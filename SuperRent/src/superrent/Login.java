@@ -12,7 +12,7 @@ import javafx.scene.control.Label;
 
 /**
  *
- * @author eraserxp
+ * @author Namitha
  */
 public class Login implements Initializable {
     
