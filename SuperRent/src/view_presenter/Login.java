@@ -1,7 +1,7 @@
 /**
  * 
  */
-package superrent;
+package view_presenter;
 
 import java.net.URL;
 import java.util.ResourceBundle;

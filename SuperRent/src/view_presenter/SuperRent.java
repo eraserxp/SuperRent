@@ -1,7 +1,7 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
  */
-package superrent;
+package view_presenter;
 
 import database.MysqlConnection;
 import java.sql.Connection;
@@ -36,7 +36,7 @@ public class SuperRent extends Application {
             System.out.println("Connect to database successfully!");
         }
 //        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        TableView root = showTable("branch");
+//        TableView root = showTable("branch");
         Scene scene = new Scene(root);
 
         stage.setScene(scene);
