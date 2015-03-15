@@ -66,6 +66,10 @@ public class LoginController implements Initializable {
                     break;
                 case ADMINISTRATOR:
                     // set the enxt page to be the page for Aadministrator
+//                    FXMLLoader loader = new FXMLLoader(getClass().getResource("AdminView.fxml"));
+//                    AdminViewController controller = loader.getController();
+//                    controller.setStage(app_stage);
+//                    next_page_parent = loader.load();
                     next_page_parent = FXMLLoader.load(getClass().getResource("AdminView.fxml"));
                     break;
             }

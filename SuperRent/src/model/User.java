@@ -30,7 +30,7 @@ public class User {
         /**
      * show a table -- as a test
      */
-    public TableView showTable(String tableName) {
+    public TableView getTable(String tableName) {
         ObservableList<ObservableList> data;
 
         TableView tableview = new TableView();

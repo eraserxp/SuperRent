@@ -6,8 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="view_presenter.AdminViewController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.AdminViewController">
    <children>
       <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -18,23 +17,37 @@
             </HBox>
          </top>
          <center>
-            <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
-                <Tab text="Show tables">
+                <Tab fx:id="showTableTab" text="Show tables">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <SplitPane dividerPositions="0.2491638795986622" prefHeight="338.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <items>
-                                  <AnchorPane id="table_name" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
-                                  <AnchorPane id="table_content" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                       <children>
+                                          <VBox id="table_list" fx:id="tableListBox" prefHeight="536.0" prefWidth="195.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <Label prefHeight="16.0" prefWidth="70.0" text="Table List" />
+                                             </children>
+                                          </VBox>
+                                       </children></AnchorPane>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                       <children>
+                                          <VBox id="table_content" fx:id="tableContentBox" prefHeight="536.0" prefWidth="595.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <Label prefHeight="16.0" prefWidth="96.0" text="Table content" />
+                                             </children>
+                                          </VBox>
+                                       </children></AnchorPane>
                                 </items>
                               </SplitPane>
                            </children>
                         </AnchorPane>
                   </content>
                 </Tab>
-                <Tab text="Manage Accounts">
+                <Tab fx:id="manageAccountTab" text="Manage Accounts">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   </content>
