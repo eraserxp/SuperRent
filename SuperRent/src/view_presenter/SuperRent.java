@@ -27,106 +27,28 @@ import javafx.util.Callback;
 public class SuperRent extends Application {
 
     private MysqlConnection database = MysqlConnection.getInstance();
+    private Stage primaryStage;
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
-        
+        // when the application starts, log into the database first
         if (database.connect("eraserxp", "a38927075")) {
             System.out.println("Connect to database successfully!");
         }
-//        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-//        TableView root = showTable("branch");
+        this.primaryStage = stage;
+        
+        /**
+         * set up the login page as the first scene and based on the result of
+         * login operation, the application will switch to the apropriate scene
+         * for customer, clerk, manager, and administrator
+         */
+        Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
         Scene scene = new Scene(root);
-
         stage.setScene(scene);
         stage.show();
     }
 
-    /**
-     * show a table -- as a test
-     */
-    public TableView showTable(String tableName) {
-        ObservableList<ObservableList> data;
-
-        TableView tableview = new TableView();
-        // get the connection from the database
-        Connection c = database.getConnection();
-
-        data = FXCollections.observableArrayList();
-        try {
-
-            //select everything from the given table
-            String SQL = "SELECT * from " + tableName;
-
-            //execute the sql statement and obtain the result
-            ResultSet rs = c.createStatement().executeQuery(SQL);
-
-            /**
-             * ********************************
-             *
-             * TABLE COLUMN ADDED DYNAMICALLY *
-             *
-             *********************************
-             */
-            for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
-
-                //We are using non property style for making dynamic table
-                final int j = i;
-
-                TableColumn col = new TableColumn(rs.getMetaData().getColumnName(i + 1));
-
-                col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
-
-                    public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {
-
-                        return new SimpleStringProperty(param.getValue().get(j).toString());
-
-                    }
-
-                });
-
-                tableview.getColumns().addAll(col);
-
-                System.out.println("Column [" + i + "] ");
-
-            }
-
-            /**
-             * add the data to ObservableList for rendering purpose
-             */
-            while (rs.next()) {
-
-                ObservableList<String> row = FXCollections.observableArrayList();
-                // for each row, we add every columns
-                for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-                    row.add(rs.getString(i));
-
-                }
-
-                System.out.println("Row [1] added " + row);
-                System.out.println("Column size = " +  row.size());
-                // add each row into the data
-                data.add(row);
-
-            }
-
-            System.out.println("Row size = " + data.size());
-            //add all rows into the tableview
-            tableview.setItems(data);
  
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-            System.out.println("Error on Building Data");
-
-        }
-        
-        return tableview;
-    }
-
     /**
      * @param args the command line arguments
      */
