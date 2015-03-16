@@ -50,7 +50,7 @@ public class MysqlConnection {
     public boolean connect(String username, String password) {
     	try{
     		// change the url if the branch table is located somewhere else
-    		String url = "jdbc:mysql://dbserver.mss.icics.ubc.ca/eraserxp";
+    		String url = "jdbc:mysql://dbserver.mss.icics.ubc.ca/team04";
 
     		if (!driverLoaded) {
                   // Load the MySQL JDBC driver
