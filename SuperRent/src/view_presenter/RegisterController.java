@@ -50,19 +50,23 @@ public class RegisterController implements Initializable {
     @FXML
     private TextField address;
     
-      
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException {
         // get the stage for the application
         Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         app_stage.hide();
-               
         Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
         Scene scene = new Scene(root);
         app_stage.setScene(scene);
         app_stage.show();
-        
-        
+             
+    } 
+    
+    @FXML
+    private void handleButtonAction1(ActionEvent event) throws IOException {
+        // get the stage for the application
+        Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    
     }
 
     @Override
