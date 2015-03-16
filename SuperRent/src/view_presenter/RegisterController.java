@@ -65,7 +65,7 @@ public class RegisterController implements Initializable {
     @FXML
     private void handleButtonAction1(ActionEvent event) throws IOException {
         // get the stage for the application
-        Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        
                     
     }
 
