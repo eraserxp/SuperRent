@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="355.0" prefWidth="604.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="355.0" prefWidth="604.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.LoginController">
    <children>
       <ImageView id="im1" disable="true" fitHeight="69.0" fitWidth="159.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -24,8 +24,8 @@
             <Image url="@download.jpg" />
          </image>
       </ImageView>
-      <TextField id="user" layoutX="226.0" layoutY="131.0" promptText="Username" />
-      <PasswordField id="pass" layoutX="226.0" layoutY="178.0" promptText="Password" />
+      <TextField id="user" fx:id="usernameField" layoutX="226.0" layoutY="131.0" promptText="Username" />
+      <PasswordField id="pass" fx:id="passwordField" layoutX="226.0" layoutY="178.0" promptText="Password" />
       <Label layoutX="134.0" layoutY="125.0" prefHeight="29.0" prefWidth="83.0" text="Username">
          <font>
             <Font name="Freestyle Script" size="28.0" />
@@ -36,10 +36,14 @@
             <Font name="Freestyle Script" size="28.0" />
          </font>
       </Label>
-      <RadioButton id="cus" layoutX="132.0" layoutY="224.0" mnemonicParsing="false" text="Customer" />
-      <RadioButton id="clerk" layoutX="226.0" layoutY="224.0" mnemonicParsing="false" text="Clerk" />
-      <RadioButton id="man" layoutX="308.0" layoutY="224.0" mnemonicParsing="false" text="Manager" />
-      <Button id="reg" layoutX="244.0" layoutY="261.0" mnemonicParsing="false" text="Register" />
+      <RadioButton id="cus" layoutX="132.0" layoutY="224.0" mnemonicParsing="false" text="Customer">
+         <toggleGroup>
+            <ToggleGroup fx:id="group" />
+         </toggleGroup></RadioButton>
+      <RadioButton id="clerk" layoutX="226.0" layoutY="224.0" mnemonicParsing="false" text="Clerk" toggleGroup="$group" />
+      <RadioButton id="man" layoutX="308.0" layoutY="224.0" mnemonicParsing="false" text="Manager" toggleGroup="$group" />
+      <Button id="reg" fx:id="register" layoutX="244.0" layoutY="261.0" mnemonicParsing="false" onAction="#handleButtonAction1" text="Register" />
       <Button id="log" layoutX="323.0" layoutY="261.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Login" />
+      <RadioButton id="admin" layoutX="404.0" layoutY="224.0" mnemonicParsing="false" text="Administrator" toggleGroup="$group" />
    </children>
 </AnchorPane>

@@ -16,8 +16,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
 /**
@@ -32,7 +35,14 @@ public class LoginController implements Initializable {
     }
 
     private UserType user_type;
-
+    
+ 
+    @FXML
+    private Button register;
+    
+    @FXML
+    private Button login;
+    
     @FXML
     private Label label;
 
@@ -44,7 +54,8 @@ public class LoginController implements Initializable {
 
     @FXML
     private TextField passwordField;
-
+    
+      
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException {
         // get the stage for the application
@@ -94,6 +105,20 @@ public class LoginController implements Initializable {
     private boolean isValidCredentials() {
         user_type = UserType.ADMINISTRATOR;
         return true;
+    }
+
+    @FXML
+    private void handleButtonAction1(ActionEvent event) throws IOException {
+        // get the stage for the application
+        Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        app_stage.hide();
+               
+        Parent root = FXMLLoader.load(getClass().getResource("Register.fxml"));
+        Scene scene = new Scene(root);
+        app_stage.setScene(scene);
+        app_stage.show();
+        
+        
     }
 
     @Override

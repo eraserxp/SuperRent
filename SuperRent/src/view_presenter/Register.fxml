@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.web.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="604.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.RegisterController">
+   <children>
+      <ImageView id="im1" disable="true" fitHeight="69.0" fitWidth="159.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@superent.png" />
+         </image>
+      </ImageView>
+      <ImageView id="im2" disable="true" fitHeight="63.0" fitWidth="327.0" layoutX="159.0" pickOnBounds="true">
+         <image>
+            <Image url="@register.jpg" />
+         </image>
+      </ImageView>
+      <ImageView id="im3" disable="true" fitHeight="114.0" fitWidth="130.0" layoutX="486.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@download.jpg" />
+         </image>
+      </ImageView>
+      <TextField id="user" fx:id="username" layoutX="226.0" layoutY="131.0" promptText="Username" />
+      <PasswordField id="pass" fx:id="password" layoutX="226.0" layoutY="178.0" promptText="Password" />
+      <Label layoutX="134.0" layoutY="125.0" prefHeight="29.0" prefWidth="83.0" text="Username">
+         <font>
+            <Font name="Freestyle Script" size="28.0" />
+         </font>
+      </Label>
+      <Label layoutX="134.0" layoutY="163.0" prefHeight="29.0" prefWidth="83.0" text="Password">
+         <font>
+            <Font name="Freestyle Script" size="28.0" />
+         </font>
+      </Label>
+      <Button id="reg" layoutX="242.0" layoutY="424.0" mnemonicParsing="false" text="Register" />
+      <PasswordField id="pass" layoutX="226.0" layoutY="221.0" promptText="Password" />
+      <Label layoutX="75.0" layoutY="215.0" prefHeight="38.0" prefWidth="142.0" text="Re-Type Password">
+         <font>
+            <Font name="Freestyle Script" size="28.0" />
+         </font>
+      </Label>
+      <TextField id="name" fx:id="name" layoutX="226.0" layoutY="265.0" promptText="Name" />
+      <Label layoutX="134.0" layoutY="259.0" prefHeight="29.0" prefWidth="83.0" text="Name">
+         <font>
+            <Font name="Freestyle Script" size="28.0" />
+         </font>
+      </Label>
+      <TextField id="phone" fx:id="phone" layoutX="226.0" layoutY="309.0" promptText="Phone" />
+      <Label layoutX="134.0" layoutY="303.0" prefHeight="29.0" prefWidth="83.0" text="Phone">
+         <font>
+            <Font name="Freestyle Script" size="28.0" />
+         </font>
+      </Label>
+      <TextField id="add" fx:id="address" layoutX="226.0" layoutY="353.0" promptText="Address" />
+      <Label layoutX="134.0" layoutY="347.0" prefHeight="29.0" prefWidth="83.0" text="Address">
+         <font>
+            <Font name="Freestyle Script" size="28.0" />
+         </font>
+      </Label>
+      <Button id="log" fx:id="login" layoutX="315.0" layoutY="424.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Login" />
+   </children>
+</AnchorPane>
