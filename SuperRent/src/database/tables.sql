@@ -39,8 +39,6 @@ drop table customer;
 
 create table customer
 (username varchar(20) not null,
-password varchar(20),
-name varchar(20),
 phone varchar(20) unique,
 address varchar(20),
 isRoadStar boolean,
@@ -56,13 +54,37 @@ drop table clerk;
 
 create table clerk
 (username varchar(20) not null,
-password varchar(20),
-name varchar(20),
-type varchar(20),
+city varchar(20),
+location varchar(20),
+PRIMARY KEY(username),
+index user_ind (username),
+FOREIGN KEY(username) REFERENCES user(username),
+index branch_ind (city),
+index location_ind (location),
+FOREIGN KEY(city,location) REFERENCES branch(city,location)
+
+)
+ENGINE = InnoDB;
+
+
+drop table manager;
+
+create table manager
+(username varchar(20) not null,
 PRIMARY KEY(username),
 index user_ind (username),
 FOREIGN KEY(username) REFERENCES user(username)
+)
+ENGINE = InnoDB;
 
+
+drop table admin;
+
+create table admin
+(username varchar(20) not null,
+PRIMARY KEY(username),
+index user_ind (username),
+FOREIGN KEY(username) REFERENCES user(username)
 )
 ENGINE = InnoDB;
 
@@ -85,7 +107,10 @@ create table vehiclesold
 solddate date,
 typeName varchar(20),
 category varchar(20),
-PRIMARY KEY(vid)
+manager varchar(20),
+PRIMARY KEY(vid),
+index manager_ind (manager),
+FOREIGN KEY(manager) REFERENCES manager(userName)
 )
 ENGINE = InnoDB;
 
@@ -97,9 +122,12 @@ isAvailable boolean,
 starting_date date,
 category varchar(20),
 vehicleType varchar(20),
+manager varchar(20),
 PRIMARY KEY(vid),
 index vehicleType_ind (vehicleType),
-FOREIGN KEY(vehicleType) REFERENCES vehicletype(typeName)
+FOREIGN KEY(vehicleType) REFERENCES vehicletype(typeName),
+index manager_ind (manager),
+FOREIGN KEY(manager) REFERENCES manager(userName)
 )
 ENGINE = InnoDB;
 
@@ -149,22 +177,6 @@ FOREIGN KEY(city,location) REFERENCES branch(city,location)
 )
 ENGINE = InnoDB;
 
-
-
-
-
-drop table works_in;
-
-create table works_in
-(username varchar(20) not null,
-city varchar(20),
-location varchar(20),
-PRIMARY KEY(username,city,location),
-index branch_ind (city),
-index location_ind (location),
-FOREIGN KEY(city,location) REFERENCES branch(city,location)
-)
-ENGINE = InnoDB;
 
 drop table reservation;
 
