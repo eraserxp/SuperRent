@@ -20,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
@@ -29,12 +30,7 @@ import javafx.stage.Stage;
  */
 public class LoginController implements Initializable {
 
-    public enum UserType {
-
-        CUSTOMER, CLERK, MANAGER, ADMINISTRATOR
-    }
-
-    private UserType user_type;
+    String user_type;
     
  
     @FXML
@@ -55,7 +51,25 @@ public class LoginController implements Initializable {
     @FXML
     private TextField passwordField;
     
-      
+    @FXML
+    private RadioButton customer_rb;
+    
+    @FXML
+    private RadioButton clerk_rb;
+    
+    @FXML
+    private RadioButton manager_rb;
+    
+    @FXML
+    private RadioButton admin_rb;
+    
+    @FXML
+    private ToggleGroup group;
+    
+    RadioButton rb_selected = new RadioButton();
+    
+    String username,password;
+    
     @FXML
     private void handleloginButtonAction(ActionEvent event) throws IOException {
         // get the stage for the application
@@ -63,19 +77,35 @@ public class LoginController implements Initializable {
         app_stage.hide();
         Parent next_page_parent = null;
         
-        if (isValidCredentials()) {
+              
+        username=usernameField.getText();
+        password=passwordField.getText();
+        
+        //System.out.println("Username"+username);
+        //System.out.println("Password"+password);
+        
+        rb_selected=(RadioButton)group.getSelectedToggle();
+        
+        
+        user_type=rb_selected.getText().toUpperCase();
+        
+       
+        
+        
+        if (isValidCredentials()) 
+        {
             // switch to different pages according to the type of the user
             switch (user_type) {
-                case CUSTOMER:
+                case "CUSTOMER":
                   next_page_parent = FXMLLoader.load(getClass().getResource("CustomerView.fxml"));
                     break;
-                case CLERK:
+                case "CLERK":
                     // set the enxt page to be the page for clerk
                     break;
-                case MANAGER:
+                case "MANAGER":
                     // set the enxt page to be the page for manager
                     break;
-                case ADMINISTRATOR:
+                case "ADMINISTRATOR":
                     // set the enxt page to be the page for Aadministrator
 //                    FXMLLoader loader = new FXMLLoader(getClass().getResource("AdminView.fxml"));
 //                    AdminViewController controller = loader.getController();
@@ -89,9 +119,14 @@ public class LoginController implements Initializable {
 
             app_stage.setScene(next_page_scene);
             app_stage.show();
-        } else {
-            usernameField.clear();
-            passwordField.clear();
+        } 
+        
+        else
+        {
+            
+                      
+            usernameField.clear();//
+            passwordField.clear();//
             invalid_label.setText("Sorry, invalid credentials");
         }
     }
@@ -103,8 +138,7 @@ public class LoginController implements Initializable {
      * @return
      */
     private boolean isValidCredentials() {
-        user_type = UserType.ADMINISTRATOR;
-        return true;
+               return true;
     }
 
     @FXML
