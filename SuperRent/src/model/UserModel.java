@@ -20,10 +20,10 @@ import javafx.util.Callback;
  *
  * @author eraserxp
  */
-public class User {
+public class UserModel {
     protected Connection con = null; 
     
-    public User() {
+    public UserModel() {
         con = MysqlConnection.getInstance().getConnection();
     }
     
@@ -94,6 +94,8 @@ public class User {
             System.out.println("Row size = " + data.size());
             //add all rows into the tableview
             tableview.setItems(data);
+            //close the result set
+            rs.close();
 
         } catch (Exception e) {
 

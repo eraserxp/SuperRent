@@ -19,7 +19,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.Admin;
+import model.AdminModel;
 
 /**
  * FXML Controller class
@@ -42,7 +42,7 @@ public class AdminViewController implements Initializable {
     @FXML
     private VBox tableContentBox;
 
-    private Admin admin = new Admin();
+    private AdminModel admin = new AdminModel();
 
     private ListView tableList = null;
 
