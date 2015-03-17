@@ -42,7 +42,7 @@ public class AdminViewController implements Initializable {
     @FXML
     private VBox tableContentBox;
 
-    private AdminModel admin = new AdminModel();
+    private AdminModel adminModel = new AdminModel();
 
     private ListView tableList = null;
 
@@ -70,7 +70,9 @@ public class AdminViewController implements Initializable {
                     if (tableList!=null) {
                         tableListBox.getChildren().remove(tableList);
                     }
-                    tableList = admin.getTableNames();
+                    //refesh the database first so that the latest info will be displayed
+                    adminModel.refeshDatabaseConnection();
+                    tableList = adminModel.getTableNames();
                     tableListBox.getChildren().add(tableList);
 
                     //add listener to each table name
@@ -101,7 +103,7 @@ public class AdminViewController implements Initializable {
         if (tableContent != null) {
             tableContentBox.getChildren().remove(tableContent);
         }
-        tableContent = admin.getTable(tableName);
+        tableContent = adminModel.getTable(tableName);
         tableContentBox.getChildren().add(tableContent);
     }
 

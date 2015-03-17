@@ -21,13 +21,23 @@ import javafx.util.Callback;
  * @author eraserxp
  */
 public class UserModel {
-    protected Connection con = null; 
-    
+
+    protected Connection con = null;
+    protected MysqlConnection mysqlConnInstance = null;
+
     public UserModel() {
+        mysqlConnInstance = MysqlConnection.getInstance();
         con = MysqlConnection.getInstance().getConnection();
     }
-    
-        /**
+
+    /**
+     * refresh the database connection so that the info 
+     */
+    public void refeshDatabaseConnection() {
+        con = mysqlConnInstance.refreshConnection();
+    }
+
+    /**
      * show a table -- as a test
      */
     public TableView getTable(String tableName) {
@@ -46,7 +56,7 @@ public class UserModel {
 
             /**
              *
-             * add table column dynamically 
+             * add table column dynamically
              *
              */
             for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
