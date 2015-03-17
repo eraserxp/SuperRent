@@ -42,8 +42,8 @@
          </toggleGroup></RadioButton>
       <RadioButton id="clerk" layoutX="226.0" layoutY="224.0" mnemonicParsing="false" text="Clerk" toggleGroup="$group" />
       <RadioButton id="man" layoutX="308.0" layoutY="224.0" mnemonicParsing="false" text="Manager" toggleGroup="$group" />
-      <Button id="reg" fx:id="register" layoutX="244.0" layoutY="261.0" mnemonicParsing="false" onAction="#handleButtonAction1" text="Register" />
-      <Button id="log" layoutX="323.0" layoutY="261.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Login" />
+      <Button id="reg" fx:id="register" layoutX="244.0" layoutY="261.0" mnemonicParsing="false" onAction="#handleregisterButtonAction" text="Register" />
+      <Button id="log" fx:id="login_button" layoutX="323.0" layoutY="261.0" mnemonicParsing="false" onAction="#handleloginButtonAction" text="Login" />
       <RadioButton id="admin" layoutX="404.0" layoutY="224.0" mnemonicParsing="false" text="Administrator" toggleGroup="$group" />
    </children>
 </AnchorPane>

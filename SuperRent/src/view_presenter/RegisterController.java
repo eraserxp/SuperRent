@@ -30,28 +30,31 @@ import javafx.stage.Stage;
 public class RegisterController implements Initializable {
 
     @FXML
-    private Button register;
+    private Button register_button;
     
     @FXML
-    private Button login;
+    private Button login_button;
     
     @FXML
-    private TextField username;
+    private TextField username_field;
 
     @FXML
-    private TextField password;
+    private TextField password_field;
     
     @FXML
-    private TextField name;
+    private TextField repassword_field;
     
     @FXML
-    private TextField phone;
+    private TextField name_field;
     
     @FXML
-    private TextField address;
+    private TextField phone_field;
     
     @FXML
-    private void handleButtonAction(ActionEvent event) throws IOException {
+    private TextField address_field;
+    
+    @FXML
+    private void handleloginButtonAction(ActionEvent event) throws IOException {
         // get the stage for the application
         Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         app_stage.hide();
@@ -63,7 +66,7 @@ public class RegisterController implements Initializable {
     } 
     
     @FXML
-    private void handleButtonAction1(ActionEvent event) throws IOException {
+    private void handleregisterButtonAction(ActionEvent event) throws IOException {
         // get the stage for the application
         
                     

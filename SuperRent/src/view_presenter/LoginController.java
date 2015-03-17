@@ -38,10 +38,10 @@ public class LoginController implements Initializable {
     
  
     @FXML
-    private Button register;
+    private Button register_button;
     
     @FXML
-    private Button login;
+    private Button login_button;
     
     @FXML
     private Label label;
@@ -57,7 +57,7 @@ public class LoginController implements Initializable {
     
       
     @FXML
-    private void handleButtonAction(ActionEvent event) throws IOException {
+    private void handleloginButtonAction(ActionEvent event) throws IOException {
         // get the stage for the application
         Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         app_stage.hide();
@@ -108,7 +108,7 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    private void handleButtonAction1(ActionEvent event) throws IOException {
+    private void handleregisterButtonAction(ActionEvent event) throws IOException {
         // get the stage for the application
         Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         app_stage.hide();
