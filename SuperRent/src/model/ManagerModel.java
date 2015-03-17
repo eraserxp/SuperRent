@@ -7,7 +7,7 @@ package model;
 
 /**
  *
- * @author eraserxp
+ * 
  */
 public class ManagerModel extends UserModel {
     
