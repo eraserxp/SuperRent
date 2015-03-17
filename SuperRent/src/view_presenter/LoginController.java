@@ -67,7 +67,7 @@ public class LoginController implements Initializable {
             // switch to different pages according to the type of the user
             switch (user_type) {
                 case CUSTOMER:
-                    // set the next page to be the page for customer
+                  next_page_parent = FXMLLoader.load(getClass().getResource("CustomerView.fxml"));
                     break;
                 case CLERK:
                     // set the enxt page to be the page for clerk

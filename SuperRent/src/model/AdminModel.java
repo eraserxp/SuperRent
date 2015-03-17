@@ -14,13 +14,13 @@ import javafx.scene.control.ListView;
 
 /**
  *
- * The Admin class is responsible for accessing/updating data from the database.
+ * The AdminModel class is responsible for accessing/updating data from the database.
  * The AdminViewController use this class to do the operations related to the
  * persistent data
  */
-public class Admin extends User {
+public class AdminModel extends UserModel {
 
-    public Admin() {
+    public AdminModel() {
         super();
     }
 
@@ -46,5 +46,7 @@ public class Admin extends User {
 
         return null;
     }
+    
+
 
 }

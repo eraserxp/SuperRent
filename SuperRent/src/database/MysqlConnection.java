@@ -4,6 +4,8 @@
 package database;
 
 import java.sql.*; 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 
@@ -17,6 +19,8 @@ import java.sql.*;
  */ 
 public class MysqlConnection {
     private static MysqlConnection _moc = null;
+    private static String username;
+    private static String password;
     protected Connection con = null;
     protected boolean driverLoaded = false;
 
@@ -50,7 +54,7 @@ public class MysqlConnection {
     public boolean connect(String username, String password) {
     	try{
     		// change the url if the branch table is located somewhere else
-    		String url = "jdbc:mysql://dbserver.mss.icics.ubc.ca/eraserxp";
+    		String url = "jdbc:mysql://dbserver.mss.icics.ubc.ca/team04";
 
     		if (!driverLoaded) {
                   // Load the MySQL JDBC driver
@@ -61,7 +65,10 @@ public class MysqlConnection {
     		con = DriverManager.getConnection(url, username, password);
 
     		con.setAutoCommit(false);
-
+                
+                //save username and password for later reconnection
+                MysqlConnection.username = username;
+                MysqlConnection.password = password;
     		return true; 
     	} catch (SQLException ex) {
     		return false; 
@@ -76,6 +83,29 @@ public class MysqlConnection {
     	return con; 
     }
 
+    /**
+     * 
+     * close the current connection and returns a new connection
+     */
+    public Connection refreshConnection() {
+        // close the current connection
+        if (con!=null) {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        //create a new connection
+        if (this.connect(MysqlConnection.username, MysqlConnection.password)==true) {
+            System.out.println("Successfully refesh the connection to database!");
+            return con;
+        } else {
+            System.out.println("Failed to get an new connection to database!");
+            return null;
+        }
+
+    }
 
     /*
      * Sets the connection

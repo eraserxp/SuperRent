@@ -32,7 +32,7 @@ public class SuperRent extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         // when the application starts, log into the database first
-        if (database.connect("eraserxp", "a38927075")) {
+        if (database.connect("team04", "pr0j3ct!")) {
             System.out.println("Connect to database successfully!");
         }
         this.primaryStage = stage;

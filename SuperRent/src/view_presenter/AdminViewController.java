@@ -19,7 +19,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.Admin;
+import model.AdminModel;
 
 /**
  * FXML Controller class
@@ -42,7 +42,7 @@ public class AdminViewController implements Initializable {
     @FXML
     private VBox tableContentBox;
 
-    private Admin admin = new Admin();
+    private AdminModel adminModel = new AdminModel();
 
     private ListView tableList = null;
 
@@ -67,10 +67,12 @@ public class AdminViewController implements Initializable {
             @Override
             public void handle(Event event) {
                 if (showTableTab.isSelected()) {
-                    if (tableList!=null) {
+                    if (tableList != null) {
                         tableListBox.getChildren().remove(tableList);
                     }
-                    tableList = admin.getTableNames();
+                    //refesh the database first so that the latest info will be displayed
+                    adminModel.refeshDatabaseConnection();
+                    tableList = adminModel.getTableNames();
                     tableListBox.getChildren().add(tableList);
 
                     //add listener to each table name
@@ -92,7 +94,6 @@ public class AdminViewController implements Initializable {
         // select the showTable tab
         tabPane.getSelectionModel().select(manageAccountTab);
 //        tabPane.getSelectionModel().select(showTableTab);
-        
 
     }
 
@@ -101,7 +102,10 @@ public class AdminViewController implements Initializable {
         if (tableContent != null) {
             tableContentBox.getChildren().remove(tableContent);
         }
-        tableContent = admin.getTable(tableName);
+
+        //refesh the database first so that the latest info will be displayed
+        adminModel.refeshDatabaseConnection();
+        tableContent = adminModel.getTable(tableName);
         tableContentBox.getChildren().add(tableContent);
     }
 

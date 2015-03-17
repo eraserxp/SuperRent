@@ -20,14 +20,24 @@ import javafx.util.Callback;
  *
  * @author eraserxp
  */
-public class User {
-    protected Connection con = null; 
-    
-    public User() {
+public class UserModel {
+
+    protected Connection con = null;
+    protected MysqlConnection mysqlConnInstance = null;
+
+    public UserModel() {
+        mysqlConnInstance = MysqlConnection.getInstance();
         con = MysqlConnection.getInstance().getConnection();
     }
-    
-        /**
+
+    /**
+     * refresh the database connection so that the info 
+     */
+    public void refeshDatabaseConnection() {
+        con = mysqlConnInstance.refreshConnection();
+    }
+
+    /**
      * show a table -- as a test
      */
     public TableView getTable(String tableName) {
@@ -46,7 +56,7 @@ public class User {
 
             /**
              *
-             * add table column dynamically 
+             * add table column dynamically
              *
              */
             for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
@@ -94,6 +104,8 @@ public class User {
             System.out.println("Row size = " + data.size());
             //add all rows into the tableview
             tableview.setItems(data);
+            //close the result set
+            rs.close();
 
         } catch (Exception e) {
 
