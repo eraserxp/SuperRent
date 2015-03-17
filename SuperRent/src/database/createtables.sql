@@ -1,4 +1,4 @@
-drop table vehicletype;
+
 
 create table vehicletype
 (typeName varchar(20) not null PRIMARY KEY,
@@ -13,7 +13,6 @@ h_insurance float
 ENGINE = InnoDB;
 
 
-drop table branch;
 
 create table branch
 (city varchar(20),
@@ -23,7 +22,7 @@ PRIMARY KEY(city,location)
 ENGINE = InnoDB;
 
 
-drop table user;
+
 
 create table user
 (username varchar(20) not null,
@@ -35,12 +34,10 @@ PRIMARY KEY(username)
 ENGINE = InnoDB;
 
 
-drop table customer;
+
 
 create table customer
 (username varchar(20) not null,
-password varchar(20),
-name varchar(20),
 phone varchar(20) unique,
 address varchar(20),
 isRoadStar boolean,
@@ -52,22 +49,46 @@ FOREIGN KEY(username) REFERENCES user(username)
 )
 ENGINE = InnoDB;
 
-drop table clerk;
+
 
 create table clerk
 (username varchar(20) not null,
-password varchar(20),
-name varchar(20),
-type varchar(20),
+city varchar(20),
+location varchar(20),
 PRIMARY KEY(username),
 index user_ind (username),
-FOREIGN KEY(username) REFERENCES user(username)
+FOREIGN KEY(username) REFERENCES user(username),
+index branch_ind (city),
+index location_ind (location),
+FOREIGN KEY(city,location) REFERENCES branch(city,location)
 
 )
 ENGINE = InnoDB;
 
 
-drop table equipment;
+
+
+create table manager
+(username varchar(20) not null,
+PRIMARY KEY(username),
+index user_ind (username),
+FOREIGN KEY(username) REFERENCES user(username)
+)
+ENGINE = InnoDB;
+
+
+
+
+create table admin
+(username varchar(20) not null,
+PRIMARY KEY(username),
+index user_ind (username),
+FOREIGN KEY(username) REFERENCES user(username)
+)
+ENGINE = InnoDB;
+
+
+
 
 create table equipment
 (equipName varchar(20) not null,
@@ -78,18 +99,21 @@ PRIMARY KEY(equipName)
 )
 ENGINE = InnoDB;
 
-drop table vehiclesold;
+
 
 create table vehiclesold
 (vid integer not null,
 solddate date,
 typeName varchar(20),
 category varchar(20),
-PRIMARY KEY(vid)
+manager varchar(20),
+PRIMARY KEY(vid),
+index manager_ind (manager),
+FOREIGN KEY(manager) REFERENCES manager(userName)
 )
 ENGINE = InnoDB;
 
-drop table vehicleforrent;
+
 
 create table vehicleforrent
 (vid integer not null,
@@ -97,14 +121,17 @@ isAvailable boolean,
 starting_date date,
 category varchar(20),
 vehicleType varchar(20),
+manager varchar(20),
 PRIMARY KEY(vid),
 index vehicleType_ind (vehicleType),
-FOREIGN KEY(vehicleType) REFERENCES vehicletype(typeName)
+FOREIGN KEY(vehicleType) REFERENCES vehicletype(typeName),
+index manager_ind (manager),
+FOREIGN KEY(manager) REFERENCES manager(userName)
 )
 ENGINE = InnoDB;
 
 
-drop table vehicleforsale;
+
 
 create table vehicleforsale
 (vid integer not null,
@@ -119,7 +146,7 @@ FOREIGN KEY(vehicleType) REFERENCES vehicletype(typeName)
 ENGINE = InnoDB;
 
 
-drop table vehicleinbranch;
+
 
 create table vehicleinbranch
 (vid integer not null,
@@ -133,7 +160,7 @@ FOREIGN KEY(city,location) REFERENCES branch(city,location)
 ENGINE = InnoDB;
 
 
-drop table keep_equipment;
+
 
 create table keep_equipment
 (equipName varchar(20) not null,
@@ -151,22 +178,6 @@ ENGINE = InnoDB;
 
 
 
-
-
-drop table works_in;
-
-create table works_in
-(username varchar(20) not null,
-city varchar(20),
-location varchar(20),
-PRIMARY KEY(username,city,location),
-index branch_ind (city),
-index location_ind (location),
-FOREIGN KEY(city,location) REFERENCES branch(city,location)
-)
-ENGINE = InnoDB;
-
-drop table reservation;
 
 create table reservation
 (confirmation_number integer not null auto_increment,
@@ -196,7 +207,7 @@ FOREIGN KEY(equip_name) REFERENCES equipment(equipName)
 ENGINE = InnoDB;
 
 
-drop table rent;
+
 
 create table rent
 (rentid integer not null auto_increment,
@@ -230,7 +241,7 @@ FOREIGN KEY(equip_name) REFERENCES equipment(equipName)
 ENGINE = InnoDB;
 
 
-drop table vreturn;
+
 
 create table vreturn
 (returnid integer not null auto_increment,
@@ -262,7 +273,7 @@ FOREIGN KEY(rent_id) REFERENCES rent(rentid)
 ENGINE = InnoDB;
 
 
-drop table rent_addon;
+
 
 create table rent_addon
 (rentid integer not null,
@@ -277,7 +288,7 @@ ENGINE = InnoDB;
 
 
 
-drop table reserve_addon;
+
 
 create table reserve_addon
 (confirmNo integer not null,
