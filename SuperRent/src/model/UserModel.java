@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import static javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY;
 import javafx.util.Callback;
 
 /**
@@ -77,7 +78,8 @@ public class UserModel {
                 });
 
                 tableview.getColumns().addAll(col);
-
+                // get rid of the extra column displayed in a Table View by default
+                // tableview.setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
                 System.out.println("Column [" + i + "] ");
 
             }
