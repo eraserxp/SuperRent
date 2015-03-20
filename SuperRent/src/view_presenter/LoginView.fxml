@@ -36,15 +36,7 @@
             <Font name="Freestyle Script" size="28.0" />
          </font>
       </Label>
-      <RadioButton id="cus" fx:id="customer_rb" layoutX="132.0" layoutY="224.0" mnemonicParsing="false" selected="true" text="Customer">
-         <toggleGroup>
-            <ToggleGroup fx:id="group" />
-         </toggleGroup></RadioButton>
-      <RadioButton id="clerk" fx:id="clerk_rb" layoutX="226.0" layoutY="224.0" mnemonicParsing="false" text="Clerk" toggleGroup="$group" />
-      <RadioButton id="man" fx:id="manager_rb" layoutX="308.0" layoutY="224.0" mnemonicParsing="false" text="Manager" toggleGroup="$group" />
       <Button id="reg" fx:id="register" layoutX="244.0" layoutY="261.0" mnemonicParsing="false" onAction="#handleregisterButtonAction" text="Register" />
       <Button id="log" fx:id="login_button" layoutX="323.0" layoutY="261.0" mnemonicParsing="false" onAction="#handleloginButtonAction" text="Login" />
-      <RadioButton id="admin" fx:id="admin_rb" layoutX="404.0" layoutY="224.0" mnemonicParsing="false" text="Administrator" toggleGroup="$group" />
-      <Label fx:id="invalid_label" layoutX="34.0" layoutY="79.0" />
    </children>
 </AnchorPane>
