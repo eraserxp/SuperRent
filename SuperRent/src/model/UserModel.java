@@ -8,6 +8,11 @@ package model;
 import database.MysqlConnection;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -32,7 +37,7 @@ public class UserModel {
     }
 
     /**
-     * refresh the database connection so that the info 
+     * refresh the database connection so that the info
      */
     public void refeshDatabaseConnection() {
         con = mysqlConnInstance.refreshConnection();
@@ -120,4 +125,110 @@ public class UserModel {
         return tableview;
     }
 
+    /**
+     * Check if the given username is already existed in the database
+     *
+     * @param username
+     * @return
+     */
+    public boolean isUsernameExisted(String username) {
+        String SQL = "select * from user where username = '" + username + "'";
+        boolean result = false;
+        try {
+            if (queryDatabase(SQL).next()) {
+                result = true;
+            } else {
+                result = false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
+    protected ResultSet queryDatabase(String SQL) {
+        ResultSet rs = null;
+        try {
+            rs = con.createStatement().executeQuery(SQL);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
+    }
+
+    protected boolean updateDatabase(String SQL) {
+        try {
+            con.createStatement().executeUpdate(SQL);
+            con.commit();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    /**
+     * execute multiple sql in a batch
+     * @param SQLs
+     * @return 
+     */
+    protected boolean updateDatabaseBatch(String ... SQLs) {
+        try {
+            Statement statement = con.createStatement();
+            for (String s: SQLs) {
+                statement.addBatch(s);
+            }
+            statement.executeBatch();
+            con.commit();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+//    protected boolean updateDatabase_noCommit(String SQL) {
+//        try {
+//            con.createStatement().executeUpdate(SQL);
+//            return true;
+//        } catch (SQLException ex) {
+//            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+//            return false;
+//        }
+//    }
+
+    protected String addQuotation(String s) {
+        return " '" + s + "' ";
+    }
+
+    public boolean addUser(String username, String passwd, String name, String type) {
+        String SQL = "insert into user values (" + addQuotation(username) + ","
+                + addQuotation(passwd) + "," + addQuotation(name)
+                + "," + addQuotation(type) + ")";
+        return updateDatabase(SQL);
+    }
+
+//    public boolean addUser_noCommit(String username, String passwd, String name, String type) {
+//        String SQL = "insert into user values (" + addQuotation(username) + ","
+//                + addQuotation(passwd) + "," + addQuotation(name)
+//                + "," + addQuotation(type) + ")";
+//        return updateDatabase_noCommit(SQL);
+//    }
+
+    public ArrayList<String> getAllBranches() {
+        String SQL = "select city, location from branch";
+        ResultSet rs = queryDatabase(SQL);
+        ArrayList<String> branchList = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                String branch;
+                branch = rs.getString("location") + ", " + rs.getString("city");
+                branchList.add(branch);
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return branchList;
+    }
 }
