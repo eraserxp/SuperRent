@@ -121,12 +121,6 @@ public class AdminViewController extends AbstractController implements Initializ
 
     private AdminModel adminModel = new AdminModel();
 
-    private Stage myStage;
-
-    public void setStage(Stage stage) {
-        myStage = stage;
-    }
-
     /**
      * Initializes the controller class. This method is automatically called
      * after the fxml file has been loaded.
@@ -157,17 +151,16 @@ public class AdminViewController extends AbstractController implements Initializ
         tabPane.getSelectionModel().select(manageAccountTab);
 //        tabPane.getSelectionModel().select(showTableTab);
 
-        setUpNameField();
-
-        //set up the combobox for user type
-        setUpComobox_userType();
-
-        setUpComobox_branch();
-
-        setUpUsernameField_add();
-
-        setUpPasswordField(passwdField_add, repasswdField_add, addInfoLabel, addButton);
-
+//        setUpNameField();
+//
+//        //set up the combobox for user type
+//        setUpComobox_userType();
+//
+//        setUpComobox_branch();
+//
+//        setUpUsernameField_add();
+//
+//        setUpPasswordField(passwdField_add, repasswdField_add, addInfoLabel, addButton);
     }
 
     private void setUpShowTablesTab() {
@@ -256,6 +249,17 @@ public class AdminViewController extends AbstractController implements Initializ
         repasswdField_change.setDisable(true);
         changeButton.setDisable(true);
 
+        setUpNameField();
+
+        //set up the combobox for user type
+        setUpComobox_userType();
+
+        setUpComobox_branch();
+
+        setUpUsernameField_add();
+
+        setUpPasswordField(passwdField_add, repasswdField_add, addInfoLabel, addButton);
+
     }
 
     private void showTable(String tableName) {
@@ -283,8 +287,7 @@ public class AdminViewController extends AbstractController implements Initializ
             if (user_type_add.toLowerCase().equals("clerk")) {
                 branchCMB.setDisable(false);
             } else {
-                branchCMB.valueProperty().set(null);
-                branchCMB.setDisable(true);
+                clearAndDisable(branchCMB);
                 usernameField_add.setDisable(false);
             }
 
@@ -312,12 +315,12 @@ public class AdminViewController extends AbstractController implements Initializ
                 // check the input when the focus on this text field is lost
                 if (!newValue) {
                     //validate the username
-                    if (usernameField_add.getText() == null || usernameField_add.getText().length() == 0) {
+                    if (isInputEmpty(usernameField_add)) {
                         showWarning(addInfoLabel, "Username can't be empty!");
                         passwdField_add.setDisable(true);
                         repasswdField_add.setDisable(true);
                         addButton.setDisable(true);
-                    } else if (adminModel.isUsernameExisted(usernameField_add.getText())) {
+                    } else if (adminModel.isUsernameExisted(usernameField_add.getText().trim())) {
                         showWarning(addInfoLabel, "Username is already existed!");
                         passwdField_add.setDisable(true);
                         repasswdField_add.setDisable(true);
@@ -355,7 +358,7 @@ public class AdminViewController extends AbstractController implements Initializ
                     }
                 }
 
-                //when user is entering something into the password field, disable the button 
+                //when user is entering something into the password field, clearAndDisable the button 
                 // and remove the warnings
                 if (newValue) {
                     infoLabel.setText("");
@@ -377,7 +380,7 @@ public class AdminViewController extends AbstractController implements Initializ
                         button.setDisable(true);
                     }
                 }
-                //when user is entering something into the password field, disable the button 
+                //when user is entering something into the password field, clearAndDisable the button 
                 // and remove the warnings
                 if (newValue) {
                     infoLabel.setText("");
@@ -391,58 +394,36 @@ public class AdminViewController extends AbstractController implements Initializ
 
     }
 
-    /**
-     * checks if the text in the two password fields is a valid password and
-     * prints out the corresponding warning in infoLabel
-     *
-     * @param passwordField
-     * @param repasswordField
-     * @param infoLabel
-     * @return
-     */
-    private boolean checkTwoPasswdFields(PasswordField passwordField, PasswordField repasswordField, Label infoLabel) {
-        boolean passwordValid = false;
-        if (isInputEmpty(passwordField)) {
-            showWarning(infoLabel, "Password can't be empty!");
-        } else if (isInputTooLong(passwordField, 20)) {
-            showWarning(infoLabel, "Password is too long!");
-        } else if (!areTwoInputsMatch(passwordField, repasswordField)) {
-            showWarning(infoLabel, "Password doesn't match!");
-        } else {
-            passwordValid = true;
-        }
-        return passwordValid;
-    }
-
     public void handleAddButton() {
         String username = usernameField_add.getText().trim();
         String passwd = passwdField_add.getText().trim();
         String name = nameField.getText().trim();
         String type = userTypeCMB.getSelectionModel().getSelectedItem().toLowerCase();
         boolean addOK = false;
-        
+
         if (type.equals("clerk")) {
             String branch = branchCMB.getSelectionModel().getSelectedItem();
             String location = branch.split(",")[0].trim();
             String city = branch.split(",")[1].trim();
-//            System.out.println(city);
-//            System.out.println(location);
             addOK = adminModel.addClerk(username, passwd, name, type, city, location);
         } else {
             addOK = adminModel.addUser(username, passwd, name, type);
         }
-        
-        if ( addOK ) {
+
+        if (addOK) {
             usernameField_add.clear();
             passwdField_add.clear();
             repasswdField_add.clear();
             nameField.clear();
 
             usernameField_add.setDisable(true);
-            userTypeCMB.setDisable(true);
+            clearAndDisable(userTypeCMB);
+            clearAndDisable(branchCMB);
             passwdField_add.setDisable(true);
             repasswdField_add.setDisable(true);
             addButton.setDisable(true);
+            nameField.requestFocus();
+            showSuccessMessage(addInfoLabel, "An user has been added.");
         }
     }
 }
