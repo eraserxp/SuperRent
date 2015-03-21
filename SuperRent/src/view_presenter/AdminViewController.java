@@ -27,6 +27,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -69,19 +70,39 @@ public class AdminViewController extends AbstractController implements Initializ
     @FXML
     private Label addInfoLabel;
 
+    private boolean nameOK = false;
+
     @FXML
     private TextField nameField;
+
+    @FXML
+    private Label nameValidator;
 
     @FXML
     private ComboBox<String> userTypeCMB;
 
     @FXML
+    private Label typeValidator;
+
+    private boolean typeOK = false;
+
+    @FXML
     private ComboBox<String> branchCMB;
+
+    @FXML
+    private Label branchValidator;
+
+    private boolean branchOK = false;
 
     private String user_type_add;
 
     @FXML
     private TextField usernameField_add;
+
+    @FXML
+    private Label usernameValidator;
+
+    private boolean usernameOK = false;
 
     @FXML
     private PasswordField passwdField_add;
@@ -90,28 +111,36 @@ public class AdminViewController extends AbstractController implements Initializ
     private PasswordField repasswdField_add;
 
     @FXML
-    private Button addButton;
+    private Label passwdValidator;
+
+    private boolean passwdOK = false;
 
     @FXML
-    private Label removeInfoLabel;
+    private Button addButton;
 
     @FXML
     private TextField usernameField_remove;
 
     @FXML
+    private Label usernameValidator_r;
+
+    @FXML
     private Button removeButton;
 
     @FXML
-    private Label changeInfoLabel;
+    private TextField usernameField_change;
 
     @FXML
-    private TextField usernameField_change;
+    private Label usernameValidator_c;
 
     @FXML
     private PasswordField passwdField_change;
 
     @FXML
     private PasswordField repasswdField_change;
+
+    @FXML
+    private Label passwdValidator_c;
 
     @FXML
     private Button changeButton;
@@ -128,6 +157,7 @@ public class AdminViewController extends AbstractController implements Initializ
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+
         // when the getTable tab is selected, show the tables
         showTableTab.setOnSelectionChanged(new EventHandler<Event>() {
             @Override
@@ -149,18 +179,6 @@ public class AdminViewController extends AbstractController implements Initializ
 
         // select the showTable tab
         tabPane.getSelectionModel().select(manageAccountTab);
-//        tabPane.getSelectionModel().select(showTableTab);
-
-//        setUpNameField();
-//
-//        //set up the combobox for user type
-//        setUpComobox_userType();
-//
-//        setUpComobox_branch();
-//
-//        setUpUsernameField_add();
-//
-//        setUpPasswordField(passwdField_add, repasswdField_add, addInfoLabel, addButton);
     }
 
     private void setUpShowTablesTab() {
@@ -186,82 +204,6 @@ public class AdminViewController extends AbstractController implements Initializ
         );
     }
 
-    private void setUpNameField() {
-        nameField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                // when user enter some text and leave the password field, check the password
-                if (!newValue) {
-                    if (isInputEmpty(nameField)) {
-                        showWarning(addInfoLabel, "Name can't be empty!");
-                        userTypeCMB.setDisable(true);
-                    } else {
-                        userTypeCMB.setDisable(false);
-                    }
-                }
-
-                //when user is entering something into the namefield, disable all other control component 
-                // and remove the warnings
-                if (newValue) {
-                    addInfoLabel.setText("");
-                    addInfoLabel.setVisible(false);
-
-                    userTypeCMB.setDisable(true);
-                    branchCMB.setDisable(true);
-                    usernameField_add.setDisable(true);
-                    passwdField_add.setDisable(true);
-                    repasswdField_add.setDisable(true);
-                    addButton.setDisable(true);
-                }
-            }
-
-        });
-    }
-
-    private void setUpManageAccountTab() {
-
-        //set the info Labels to be invisible
-        addInfoLabel.setVisible(false);
-        removeInfoLabel.setVisible(false);
-        changeInfoLabel.setVisible(false);
-
-        //clear the text fields
-        usernameField_add.clear();
-        passwdField_add.clear();
-        repasswdField_add.clear();
-
-        //disable some text fields and buttons
-        userTypeCMB.setDisable(true);
-        usernameField_add.setDisable(true);
-        passwdField_add.setDisable(true);
-        repasswdField_add.setDisable(true);
-        addButton.setDisable(true);
-
-        usernameField_remove.clear();
-        removeButton.setDisable(true);
-
-        usernameField_change.clear();
-        passwdField_change.clear();
-        repasswdField_change.clear();
-
-        passwdField_change.setDisable(true);
-        repasswdField_change.setDisable(true);
-        changeButton.setDisable(true);
-
-        setUpNameField();
-
-        //set up the combobox for user type
-        setUpComobox_userType();
-
-        setUpComobox_branch();
-
-        setUpUsernameField_add();
-
-        setUpPasswordField(passwdField_add, repasswdField_add, addInfoLabel, addButton);
-
-    }
-
     private void showTable(String tableName) {
         //remove the content of the last table
         if (tableContent != null) {
@@ -274,6 +216,54 @@ public class AdminViewController extends AbstractController implements Initializ
         tableContentBox.getChildren().add(tableContent);
     }
 
+    private void setUpManageAccountTab() {
+
+        //set all validator labels to be invisible
+        hide(addInfoLabel, nameValidator, typeValidator, branchValidator,
+                usernameValidator, passwdValidator, usernameValidator_r,
+                usernameValidator_c, passwdValidator_c);
+
+        //clear the text fields
+        clearText(nameField, usernameField_add, passwdField_add,
+                repasswdField_add, usernameField_remove, usernameField_change,
+                passwdField_change, repasswdField_change);
+
+        //disable the three buttons
+//      disableNodes(addButton, removeButton, changeButton);
+        setUpNameField();
+
+        //set up the combobox for user type
+        setUpComobox_userType();
+
+        setUpComobox_branch();
+
+        setUpUsernameField_add();
+
+        setUpPasswordField(passwdField_add, repasswdField_add, passwdValidator);
+
+        setUpUsernameField_remove();
+
+    }
+
+    private void setUpNameField() {
+        nameField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            // when user enter some text and leave the password field, check the password
+            if (!newValue) {
+                if (isInputEmpty(nameField)) {
+                    showWarning(nameValidator, "Name can't be empty!");
+                    nameOK = false;
+                } else {
+                    nameOK = true;
+                }
+            }
+
+            //when user is entering something into the namefield, remove the validation information
+            if (newValue) {
+                hide(nameValidator);
+            }
+        });
+    }
+
     private void setUpComobox_userType() {
         ArrayList<String> user_types = new ArrayList<>();
         user_types.add("Customer");
@@ -284,11 +274,14 @@ public class AdminViewController extends AbstractController implements Initializ
         userTypeCMB.setOnAction((ActionEvent event) -> {
             user_type_add = userTypeCMB.getSelectionModel().getSelectedItem();
             System.out.println("ComboBox Action (selected: " + user_type_add + ")");
+            typeOK = true;
+            hide(typeValidator);
+            // only enable the branch combobox if user type is clerk
             if (user_type_add.toLowerCase().equals("clerk")) {
                 branchCMB.setDisable(false);
             } else {
+                hide(branchValidator);
                 clearAndDisable(branchCMB);
-                usernameField_add.setDisable(false);
             }
 
         });
@@ -299,131 +292,134 @@ public class AdminViewController extends AbstractController implements Initializ
         configureComboBox(branchCMB, branches);
 
         branchCMB.setOnAction((ActionEvent event) -> {
+            branchOK = true;
+            hide(branchValidator);
             String branch = branchCMB.getSelectionModel().getSelectedItem();
             System.out.println("ComboBox Action (selected: " + branch + ")");
-            //enable the username field
-            usernameField_add.setDisable(false);
         });
+        //disable this combobox initially
         branchCMB.setDisable(true);
     }
 
     private void setUpUsernameField_add() {
-        usernameField_add.focusedProperty().addListener(new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                // check the input when the focus on this text field is lost
-                if (!newValue) {
-                    //validate the username
-                    if (isInputEmpty(usernameField_add)) {
-                        showWarning(addInfoLabel, "Username can't be empty!");
-                        passwdField_add.setDisable(true);
-                        repasswdField_add.setDisable(true);
-                        addButton.setDisable(true);
-                    } else if (adminModel.isUsernameExisted(usernameField_add.getText().trim())) {
-                        showWarning(addInfoLabel, "Username is already existed!");
-                        passwdField_add.setDisable(true);
-                        repasswdField_add.setDisable(true);
-                        addButton.setDisable(true);
-                    } else {
-                        //if username is OK, enable the passwd field
-                        passwdField_add.setDisable(false);
-                        repasswdField_add.setDisable(false);
-                    }
+        usernameField_add.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            // check the input when the focus on this text field is lost
+            if (!newValue) {
+                //validate the username
+                if (isInputEmpty(usernameField_add)) {
+                    showWarning(usernameValidator, "Username can't be empty!");
+                    usernameOK = false;
+                } else if (adminModel.isUsernameExisted(usernameField_add.getText().trim())) {
+                    showWarning(usernameValidator, "Username is existed!");
+                    usernameOK = false;
+                } else {
+                    usernameOK = true;
                 }
-
-                //when user is entering something into the field, remove any previous warnings
-                if (newValue) {
-                    addInfoLabel.setText("");
-                    addInfoLabel.setVisible(false);
-                }
-
             }
 
+            //when user is entering something into the field, remove any previous validation message
+            if (newValue) {
+                hide(usernameValidator);
+            }
         });
     }
 
-    private void setUpPasswordField(PasswordField passwordField, PasswordField repasswordField, Label infoLabel, Button button) {
+    private void setUpPasswordField(PasswordField passwordField, PasswordField repasswordField, Label infoLabel) {
 
-        passwordField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                // when user enter some text and leave the password field, check the password
-                if (!newValue) {
-                    if (checkTwoPasswdFields(passwordField, repasswordField, infoLabel) == true) {
-                        button.setDisable(false);
-                    } else {
-                        button.setDisable(true);
-                    }
-                }
-
-                //when user is entering something into the password field, clearAndDisable the button 
-                // and remove the warnings
-                if (newValue) {
-                    infoLabel.setText("");
-                    infoLabel.setVisible(false);
-                    button.setDisable(true);
+        passwordField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            // when user enter some text and leave the password field, check the password
+            if (!newValue) {
+                if (checkTwoPasswdFields(passwordField, repasswordField, passwdValidator) == true) {
+                    passwdOK = true;
+                } else {
+                    passwdOK = false;
                 }
             }
 
+            //when user is entering something into the password field, clearAndDisable the button
+            // and remove the warnings
+            if (newValue) {
+                infoLabel.setText("");
+                infoLabel.setVisible(false);
+            }
         });
 
-        repasswordField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (!newValue) {
-                    if (checkTwoPasswdFields(passwordField, repasswordField, infoLabel) == true) {
-                        button.setDisable(false);
-                    } else {
-                        button.setDisable(true);
-                    }
+        repasswordField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                if (checkTwoPasswdFields(passwordField, repasswordField, infoLabel) == true) {
+                    passwdOK = true;
+                } else {
+                    passwdOK = false;
                 }
-                //when user is entering something into the password field, clearAndDisable the button 
-                // and remove the warnings
-                if (newValue) {
-                    infoLabel.setText("");
-                    infoLabel.setVisible(false);
-                    button.setDisable(true);
-                }
-
             }
-
+            //when user is entering something into the password field, clearAndDisable the button
+            // and remove the warnings
+            if (newValue) {
+                infoLabel.setText("");
+                infoLabel.setVisible(false);
+            }
         });
 
     }
 
     public void handleAddButton() {
-        String username = usernameField_add.getText().trim();
-        String passwd = passwdField_add.getText().trim();
-        String name = nameField.getText().trim();
-        String type = userTypeCMB.getSelectionModel().getSelectedItem().toLowerCase();
-        boolean addOK = false;
+        //use request focus to let each textfield to be checked again
+        nameField.requestFocus();
+        usernameField_add.requestFocus();
+        repasswdField_add.requestFocus();
+        addButton.requestFocus();
+        String type;
 
-        if (type.equals("clerk")) {
-            String branch = branchCMB.getSelectionModel().getSelectedItem();
-            String location = branch.split(",")[0].trim();
-            String city = branch.split(",")[1].trim();
-            addOK = adminModel.addClerk(username, passwd, name, type, city, location);
-        } else {
-            addOK = adminModel.addUser(username, passwd, name, type);
+        if (userTypeCMB.getSelectionModel().isEmpty()) {
+            showWarning(typeValidator, "Type must be selected!");
+            typeOK = false;
+            return;
         }
+//        else {
+//            type = userTypeCMB.getSelectionModel().getSelectedItem().toLowerCase();
+//            if (type.equals("clerk")) {
+//
+//                if (branchCMB.getSelectionModel().isEmpty()) {
+//                    showWarning(branchValidator, "Branch must be selected!");
+//                    branchOK = false;
+//                    return;
+//                }
+//            }
+//        }
 
-        if (addOK) {
-            usernameField_add.clear();
-            passwdField_add.clear();
-            repasswdField_add.clear();
-            nameField.clear();
+        if (nameOK && usernameOK && passwdOK && typeOK) {
 
-            usernameField_add.setDisable(true);
-            clearAndDisable(userTypeCMB);
-            clearAndDisable(branchCMB);
-            passwdField_add.setDisable(true);
-            repasswdField_add.setDisable(true);
-            addButton.setDisable(true);
-            nameField.requestFocus();
-            showSuccessMessage(addInfoLabel, "An user has been added.");
+            String username = usernameField_add.getText().trim();
+            String passwd = passwdField_add.getText().trim();
+            String name = nameField.getText().trim();
+
+            boolean addOK = false;
+            type = userTypeCMB.getSelectionModel().getSelectedItem().toLowerCase();
+            if (type.equals("clerk")) {
+
+                if (branchCMB.getSelectionModel().isEmpty()) {
+                    showWarning(branchValidator, "Type must be selected!");
+                    branchOK = false;
+                    return;
+                }
+
+                String branch = branchCMB.getSelectionModel().getSelectedItem();
+                String location = branch.split(",")[0].trim();
+                String city = branch.split(",")[1].trim();
+                addOK = adminModel.addClerk(username, passwd, name, type, city, location);
+            } else {
+                addOK = adminModel.addUser(username, passwd, name, type);
+            }
+
+            if (addOK) {
+                clearText(nameField, usernameField_add, passwdField_add, repasswdField_add);
+                hide(nameValidator, typeValidator, branchValidator, usernameValidator, passwdValidator);
+                showSuccessMessage(addInfoLabel, "An user has been added.");
+            }
         }
+    }
+
+    private void setUpUsernameField_remove() {
+
     }
 }

@@ -52,7 +52,6 @@ public abstract class AbstractController {
      */
     protected void showWarning(Label infoLabel, String s) {
         infoLabel.setVisible(true);
-        infoLabel.setTextFill(Color.RED);
         infoLabel.setText(s);
     }
 
@@ -105,21 +104,20 @@ public abstract class AbstractController {
 
     /**
      * Add the relatedNode to the list corresponding to the target node so that
-     * if something went wrong with the targetNode, the relatedNode will also 
-     * be disabled
-     * 
+     * if something went wrong with the targetNode, the relatedNode will also be
+     * disabled
+     *
      * @param targetNode
-     * @param relatedNode 
+     * @param relatedNode
      */
     protected void addRelatedNode(Node targetNode, Node relatedNode) {
         if (!relatedNodeMapping.containsKey(targetNode)) {
             ArrayList<Node> relatedNodes = new ArrayList<>();
             relatedNodeMapping.put(targetNode, relatedNodes);
-        } 
+        }
         relatedNodeMapping.get(targetNode).add(relatedNode);
     }
-    
-    
+
     /**
      * disable all the nodes that are related to the given node
      *
@@ -147,6 +145,24 @@ public abstract class AbstractController {
                 ((TextField) n).clear();
             }
             n.setDisable(false);
+        }
+    }
+
+    protected void hide(Node... nodes) {
+        for (Node n : nodes) {
+            n.setVisible(false);
+        }
+    }
+
+    protected void clearText(TextField... tfs) {
+        for (TextField t : tfs) {
+            t.clear();
+        }
+    }
+
+    protected void disableNodes(Node... nodes) {
+        for (Node n : nodes) {
+            n.setDisable(true);
         }
     }
 
