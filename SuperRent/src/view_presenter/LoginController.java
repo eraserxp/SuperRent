@@ -102,7 +102,7 @@ public class LoginController implements Initializable {
 //                    AdminViewController controller = loader.getController();
 //                    controller.setStage(app_stage);
 //                    next_page_parent = loader.load();
-                    next_page_parent = FXMLLoader.load(getClass().getResource("AdminView.fxml"));
+                    next_page_parent = FXMLLoader.load(getClass().getResource("AdminOverview.fxml"));
                     break;
             }
 

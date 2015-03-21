@@ -8,64 +8,22 @@ package view_presenter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import model.AdminModel;
 
 /**
  * FXML Controller class
  *
+ * @author eraserxp
  */
-public class AdminViewController extends AbstractController implements Initializable {
-
-    @FXML
-    private TabPane tabPane;
-
-    /**
-     * ** the following control components are for the show tables tab ***
-     */
-    @FXML
-    private Tab showTableTab;
-
-    @FXML
-    private VBox tableListBox; //in show table tab
-
-    @FXML
-    private VBox tableContentBox; // in show table tab
-
-    private ListView tableList = null;
-
-    private TableView tableContent = null;
-    /**
-     * *********************************************************************
-     */
-
-    /**
-     * ** the following control components are for the manageAccount tab ***
-     */
-    @FXML
-    private Tab manageAccountTab;
+public class AddRemoveUserViewController extends AbstractController implements Initializable {
 
     @FXML
     private Label addInfoLabel;
@@ -127,107 +85,30 @@ public class AdminViewController extends AbstractController implements Initializ
     @FXML
     private Button removeButton;
 
-    @FXML
-    private TextField usernameField_change;
-
-    @FXML
-    private Label usernameValidator_c;
-
-    @FXML
-    private PasswordField passwdField_change;
-
-    @FXML
-    private PasswordField repasswdField_change;
-
-    @FXML
-    private Label passwdValidator_c;
-
-    @FXML
-    private Button changeButton;
     /**
      * *********************************************************************
      */
-
     private AdminModel adminModel = new AdminModel();
 
     /**
-     * Initializes the controller class. This method is automatically called
-     * after the fxml file has been loaded.
+     * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-
-        // when the getTable tab is selected, show the tables
-        showTableTab.setOnSelectionChanged(new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                if (showTableTab.isSelected()) {
-                    setUpShowTablesTab();
-                }
-            }
-        });
-
-        manageAccountTab.setOnSelectionChanged(new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                if (manageAccountTab.isSelected()) {
-                    setUpManageAccountTab();
-                }
-            }
-        });
-
-        // select the showTable tab
-        tabPane.getSelectionModel().select(manageAccountTab);
-    }
-
-    private void setUpShowTablesTab() {
-        if (tableList != null) {
-            tableListBox.getChildren().remove(tableList);
-        }
-        //refesh the database first so that the latest info will be displayed
-        adminModel.refeshDatabaseConnection();
-        tableList = adminModel.getTableNames();
-        tableListBox.getChildren().add(tableList);
-
-        //add listener to each table name
-        tableList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                System.out.println(newValue);
-                // show the content of the corresponding table
-                showTable(newValue);
-            }
-
-        }
-        );
-    }
-
-    private void showTable(String tableName) {
-        //remove the content of the last table
-        if (tableContent != null) {
-            tableContentBox.getChildren().remove(tableContent);
-        }
-
-        //refesh the database first so that the latest info will be displayed
-        adminModel.refeshDatabaseConnection();
-        tableContent = adminModel.getTable(tableName);
-        tableContentBox.getChildren().add(tableContent);
+        setUpManageAccountTab();
     }
 
     private void setUpManageAccountTab() {
 
         //set all validator labels to be invisible
         hide(addInfoLabel, nameValidator, typeValidator, branchValidator,
-                usernameValidator, passwdValidator, usernameValidator_r,
-                usernameValidator_c, passwdValidator_c);
+                usernameValidator, passwdValidator, usernameValidator_r
+               );
 
         //clear the text fields
         clearText(nameField, usernameField_add, passwdField_add,
-                repasswdField_add, usernameField_remove, usernameField_change,
-                passwdField_change, repasswdField_change);
-
+                repasswdField_add, usernameField_remove);
         //disable the three buttons
 //      disableNodes(addButton, removeButton, changeButton);
         setUpNameField();
