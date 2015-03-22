@@ -23,6 +23,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
+import model.AppContext;
 import model.LoginModel;
 
 /**
@@ -102,6 +103,9 @@ public class LoginController implements Initializable {
 //                    AdminViewController controller = loader.getController();
 //                    controller.setStage(app_stage);
 //                    next_page_parent = loader.load();
+                    
+                    AppContext.getInstance().setUsername(username);
+                    AppContext.getInstance().setUserType(user_type);
                     next_page_parent = FXMLLoader.load(getClass().getResource("AdminOverview.fxml"));
                     break;
             }

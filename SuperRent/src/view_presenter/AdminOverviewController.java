@@ -38,6 +38,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.AdminModel;
+import model.AppContext;
 
 /**
  * FXML Controller class
@@ -45,6 +46,12 @@ import model.AdminModel;
  */
 public class AdminOverviewController extends AbstractController implements Initializable {
 
+    @FXML
+    private Label usernameLabel;
+    
+    @FXML
+    private Label userTypeLabel;
+    
     @FXML
     private TabPane tabPane;
 
@@ -76,7 +83,11 @@ public class AdminOverviewController extends AbstractController implements Initi
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-
+        usernameLabel.setText(AppContext.getInstance().getUsername());
+        usernameLabel.setTextFill(Color.GREEN);
+        userTypeLabel.setText(AppContext.getInstance().getUserType());
+        userTypeLabel.setTextFill(Color.GREEN);
+        
         // when the getTable tab is selected, show the tables
         showTableTab.setOnSelectionChanged(new EventHandler<Event>() {
             @Override

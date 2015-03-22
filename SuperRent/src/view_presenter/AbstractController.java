@@ -21,8 +21,8 @@ import javafx.scene.paint.Color;
  *
  */
 public abstract class AbstractController {
-
-    protected HashMap<Node, ArrayList<Node>> relatedNodeMapping = new HashMap<Node, ArrayList<Node>>();
+    
+ 
 
     protected boolean isInputEmpty(TextField t) {
         return (t.getText() == null || t.getText().trim().length() == 0);
@@ -102,51 +102,7 @@ public abstract class AbstractController {
         c.setDisable(true);
     }
 
-    /**
-     * Add the relatedNode to the list corresponding to the target node so that
-     * if something went wrong with the targetNode, the relatedNode will also be
-     * disabled
-     *
-     * @param targetNode
-     * @param relatedNode
-     */
-    protected void addRelatedNode(Node targetNode, Node relatedNode) {
-        if (!relatedNodeMapping.containsKey(targetNode)) {
-            ArrayList<Node> relatedNodes = new ArrayList<>();
-            relatedNodeMapping.put(targetNode, relatedNodes);
-        }
-        relatedNodeMapping.get(targetNode).add(relatedNode);
-    }
 
-    /**
-     * disable all the nodes that are related to the given node
-     *
-     * @param node
-     */
-    protected void disableRelated(Node node) {
-        ArrayList<Node> relatedNodes = relatedNodeMapping.get(node);
-        for (Node n : relatedNodes) {
-            if (n instanceof TextField) {
-                ((TextField) n).clear();
-            }
-            n.setDisable(true);
-        }
-    }
-
-    /**
-     * enable all the nodes that are related to the given node
-     *
-     * @param node
-     */
-    protected void enableRelated(Node node) {
-        ArrayList<Node> relatedNodes = relatedNodeMapping.get(node);
-        for (Node n : relatedNodes) {
-            if (n instanceof TextField) {
-                ((TextField) n).clear();
-            }
-            n.setDisable(false);
-        }
-    }
 
     protected void hide(Node... nodes) {
         for (Node n : nodes) {
