@@ -53,6 +53,23 @@ public class AddRemoveUserViewController extends AbstractController implements I
     private boolean branchOK = false;
 
     private String user_type_add;
+    
+    @FXML
+    private TextField phoneField;
+    
+    @FXML
+    private Label phoneValidator;
+    
+    
+    private boolean phoneOK = false;
+    
+    @FXML
+    private TextField addressField;
+    
+    @FXML
+    private Label addressValidator;
+    
+    private boolean addressOK = false;
 
     @FXML
     private TextField usernameField_add;
@@ -75,6 +92,9 @@ public class AddRemoveUserViewController extends AbstractController implements I
 
     @FXML
     private Button addButton;
+    
+    @FXML
+    private Label removeInfoLabel;
 
     @FXML
     private TextField usernameField_remove;

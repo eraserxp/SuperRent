@@ -40,10 +40,11 @@
          <top>
             <BorderPane prefHeight="82.0" prefWidth="800.0" BorderPane.alignment="CENTER">
                <right>
-                  <GridPane prefHeight="82.0" prefWidth="266.0" BorderPane.alignment="CENTER">
+                  <GridPane prefHeight="82.0" prefWidth="468.0" BorderPane.alignment="CENTER">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -70,6 +71,7 @@
                               <Font size="15.0" />
                            </font>
                         </Label>
+                        <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#handleLogout" text="Log out" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowSpan="2" />
                      </children>
                   </GridPane>
                </right>

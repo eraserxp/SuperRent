@@ -21,7 +21,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -48,10 +50,10 @@ public class AdminOverviewController extends AbstractController implements Initi
 
     @FXML
     private Label usernameLabel;
-    
+
     @FXML
     private Label userTypeLabel;
-    
+
     @FXML
     private TabPane tabPane;
 
@@ -76,6 +78,9 @@ public class AdminOverviewController extends AbstractController implements Initi
     @FXML
     private BorderPane manageAccountContent;
 
+    @FXML
+    private Button logoutButton;
+
     /**
      * Initializes the controller class. This method is automatically called
      * after the fxml file has been loaded.
@@ -87,7 +92,7 @@ public class AdminOverviewController extends AbstractController implements Initi
         usernameLabel.setTextFill(Color.GREEN);
         userTypeLabel.setText(AppContext.getInstance().getUserType());
         userTypeLabel.setTextFill(Color.GREEN);
-        
+
         // when the getTable tab is selected, show the tables
         showTableTab.setOnSelectionChanged(new EventHandler<Event>() {
             @Override
@@ -111,7 +116,7 @@ public class AdminOverviewController extends AbstractController implements Initi
                     try {
                         //setUpShowTablesTab();
                         Parent root = FXMLLoader.load(getClass().getResource("AddRemoveUserView.fxml"));
-                        
+
                         manageAccountContent.setCenter(root);
                     } catch (IOException ex) {
                         Logger.getLogger(AdminOverviewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -125,4 +130,18 @@ public class AdminOverviewController extends AbstractController implements Initi
 //        tabPane.getSelectionModel().select(showTableTab);
     }
 
+    @FXML
+    private void handleLogout(ActionEvent event) throws IOException {
+        // get the stage for the application
+        Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        app_stage.hide();
+        Parent next_page_parent = null;
+
+        next_page_parent = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
+        Scene next_page_scene = new Scene(next_page_parent);
+
+        app_stage.setScene(next_page_scene);
+        app_stage.show();
+
+    }
 }
