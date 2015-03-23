@@ -30,7 +30,7 @@ import model.LoginModel;
  *
  *
  */
-public class LoginController implements Initializable {
+public class LoginController extends AbstractController implements Initializable {
 
     String user_type;
     
@@ -42,10 +42,14 @@ public class LoginController implements Initializable {
     private Button login_button;
     
     @FXML
-    private Label label;
-
-    @FXML
-    private Label invalid_label;
+    private Button clear_button;
+    
+     @FXML
+    private Label usernameValidator;
+      @FXML
+    private Label passwordValidator;
+       @FXML
+    private Label credentialValidator;
 
     @FXML
     private TextField usernameField;
@@ -58,7 +62,53 @@ public class LoginController implements Initializable {
      private LoginModel loginModel = new LoginModel();
      
      boolean valid;
+     
+    private boolean usernameOK = false;
+    private boolean passwordOK = false;
     
+    
+      private void setUpUserField() {
+        usernameField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            // when user enter some text and leave the password field, check the password
+             if (!newValue) {
+             if (isInputEmpty(usernameField)) {
+                    showWarning(usernameValidator, "Username can't be empty!");
+                    usernameOK = false;
+                    
+                } else {
+                    usernameOK = true;
+                    
+                }
+             }
+            //when user is entering something into the namefield, remove the validation information
+            if (newValue) {
+                hide(usernameValidator);
+               
+            }
+        });
+    }
+       private void setUpPassField() {
+        passwordField.focusedProperty().addListener((observable1, oldValue1, newValue1) -> {
+            // when user enter some text and leave the password field, check the password
+             if (!newValue1) {
+             if (isInputEmpty(passwordField)) {
+                    showWarning(passwordValidator, "Password can't be empty!");
+                    passwordOK = false;
+                    
+                } else {
+                    passwordOK = true;
+                    
+                }
+             }
+            //when user is entering something into the namefield, remove the validation information
+            if (newValue1) {
+                hide(passwordValidator);
+               
+            }
+        });
+    }
+
+      
     @FXML
     private void handleloginButtonAction(ActionEvent event) throws IOException {
         // get the stage for the application
@@ -67,15 +117,18 @@ public class LoginController implements Initializable {
         Parent next_page_parent = null;
         
               
+        
+        
+      
+        
+        if(usernameOK==true && passwordOK==true)
+        {
         username=usernameField.getText();
         password=passwordField.getText();
         
-        //System.out.println("Username"+username);
-        //System.out.println("Password"+password);
-        
         valid=loginModel.isValidCredentials(username,password);
         System.out.println("Valid="+valid);
-        
+       
         
                     
        
@@ -118,10 +171,16 @@ public class LoginController implements Initializable {
         
         else
         {
-            Parent root = FXMLLoader.load(getClass().getResource("Invalid.fxml"));
-            Scene scene = new Scene(root);
-            app_stage.setScene(scene);
-            app_stage.show();
+        app_stage.hide();
+               
+        Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
+        Scene scene = new Scene(root);
+        app_stage.setScene(scene);
+        app_stage.show();
+        credentialcheck();
+                   
+        }
+        
         }
     }
 
@@ -138,10 +197,48 @@ public class LoginController implements Initializable {
         
         
     }
-
-    @Override
+    
+    
+     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        setUpManage();
+         login_button.setOnAction((event) -> {
+    // Button was clicked, do something...
+          credentialcheck();
+      });
+         clear_button.setOnAction((event) -> {
+    // Button was clicked, do something...
+          usernameField.clear();
+          passwordField.clear();
+          hide(credentialValidator);
+      });
+        
     }
 
+    
+    private void setUpManage() {
+
+        //set all validator labels to be invisible
+        hide(usernameValidator, passwordValidator,credentialValidator);
+        //clear the text fields
+        clearText(usernameField,passwordField);
+        //disable the three buttons
+
+         setUpUserField();
+         setUpPassField();
+         
+          
+
+    }
+    
+    
+    private void credentialcheck() {
+
+        if(valid==true)
+            hide(credentialValidator);
+        else if(valid==false)
+                showWarning(credentialValidator, "Invalid Credentials!");  
+
+    }
 }
