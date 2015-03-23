@@ -43,6 +43,11 @@ public abstract class AbstractController {
     protected boolean areTwoInputsMatch(PasswordField p1, PasswordField p2) {
         return p1.getText().trim().equals(p2.getText().trim());
     }
+    
+    protected boolean isInputLength(TextField t, int size) {
+        return t.getText().trim().length() == size;
+    }
+
 
     /**
      * Use the infoLabel to show the warning message s

@@ -83,7 +83,7 @@ public class LoginController extends AbstractController implements Initializable
             //when user is entering something into the namefield, remove the validation information
             if (newValue) {
                 hide(usernameValidator);
-               
+                hide(passwordValidator);
             }
         });
     }
@@ -108,19 +108,26 @@ public class LoginController extends AbstractController implements Initializable
         });
     }
 
-      
+       public void start(Stage stage) throws Exception {
+           
+        Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    
     @FXML
     private void handleloginButtonAction(ActionEvent event) throws IOException {
         // get the stage for the application
         Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        app_stage.hide();
+        //app_stage.hide();
         Parent next_page_parent = null;
         
-              
-        
-        
-      
-        
+        usernameField.requestFocus();
+        passwordField.requestFocus();
+        login_button.requestFocus();
+               
         if(usernameOK==true && passwordOK==true)
         {
         username=usernameField.getText();
@@ -129,10 +136,7 @@ public class LoginController extends AbstractController implements Initializable
         valid=loginModel.isValidCredentials(username,password);
         System.out.println("Valid="+valid);
        
-        
-                    
-       
-              
+         
         
         if (valid==true) 
         {
@@ -171,13 +175,14 @@ public class LoginController extends AbstractController implements Initializable
         
         else
         {
-        app_stage.hide();
-               
-        Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
+            //System.out.println("Else part");
+            this.credentialValidator.setVisible(true);
+            this.credentialValidator.setText("Invalid Credentials");
+        //credentialcheck();
+        /*Parent root = FXMLLoader.load(getClass().getResource("Invalid.fxml"));
         Scene scene = new Scene(root);
         app_stage.setScene(scene);
-        app_stage.show();
-        credentialcheck();
+        app_stage.show();*/
                    
         }
         
@@ -203,15 +208,12 @@ public class LoginController extends AbstractController implements Initializable
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         setUpManage();
-         login_button.setOnAction((event) -> {
-    // Button was clicked, do something...
-          credentialcheck();
-      });
+        
          clear_button.setOnAction((event) -> {
     // Button was clicked, do something...
           usernameField.clear();
           passwordField.clear();
-          hide(credentialValidator);
+          hide(usernameValidator, passwordValidator,credentialValidator);
       });
         
     }
@@ -233,12 +235,5 @@ public class LoginController extends AbstractController implements Initializable
     }
     
     
-    private void credentialcheck() {
-
-        if(valid==true)
-            hide(credentialValidator);
-        else if(valid==false)
-                showWarning(credentialValidator, "Invalid Credentials!");  
-
-    }
+    
 }
