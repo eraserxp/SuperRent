@@ -32,7 +32,7 @@
             </Label>
             <Label text="Username:  " GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="13" />
             <TextField fx:id="usernameField_remove" GridPane.columnIndex="2" GridPane.rowIndex="13" />
-            <Button fx:id="removeButton" mnemonicParsing="false" text="Remove" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="14" />
+            <Button fx:id="removeButton" mnemonicParsing="false" onAction="#handleRemoveButton" text="Remove" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="14" />
             <Label text="User type:  " GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
             <ComboBox fx:id="userTypeCMB" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="11" />

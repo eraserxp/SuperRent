@@ -59,9 +59,30 @@ public class AdminModel extends UserModel {
         String addClerk = "insert into clerk values ( " + addQuotation(username) + ","
                 + addQuotation(branch_city) + ","
                 + addQuotation(branch_location) + ")";
-            
+
 //        return updateDatabase(addUser) && updateDatabase(addClerk);
         return updateDatabaseBatch(addUser, addClerk);
     }
 
+    public boolean addCustomer(String username, String passwd, String name, String type,
+            String phone, String address) {
+        boolean result = false;
+        String addUser = "insert into user values (" + addQuotation(username) + ","
+                + addQuotation(passwd) + "," + addQuotation(name)
+                + "," + addQuotation(type) + ")";
+        String isRoadStar = "0";
+        String isClubMember = "0";
+        Integer point = 0;
+        String addCustomer = "insert into customer values ( " + addQuotation(username) + ","
+                + addQuotation(phone) + "," + addQuotation(address) + ", " 
+                + isRoadStar + ", " + isClubMember + ", " + point.toString() + ")";
+
+        return updateDatabaseBatch(addUser, addCustomer);
+    }
+
+    
+    public boolean removeUser(String username) {
+        String removeuser = "delete from user where username = " + addQuotation(username);
+        return updateDatabase(removeuser);
+    }
 }

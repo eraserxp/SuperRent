@@ -7,6 +7,8 @@ package view_presenter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -46,6 +48,21 @@ public abstract class AbstractController {
     
     protected boolean isInputLength(TextField t, int size) {
         return t.getText().trim().length() == size;
+    }
+    
+    /**
+     * Check if the phone number is valid (must be 10 digits, and in some common formats)
+     * 
+     * See the link for details:
+     * http://howtodoinjava.com/2014/11/12/java-regex-validate-and-format-north-american-phone-numbers/
+     * @param t
+     * @return 
+     */
+    protected boolean isInputPhoneNo(TextField t) {
+        String regex = "^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(t.getText().trim());
+        return matcher.matches();
     }
 
 
