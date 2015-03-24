@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="877.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.CustomerOverviewController">
+   <children>
+      <BorderPane layoutY="1.0" prefHeight="877.0" prefWidth="1250.0">
+         <top>
+            <BorderPane prefHeight="72.0" prefWidth="716.0" BorderPane.alignment="CENTER">
+               <left>
+                  <ImageView fitHeight="98.0" fitWidth="191.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                     <image>
+                        <Image url="@superent.png" />
+                     </image>
+                  </ImageView>
+               </left></BorderPane>
+         </top>
+         <center>
+            <TabPane fx:id="tabPane" prefHeight="775.0" prefWidth="1138.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+              <tabs>
+                <Tab fx:id="makeReseravtion_tab" text="Make Reservation">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <BorderPane fx:id="searchVehiclePane" layoutX="-9.0" layoutY="-5.0" prefHeight="542.0" prefWidth="667.0" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab fx:id="changePassword_tab" text="Change Password">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <BorderPane prefHeight="484.0" prefWidth="639.0" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
