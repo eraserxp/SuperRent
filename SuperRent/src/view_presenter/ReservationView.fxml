@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="728.0" prefWidth="1269.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.ReservationViewController">
+   <children>
+      <BorderPane fx:id="selectVehiclePane" prefHeight="728.0" prefWidth="1269.0">
+         <top>
+            <SplitPane dividerPositions="0.2737864077669903" prefHeight="728.0" prefWidth="1269.0" BorderPane.alignment="CENTER">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="727.0" prefWidth="344.0">
+                     <children>
+                        <Button fx:id="searchButton" layoutX="152.0" layoutY="262.0" mnemonicParsing="false" onAction="#handleSearchButtonAction" prefHeight="26.0" prefWidth="79.0" text="Search" />
+                        <ComboBox fx:id="LocationCombobox" layoutX="152.0" layoutY="28.0" prefHeight="26.0" prefWidth="139.0" />
+                        <Label alignment="BASELINE_RIGHT" layoutX="63.0" layoutY="32.0" text="Location" textFill="#1a1ced">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="BASELINE_RIGHT" layoutX="10.0" layoutY="78.0" text="Vehicle Category" textFill="#1c15e1">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="VehicleCategoryCombobox" layoutX="152.0" layoutY="74.0" prefHeight="26.0" prefWidth="118.0" />
+                        <Label alignment="BASELINE_RIGHT" layoutX="18.0" layoutY="124.0" prefHeight="18.0" prefWidth="106.0" text="Vehicle Type" textFill="#1f19dd">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="VehicleTypeCombobox" layoutX="152.0" layoutY="120.0" prefHeight="26.0" prefWidth="118.0" />
+                        <Label layoutX="31.0" layoutY="165.0" text="Vehicle Brand" textFill="#2310d3">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="VehicleBrandCombobox" layoutX="152.0" layoutY="161.0" prefHeight="26.0" prefWidth="118.0" />
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="718.0" prefWidth="801.0">
+                     <children>
+                        <VBox fx:id="tableContentBox" layoutX="1.0" layoutY="-1.0" prefHeight="724.0" prefWidth="512.0">
+                           <children>
+                              <AnchorPane prefHeight="51.0" prefWidth="397.0">
+                                 <children>
+                                    <Button layoutX="406.0" layoutY="9.0" mnemonicParsing="false" onAction="#handleReserveButtonAction" prefHeight="33.0" prefWidth="106.0" text="Select" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </VBox>
+                        <SplitPane dividerPositions="0.008928571428571428" layoutX="515.0" prefHeight="728.0" prefWidth="450.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="46.0" />
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="726.0" prefWidth="442.0">
+                                 <children>
+                                    <DatePicker layoutX="180.0" layoutY="45.0" />
+                                    <Label alignment="BASELINE_RIGHT" layoutX="69.0" layoutY="50.0" text="Pick Up Date" textFill="#2c14c9">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label alignment="BASELINE_RIGHT" layoutX="75.0" layoutY="187.0" text="Return Date" textFill="#2c14c9">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <DatePicker layoutX="180.0" layoutY="182.0" />
+                                    <ComboBox layoutX="180.0" layoutY="86.0" prefWidth="150.0" />
+                                    <ComboBox layoutX="180.0" layoutY="232.0" prefWidth="150.0" />
+                                    <Label alignment="BASELINE_RIGHT" layoutX="68.0" layoutY="91.0" text="Pick Up Time" textFill="#2c14c9">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label alignment="BASELINE_RIGHT" layoutX="75.0" layoutY="237.0" text="Return Date" textFill="#2c14c9">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label alignment="BASELINE_RIGHT" layoutX="43.0" layoutY="133.0" text="Pick Up Location" textFill="#2c14c9">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox layoutX="180.0" layoutY="128.0" prefWidth="150.0" />
+                                    <Label alignment="BASELINE_RIGHT" layoutX="50.0" layoutY="282.0" text="Return Location" textFill="#2c14c9">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox layoutX="180.0" layoutY="277.0" prefWidth="150.0" />
+                                    <CheckBox layoutX="137.0" layoutY="363.0" mnemonicParsing="false" />
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+         </top></BorderPane>
+   </children>
+</AnchorPane>
