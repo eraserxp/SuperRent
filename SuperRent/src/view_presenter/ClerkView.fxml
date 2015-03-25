@@ -1,11 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.ClerkViewController">
-    
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.ClerkViewController">
+   <children>
+      <TabPane fx:id="ClerkTabPane" layoutX="69.0" layoutY="72.0" prefHeight="528.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="72.0">
+         <tabs>
+            <Tab fx:id="CheckReservationTab" text="Check Reservation">
+               <content>
+                  <BorderPane fx:id="CheckReservationContents" prefHeight="200.0" prefWidth="200.0" />
+               </content></Tab>
+            <Tab fx:id="SearchRentTab" text="Search&amp;Rent">
+               <content>
+                  <BorderPane fx:id="SearchRentContents" prefHeight="200.0" prefWidth="200.0" />
+               </content></Tab>
+            <Tab fx:id="ReturnTab" text="Return">
+               <content>
+                  <BorderPane fx:id="ReturnContents" prefHeight="200.0" prefWidth="200.0" />
+               </content></Tab>
+         </tabs>
+      </TabPane>
+      <ImageView fitHeight="123.0" fitWidth="181.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@superent.png" />
+         </image>
+      </ImageView>
+      <GridPane layoutX="305.0" layoutY="-12.0" prefHeight="84.0" prefWidth="468.0">
+         <children>
+            <Label text="Username:  " GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label text="Type:  " GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="usernameLabel" text="usernameLabel" GridPane.columnIndex="1" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="userTypeLabel" text="userTypeLabel" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#handleLogout" text="Log out" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowSpan="2" />
+         </children>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+      </GridPane>
+   </children>
 </AnchorPane>

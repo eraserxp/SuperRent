@@ -11,4 +11,13 @@ package model;
  */
 public class ClerkModel extends UserModel {
     
+        public ClerkModel() {
+        super();
+    }
+    
+    
+    
+    
+    
+    
 }

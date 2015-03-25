@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="495.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.SearchRentViewController">
+   <children>
+      <SplitPane dividerPositions="0.2857142857142857" layoutX="62.0" layoutY="14.0" prefHeight="339.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <VBox layoutX="16.0" layoutY="53.0" prefHeight="370.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="15.0" layoutY="17.0" text="Confirmation Number">
+                           <VBox.margin>
+                              <Insets bottom="4.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="confirmationField" layoutX="12.0" layoutY="36.0" prefHeight="26.0" prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets bottom="4.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Label layoutX="13.0" layoutY="62.0" text="Vehicle Type">
+                           <VBox.margin>
+                              <Insets bottom="4.0" />
+                           </VBox.margin>
+                        </Label>
+                        <ComboBox fx:id="VehicleTypeCBOX" layoutX="12.0" layoutY="78.0" prefHeight="26.0" prefWidth="200.0" style="-fx-background-image: white;" AnchorPane.leftAnchor="12.0">
+                           <VBox.margin>
+                              <Insets bottom="4.0" />
+                           </VBox.margin>
+                        </ComboBox>
+                        <Label layoutX="13.0" layoutY="111.0" text="Category">
+                           <VBox.margin>
+                              <Insets bottom="4.0" />
+                           </VBox.margin>
+                        </Label>
+                        <ComboBox fx:id="CategoryCBOX" layoutX="12.0" layoutY="127.0" prefHeight="26.0" prefWidth="200.0" AnchorPane.leftAnchor="12.0">
+                           <VBox.margin>
+                              <Insets bottom="4.0" />
+                           </VBox.margin>
+                        </ComboBox>
+                        <Label layoutX="13.0" layoutY="156.0" text="Brand">
+                           <VBox.margin>
+                              <Insets bottom="4.0" />
+                           </VBox.margin>
+                        </Label>
+                        <ComboBox fx:id="BrandCBOX" layoutX="18.0" layoutY="172.0" prefHeight="26.0" prefWidth="200.0" AnchorPane.leftAnchor="12.0">
+                           <VBox.margin>
+                              <Insets bottom="4.0" />
+                           </VBox.margin>
+                        </ComboBox>
+                        <Label text="Location">
+                           <VBox.margin>
+                              <Insets bottom="4.0" />
+                           </VBox.margin>
+                        </Label>
+                        <ComboBox fx:id="LocationCBOX" prefHeight="26.0" prefWidth="200.0" />
+                        <Button mnemonicParsing="false" text="Search">
+                           <VBox.margin>
+                              <Insets left="140.0" top="8.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <HBox layoutX="333.0" layoutY="415.0">
+                     <children>
+                        <Button layoutX="250.0" layoutY="422.0" mnemonicParsing="false" text="Reserve" />
+                        <Button layoutX="325.0" layoutY="422.0" mnemonicParsing="false" text="Rent">
+                           <HBox.margin>
+                              <Insets left="4.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+         </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

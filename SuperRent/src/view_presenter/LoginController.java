@@ -149,6 +149,9 @@ public class LoginController extends AbstractController implements Initializable
                     break;
                 case "CLERK":
                     // set the enxt page to be the page for clerk
+                    AppContext.getInstance().setUsername(username);
+                    AppContext.getInstance().setUserType(user_type);
+                    next_page_parent = FXMLLoader.load(getClass().getResource("ClerkView.fxml"));
                     break;
                 case "MANAGER":
                     // set the enxt page to be the page for manager
