@@ -131,6 +131,12 @@ public abstract class AbstractController {
             n.setVisible(false);
         }
     }
+    
+    protected void show(Node... nodes) {
+        for (Node n : nodes) {
+            n.setVisible(true);
+        }
+    }
 
     protected void clearText(TextField... tfs) {
         for (TextField t : tfs) {

@@ -61,9 +61,11 @@ public class SearchRentViewController implements Initializable {
         //set the value of the combo boxes
         VehicleTypeCBOX.setItems(CarTypeList);
         
+        CategoryCBOX.setItems(CategoryList);
         
+        BrandCBOX.setItems(CarBrandList);
         
-        
+        LocationCBOX.setItems(LocationList);
         
         
         

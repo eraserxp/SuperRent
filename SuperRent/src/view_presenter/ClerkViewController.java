@@ -136,12 +136,9 @@ public class ClerkViewController extends AbstractController implements Initializ
                 }
             });
             
-//        CheckReservationTab is first selected as the initia view
+//        show the state that the tab is selected
 //        ClerkTabPane.getSelectionModel().select(CheckReservationTab);
-//        ClerkTabPane.getTabs().add(CheckReservationTab);
-//        SingleSelectionModel<Tab> selectionModel = ClerkTabPane.getSelectionModel();
-//        selectionModel.clearSelection();
-//        selectionModel.select(CheckReservationTab);
+
             
         } catch (IOException ex) {
             Logger.getLogger(ClerkViewController.class.getName()).log(Level.SEVERE, null, ex);
