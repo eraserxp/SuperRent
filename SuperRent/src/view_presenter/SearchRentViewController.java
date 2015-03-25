@@ -6,13 +6,23 @@
 package view_presenter;
 
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import model.ClerkModel;
 
 /**
  * FXML Controller class
@@ -44,12 +54,26 @@ public class SearchRentViewController implements Initializable {
         "BMW","Honda");
     ObservableList<String> TruckBrandList=FXCollections.observableArrayList (
         "BMW","Honda");
-    @FXML
-    private ComboBox LocationCBOX;
-    ObservableList<String> LocationList=FXCollections.observableArrayList (
-        "Vancouver","Toronto");
+
+    @FXML   
+    private Button searchButton;
+    @FXML   
+    private TableView searchTableView;
+    @FXML   
+    private TableColumn vidColumn;
+    @FXML   
+    private TableColumn categoryColumn;    
+    @FXML   
+    private TableColumn vehicleTypeColumn;    
+    @FXML   
+    private TableColumn brandColumn;    
+    @FXML   
+    private TableColumn estimationColumn;    
+   
     
     
+    
+    private ClerkModel clerkModel = new ClerkModel();
     
     
     
@@ -65,10 +89,75 @@ public class SearchRentViewController implements Initializable {
         
         BrandCBOX.setItems(CarBrandList);
         
-        LocationCBOX.setItems(LocationList);
+//        LocationCBOX.setItems(LocationList);
+        
+        handleSearchButton();
+
+        
+        
+    }
+    
+    
+    
+    public void handleSearchButton(){
+        
+    searchButton.setOnAction(new EventHandler<ActionEvent>() {
+    @Override 
+    public void handle(ActionEvent e) {
+        //to do
+        
+        String confirmationNo = confirmationField.getText(); 
+        String vehicletype = VehicleTypeCBOX.getSelectionModel().getSelectedItem().toString();
+        String category = CategoryCBOX.getSelectionModel().getSelectedItem().toString();       
+        String brand = BrandCBOX.getSelectionModel().getSelectedItem().toString();        
+        
+        try {
+            boolean checkvalue = clerkModel.checkConNumber(confirmationNo);
+            if(checkvalue == true){
+                  ArrayList<String> reservation = clerkModel.getReservationDetails(confirmationNo);
+//                  ObservableList<String> oListreservation = FXCollections.observableArrayList(reservation);
+                  //add the info to the table view
+                  //don't forget the estimation cost
+//                  searchTableView.setItems(oListreservation);
+//                  searchTableView.getColumns().addAll(vidColumn, categoryColumn, vehicleTypeColumn,brandColumn);
+                  
+                  
+                  
+                  
+                  
+                  
+            }else{
+                //change the contents of the validator
+                
+                
+                
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(SearchRentViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         
         
-    }    
+        
+    }
+    });
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+    
     
 }
