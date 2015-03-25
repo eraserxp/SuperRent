@@ -214,8 +214,7 @@ public class LoginController extends AbstractController implements Initializable
         
          clear_button.setOnAction((event) -> {
     // Button was clicked, do something...
-          usernameField.clear();
-          passwordField.clear();
+         clearText(usernameField, passwordField);
           hide(usernameValidator, passwordValidator,credentialValidator);
       });
         
