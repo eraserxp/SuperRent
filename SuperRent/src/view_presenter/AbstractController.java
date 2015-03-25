@@ -17,14 +17,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import model.ValidationResult;
 
 /**
  *
  *
  */
 public abstract class AbstractController {
-    
- 
 
     protected boolean isInputEmpty(TextField t) {
         return (t.getText() == null || t.getText().trim().length() == 0);
@@ -45,18 +44,20 @@ public abstract class AbstractController {
     protected boolean areTwoInputsMatch(PasswordField p1, PasswordField p2) {
         return p1.getText().trim().equals(p2.getText().trim());
     }
-    
+
     protected boolean isInputLength(TextField t, int size) {
         return t.getText().trim().length() == size;
     }
-    
+
     /**
-     * Check if the phone number is valid (must be 10 digits, and in some common formats)
-     * 
+     * Check if the phone number is valid (must be 10 digits, and in some common
+     * formats)
+     *
      * See the link for details:
      * http://howtodoinjava.com/2014/11/12/java-regex-validate-and-format-north-american-phone-numbers/
+     *
      * @param t
-     * @return 
+     * @return
      */
     protected boolean isInputPhoneNo(TextField t) {
         String regex = "^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$";
@@ -64,7 +65,6 @@ public abstract class AbstractController {
         Matcher matcher = pattern.matcher(t.getText().trim());
         return matcher.matches();
     }
-
 
     /**
      * Use the infoLabel to show the warning message s
@@ -75,6 +75,7 @@ public abstract class AbstractController {
     protected void showWarning(Label infoLabel, String s) {
         infoLabel.setVisible(true);
         infoLabel.setText(s);
+        infoLabel.setWrapText(true);
     }
 
     protected void showSuccessMessage(Label infoLabel, String s) {
@@ -100,7 +101,8 @@ public abstract class AbstractController {
      * @param infoLabel
      * @return
      */
-    protected boolean checkTwoPasswdFields(PasswordField passwordField, PasswordField repasswordField, Label infoLabel) {
+    protected boolean checkTwoPasswdFields(PasswordField passwordField, PasswordField repasswordField, 
+                                           Label infoLabel) {
         boolean passwordValid = false;
         if (isInputEmpty(passwordField)) {
             showWarning(infoLabel, "Password can't be empty!");
@@ -114,6 +116,67 @@ public abstract class AbstractController {
         return passwordValid;
     }
 
+    protected void setUpPasswordField(PasswordField passwordField, PasswordField repasswordField, 
+                                    Label infoLabel, ValidationResult validationResult) {
+
+        passwordField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            // when user enter some text and leave the password field, check the password
+            if (!newValue) {
+                if (checkTwoPasswdFields(passwordField, repasswordField, infoLabel) == true) {
+                    validationResult.set(true);
+                } else {
+                    validationResult.set(false);
+                }
+            }
+
+            //when user is entering something into the password field, clearAndDisable the button
+            // and remove the warnings
+            if (newValue) {
+                infoLabel.setText("");
+                infoLabel.setVisible(false);
+            }
+        });
+
+        repasswordField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                if (checkTwoPasswdFields(passwordField, repasswordField, infoLabel) == true) {
+                    validationResult.set(true);
+                } else {
+                    validationResult.set(false);
+                }
+            }
+            //when user is entering something into the password field, clearAndDisable the button
+            // and remove the warnings
+            if (newValue) {
+                infoLabel.setText("");
+                infoLabel.setVisible(false);
+            }
+        });
+
+    }
+    
+    
+        protected void setUpUsernameField_checkEmpty(TextField usernameField, Label infoLabel,
+                                                   ValidationResult validationResult) {
+        usernameField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            // check the input when the focus on this text field is lost
+            if (!newValue) {
+                //validate the username
+                if (isInputEmpty(usernameField)) {
+                    showWarning(infoLabel, "Username can't be empty!");
+                    validationResult.set(false);
+                } else {
+                    validationResult.set(true);
+                }
+            }
+
+            //when user is entering something into the field, remove any previous validation message
+            if (newValue) {
+                hide(infoLabel);
+            }
+        });
+    }
+
     /**
      * clear and clearAndDisable a combobox
      *
@@ -124,14 +187,12 @@ public abstract class AbstractController {
         c.setDisable(true);
     }
 
-
-
     protected void hide(Node... nodes) {
         for (Node n : nodes) {
             n.setVisible(false);
         }
     }
-    
+
     protected void show(Node... nodes) {
         for (Node n : nodes) {
             n.setVisible(true);

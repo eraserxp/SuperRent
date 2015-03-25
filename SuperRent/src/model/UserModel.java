@@ -231,4 +231,11 @@ public class UserModel {
         }
         return branchList;
     }
+    
+    
+    public boolean changePasswd(String username, String passwd) {
+        String changePasswd = "update user set password = " + addQuotation(passwd)
+                              + " where username = " + addQuotation(username);
+        return updateDatabase(changePasswd);
+    }
 }
