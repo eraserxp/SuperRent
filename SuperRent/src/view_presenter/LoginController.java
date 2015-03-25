@@ -117,6 +117,7 @@ public class LoginController extends AbstractController implements Initializable
     }
 
     
+    
     @FXML
     private void handleloginButtonAction(ActionEvent event) throws IOException {
         // get the stage for the application
@@ -214,8 +215,7 @@ public class LoginController extends AbstractController implements Initializable
         
          clear_button.setOnAction((event) -> {
     // Button was clicked, do something...
-          usernameField.clear();
-          passwordField.clear();
+         clearText(usernameField, passwordField);
           hide(usernameValidator, passwordValidator,credentialValidator);
       });
         

@@ -21,26 +21,9 @@ import javafx.util.Callback;
  *
  * @author eraserxp
  */
-public class LoginModel {
+public class LoginModel extends UserModel{
 
-    protected Connection con = null;
-    protected MysqlConnection mysqlConnInstance = null;
-
-    public LoginModel() {
-        mysqlConnInstance = MysqlConnection.getInstance();
-        con = MysqlConnection.getInstance().getConnection();
-    }
-
-    /**
-     * refresh the database connection so that the info 
-     */
-    public void refeshDatabaseConnection() {
-        con = mysqlConnInstance.refreshConnection();
-    }
-
-    /**
-     * show a table -- as a test
-     */
+    
      public boolean isValidCredentials(String username,String passwrd) 
     {
         String pass="";
@@ -58,7 +41,7 @@ public class LoginModel {
             {
                       
             pass=rs.getString("password");
-            System.out.println("Password"+pass);
+            //System.out.println("Password"+pass);
 
             if(pass.equals(passwrd))
                 valid=true;
@@ -97,7 +80,7 @@ public class LoginModel {
 
             while(rs.next()){
             type = rs.getString("type");
-            System.out.println("TYPE "+type);
+            //System.out.println("TYPE "+type);
             }
             rs.close();
 
@@ -113,5 +96,62 @@ public class LoginModel {
 
         return type;
     }
+    
+    public boolean isUserExist(String username) 
+    {
+       int count=0;
+        
+          
+        try {
+
+            //select everything from the given table
+            //String SQL = "SELECT type from user where username="+username+"and password="+password;
+
+            String SQL = "SELECT type FROM user WHERE username='"+username+"'";
+            //execute the sql statement and obtain the result
+            ResultSet rs = con.createStatement().executeQuery(SQL);
+
+            while(rs.next()){
+            count++;
+            }
+            
+            rs.close();
+            if(count==0)
+                return false;
+            else 
+                return true;
+            
+
+        } 
+       
+   catch (Exception e) {
+
+            e.printStackTrace();
+
+            System.out.println("Error on Building Data");
+
+        }
+     
+     return true;     
+    }
+
+
+    public boolean addCustomer(String username, String passwd, String name, String type,
+            String phone, String address) {
+        boolean result = false;
+        String addUser = "insert into user values (" + addQuotation(username) + ","
+                + addQuotation(passwd) + "," + addQuotation(name)
+                + "," + addQuotation(type) + ")";
+        String isRoadStar = "0";
+        String isClubMember = "0";
+        Integer point = 0;
+        String addCustomer = "insert into customer values ( " + addQuotation(username) + ","
+                + addQuotation(phone) + "," + addQuotation(address) + ", " 
+                + isRoadStar + ", " + isClubMember + ", " + point.toString() + ")";
+
+        return updateDatabaseBatch(addUser, addCustomer);
+    }
+
+    
 
 }

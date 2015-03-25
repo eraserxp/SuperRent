@@ -79,6 +79,12 @@ public class AdminOverviewController extends AbstractController implements Initi
     private BorderPane manageAccountContent;
 
     @FXML
+    private Tab changePasswdTab;
+
+    @FXML
+    private BorderPane changePasswdContent;
+
+    @FXML
     private Button logoutButton;
 
     /**
@@ -118,6 +124,21 @@ public class AdminOverviewController extends AbstractController implements Initi
                         Parent root = FXMLLoader.load(getClass().getResource("AddRemoveUserView.fxml"));
 
                         manageAccountContent.setCenter(root);
+                    } catch (IOException ex) {
+                        Logger.getLogger(AdminOverviewController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+
+        changePasswdTab.setOnSelectionChanged(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+                if (changePasswdTab.isSelected()) {
+                    System.out.println("Change password tab has been selected");
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("ChangePasswdView.fxml"));
+                        changePasswdContent.setCenter(root);
                     } catch (IOException ex) {
                         Logger.getLogger(AdminOverviewController.class.getName()).log(Level.SEVERE, null, ex);
                     }

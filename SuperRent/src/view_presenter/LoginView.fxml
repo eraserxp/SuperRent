@@ -24,8 +24,8 @@
             <Image url="@download.jpg" />
          </image>
       </ImageView>
-      <TextField id="user" fx:id="usernameField" layoutX="226.0" layoutY="131.0" promptText="Username" />
-      <PasswordField id="pass" fx:id="passwordField" layoutX="226.0" layoutY="178.0" promptText="Password" />
+      <TextField id="user" fx:id="usernameField" focusTraversable="false" layoutX="226.0" layoutY="131.0" promptText="Username" />
+      <PasswordField id="pass" fx:id="passwordField" focusTraversable="false" layoutX="226.0" layoutY="178.0" promptText="Password" />
       <Label layoutX="134.0" layoutY="125.0" prefHeight="29.0" prefWidth="83.0" text="Username">
          <font>
             <Font name="Freestyle Script" size="28.0" />
@@ -40,7 +40,7 @@
       <Button id="log" fx:id="login_button" layoutX="329.0" layoutY="220.0" mnemonicParsing="false" onAction="#handleloginButtonAction" text="Login" />
       <Label fx:id="usernameValidator" layoutX="394.0" layoutY="135.0" prefHeight="17.0" prefWidth="159.0" />
       <Label fx:id="passwordValidator" layoutX="394.0" layoutY="182.0" prefHeight="17.0" prefWidth="159.0" />
-      <Label fx:id="credentialValidator" layoutX="66.0" layoutY="97.0" prefHeight="17.0" prefWidth="159.0" text="Hello" textFill="#ee158c" />
+      <Label fx:id="credentialValidator" layoutX="66.0" layoutY="97.0" prefHeight="17.0" prefWidth="159.0" textFill="#ee158c" />
       <Button fx:id="clear_button" layoutX="331.0" layoutY="256.0" mnemonicParsing="false" text="Clear" />
    </children>
 </AnchorPane>
