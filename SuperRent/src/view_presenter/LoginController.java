@@ -118,7 +118,8 @@ public class LoginController extends AbstractController implements Initializable
 
     
     
-    public void handleloginButtonAction(ActionEvent event) throws IOException {
+    @FXML
+    private void handleloginButtonAction(ActionEvent event) throws IOException {
         // get the stage for the application
         Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         //app_stage.hide();
