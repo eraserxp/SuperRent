@@ -22,6 +22,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import model.ClerkModel;
 
 /**
@@ -57,21 +58,11 @@ public class SearchRentViewController implements Initializable {
 
     @FXML   
     private Button searchButton;
-    @FXML   
-    private TableView searchTableView;
-    @FXML   
-    private TableColumn vidColumn;
-    @FXML   
-    private TableColumn categoryColumn;    
-    @FXML   
-    private TableColumn vehicleTypeColumn;    
-    @FXML   
-    private TableColumn brandColumn;    
-    @FXML   
-    private TableColumn estimationColumn;    
-   
     
-    
+    @FXML
+    private VBox tableViewBox; // box to hold the table view
+    @FXML   
+    private TableView tableView = null;
     
     private ClerkModel clerkModel = new ClerkModel();
     
@@ -107,9 +98,9 @@ public class SearchRentViewController implements Initializable {
         //to do
         
         String confirmationNo = confirmationField.getText(); 
-        String vehicletype = VehicleTypeCBOX.getSelectionModel().getSelectedItem().toString();
-        String category = CategoryCBOX.getSelectionModel().getSelectedItem().toString();       
-        String brand = BrandCBOX.getSelectionModel().getSelectedItem().toString();        
+//        String vehicletype = VehicleTypeCBOX.getSelectionModel().getSelectedItem().toString();
+//        String category = CategoryCBOX.getSelectionModel().getSelectedItem().toString();       
+//        String brand = BrandCBOX.getSelectionModel().getSelectedItem().toString();        
         
         try {
             boolean checkvalue = clerkModel.checkConNumber(confirmationNo);
@@ -120,7 +111,16 @@ public class SearchRentViewController implements Initializable {
                   //don't forget the estimation cost
 //                  searchTableView.setItems(oListreservation);
 //                  searchTableView.getColumns().addAll(vidColumn, categoryColumn, vehicleTypeColumn,brandColumn);
-                  
+        if (tableView != null) {
+            tableViewBox.getChildren().remove(tableView);
+        }
+
+        //refesh the database first so that the latest info will be displayed
+        clerkModel.refeshDatabaseConnection();
+        if(confirmationNo!=null){
+        tableView = clerkModel.TableviewwithCN(confirmationNo);
+        }
+        tableViewBox.getChildren().add(tableView);
                   
                   
                   

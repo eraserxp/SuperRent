@@ -12,22 +12,6 @@
       <Label layoutX="14.0" layoutY="43.0" prefHeight="27.0" prefWidth="138.0" text="Confirmation Number" AnchorPane.leftAnchor="14.0" />
       <TextField layoutX="16.0" layoutY="70.0" prefHeight="26.0" prefWidth="200.0" AnchorPane.leftAnchor="14.0" />
       <Button layoutX="148.0" layoutY="265.0" mnemonicParsing="false" text="Identify" />
-      <TreeTableView layoutX="217.0" layoutY="81.0" prefHeight="495.0" prefWidth="583.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="217.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <columns>
-          <TreeTableColumn prefWidth="29.0" text="Confirmation Number" />
-            <TreeTableColumn prefWidth="38.0" text="Vid" />
-            <TreeTableColumn prefWidth="33.0" text="RentID" />
-            <TreeTableColumn prefWidth="38.0" text="ReturnTime" />
-            <TreeTableColumn prefWidth="41.0" text="ReturnLocation" />
-            <TreeTableColumn prefWidth="46.0" text="Customer" />
-            <TreeTableColumn prefWidth="59.0" text="tank_full" />
-            <TreeTableColumn prefWidth="57.0" text="od_reading" />
-            <TreeTableColumn prefWidth="36.0" text="Rental Charge" />
-            <TreeTableColumn prefWidth="34.0" text="InsuranceCost" />
-            <TreeTableColumn prefWidth="29.0" text="Additional Cost" />
-            <TreeTableColumn prefWidth="35.0" text="Total Cost" />
-            <TreeTableColumn prefWidth="75.0" text="Payment Method" />
-        </columns>
-      </TreeTableView>
+      <VBox layoutX="226.0" layoutY="91.0" prefHeight="495.0" prefWidth="574.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>
