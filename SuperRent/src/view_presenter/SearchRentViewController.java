@@ -58,6 +58,10 @@ public class SearchRentViewController implements Initializable {
 
     @FXML   
     private Button searchButton;
+    @FXML   
+    private Button reserveButton;
+    @FXML   
+    private Button rentButton;
     
     @FXML
     private VBox tableViewBox; // box to hold the table view
@@ -80,18 +84,64 @@ public class SearchRentViewController implements Initializable {
         
         BrandCBOX.setItems(CarBrandList);
         
-//        LocationCBOX.setItems(LocationList);
-        
         handleSearchButton();
+        
+        handleReserveButton();
+        
+        handleRentButton();
 
         
         
     }
     
-    
-    
-    public void handleSearchButton(){
+@FXML   
+private void handleReserveButton() {
+
+    reserveButton.setOnAction(new EventHandler<ActionEvent>() {
+    @Override 
+    public void handle(ActionEvent e) {
+        //to do  
+        //get Selected Item
+//        Person currentPerson = (Person) ButtonCell.this.getTableView().getItems().get(ButtonCell.this.getIndex());
+//        //remove selected item from the table list
+//        data.remove(currentPerson);
         
+        
+        
+        System.out.println("testing");
+        
+    }
+    });
+    
+ 
+    
+}
+ 
+@FXML
+private void handleRentButton() {
+
+    rentButton.setOnAction(new EventHandler<ActionEvent>() {
+    @Override 
+    public void handle(ActionEvent e) {
+        //to do  
+        
+        
+        
+        
+        System.out.println("testing");
+    }
+    });
+    
+    
+    
+    
+}    
+    
+@FXML    
+private void handleSearchButton(){
+    
+    reserveButton.setVisible(false);
+    rentButton.setVisible(false);
     searchButton.setOnAction(new EventHandler<ActionEvent>() {
     @Override 
     public void handle(ActionEvent e) {
@@ -126,7 +176,10 @@ public class SearchRentViewController implements Initializable {
         clerkModel.refeshDatabaseConnection();
         tableView = clerkModel.setupTableview(confirmationNo,vehicletype,category,brand);
         tableViewBox.getChildren().add(tableView);
-
+//        reserveButton.setDisable(false);
+//        rentButton.setDisable(false);
+        reserveButton.setVisible(true);
+        rentButton.setVisible(true);
             
             
         } catch (SQLException ex) {
@@ -143,9 +196,8 @@ public class SearchRentViewController implements Initializable {
     }
     
     
-    
-    
-    
+
+
     
     
     

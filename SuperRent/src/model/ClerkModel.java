@@ -158,7 +158,29 @@ public class ClerkModel extends UserModel {
     
     }
     
+    public void moveToReservation(){
+        //remove it in vehicleforrent
+        //add it to reservation
+        
+        
+        
+        
+        
+        
+        
+    }
     
+    public void moveToRent(){
+        //if it is reserved,remove it in reservation, and add it to rent
+        //if it is not reserved, remove it in vehicleforrent, and add it to rent
+        
+        
+        
+        
+        
+        
+        
+    }
     
     
     
