@@ -42,13 +42,13 @@ public class SearchRentViewController implements Initializable {
     @FXML
     private ComboBox VehicleTypeCBOX;
     ObservableList<String> CarTypeList=FXCollections.observableArrayList (
-        "Economy","Luxury");
+        "economy","luxury");
     ObservableList<String> TruckTypeList=FXCollections.observableArrayList (
-        "12-foot","24-foot");
+        "foot12","foot24");
     @FXML
     private ComboBox CategoryCBOX;
     ObservableList<String> CategoryList=FXCollections.observableArrayList (
-        "Car","Truck");
+        "car","truck");
     @FXML
     private ComboBox BrandCBOX;
     ObservableList<String> CarBrandList=FXCollections.observableArrayList (
@@ -96,48 +96,37 @@ public class SearchRentViewController implements Initializable {
     @Override 
     public void handle(ActionEvent e) {
         //to do
+        String vehicletype = null;
+        String category = null;
+        String brand = null;
+        String confirmationNo = null; 
         
-        String confirmationNo = confirmationField.getText(); 
-//        String vehicletype = VehicleTypeCBOX.getSelectionModel().getSelectedItem().toString();
-//        String category = CategoryCBOX.getSelectionModel().getSelectedItem().toString();       
-//        String brand = BrandCBOX.getSelectionModel().getSelectedItem().toString();        
+        if(VehicleTypeCBOX.getSelectionModel().getSelectedItem()!=null){
+        vehicletype = VehicleTypeCBOX.getSelectionModel().getSelectedItem().toString();        
+        }
+        if(CategoryCBOX.getSelectionModel().getSelectedItem()!=null){
+        category = CategoryCBOX.getSelectionModel().getSelectedItem().toString();        
+        }
+        if(BrandCBOX.getSelectionModel().getSelectedItem()!=null){
+        brand = BrandCBOX.getSelectionModel().getSelectedItem().toString();        
+        }
+        if(confirmationField.getText()!=null){
+        confirmationNo = confirmationField.getText();    
+        }
+
         
-        try {
-            boolean checkvalue = clerkModel.checkConNumber(confirmationNo);
-            if(checkvalue == true){
-                  ArrayList<String> reservation = clerkModel.getReservationDetails(confirmationNo);
-//                  ObservableList<String> oListreservation = FXCollections.observableArrayList(reservation);
-                  //add the info to the table view
-                  //don't forget the estimation cost
-//                  searchTableView.setItems(oListreservation);
-//                  searchTableView.getColumns().addAll(vidColumn, categoryColumn, vehicleTypeColumn,brandColumn);
+    try {
+
+        //add the info to the table view
+        //don't forget the estimation cost
         if (tableView != null) {
             tableViewBox.getChildren().remove(tableView);
         }
-
         //refesh the database first so that the latest info will be displayed
         clerkModel.refeshDatabaseConnection();
-        if(confirmationNo!=null){
-        tableView = clerkModel.TableviewwithCN(confirmationNo);
-        }
+        tableView = clerkModel.setupTableview(confirmationNo,vehicletype,category,brand);
         tableViewBox.getChildren().add(tableView);
-                  
-                  
-                  
-                  
-                  
-            }else{
-                //change the contents of the validator
-                
-                
-                
-            }
-            
-            
-            
-            
-            
-            
+
             
             
         } catch (SQLException ex) {

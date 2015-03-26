@@ -82,23 +82,32 @@ public class ClerkModel extends UserModel {
      
  }
 
-    public TableView TableviewwithCN(String connumber) throws SQLException {
+    public TableView setupTableview(String connumber,String vehicletype,String category,String brand) throws SQLException {
         //To change body of generated methods, choose Tools | Templates.
-    
     
         ObservableList<ObservableList> rdata;
         rdata = FXCollections.observableArrayList();
 
         TableView tableview = new TableView();
         String statement = null;
-        
-        if(connumber!=null){
-        statement = "SELECT reservation.confirmation_number,vehicleforrent.category,vehicleforrent.vehicleType,vehicleforrent.brand from vehicleforrent,reservation where vehicleforrent.vid = reservation.vid && reservation.confirmation_number = " + connumber + ";";
-        }else{
-            
+        boolean checkvalue = false;
+        if(!connumber.isEmpty()){
+        checkvalue = checkConNumber(connumber);
         }
-        ResultSet rs = con.createStatement().executeQuery(statement);
+        if(checkvalue==true){
+        statement = "SELECT reservation.confirmation_number,vehicleforrent.category,vehicleforrent.vehicleType,vehicleforrent.brand from vehicleforrent,reservation where vehicleforrent.vid = reservation.vid && reservation.confirmation_number = " + connumber + ";";
+        }else if(checkvalue==false&&!vehicletype.isEmpty()&&!category.isEmpty()&&!brand.isEmpty()){
+
+        statement = "select category,vehicleType,brand from vehicleforrent where category = "+addQuotation(category)+"&&vehicleType = "+addQuotation(vehicletype)+"&&brand = "+addQuotation(brand)+";";    
+
+        }else{
+        System.out.println("please define the validator");
+        }
         
+        
+        
+        
+        ResultSet rs = con.createStatement().executeQuery(statement);
         
         for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
 
@@ -129,7 +138,7 @@ public class ClerkModel extends UserModel {
                 // for each row, we add every columns
                 for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
                     row.add(rs.getString(i));
-                    System.out.println("testing");
+                    //System.out.println("testing");
 
                 }
                 // add each row into the data
@@ -148,6 +157,12 @@ public class ClerkModel extends UserModel {
     
     
     }
+    
+    
+    
+    
+    
+    
     
     
 }
