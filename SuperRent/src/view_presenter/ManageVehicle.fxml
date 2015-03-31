@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="555.0" prefWidth="808.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.ManageVehicleController">
+   <children>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="555.0" prefWidth="808.0">
+         <children>
+            <SplitPane dividerPositions="0.3005366726296959" layoutY="-1.0" orientation="VERTICAL" prefHeight="561.0" prefWidth="808.0">
+               <items>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="183.0" prefWidth="806.0">
+                     <children>
+                        <TextField fx:id="typeTextFeild" layoutX="378.0" layoutY="48.0" />
+                        <DatePicker fx:id="dateBox" layoutX="379.0" layoutY="85.0" prefHeight="26.0" prefWidth="163.0" />
+                        <Label layoutX="329.0" layoutY="53.0" text="Type:" />
+                        <RadioButton fx:id="truckRadioButton" layoutX="460.0" layoutY="21.0" mnemonicParsing="false" text="Truck" />
+                        <RadioButton fx:id="carRadioButton" layoutX="402.0" layoutY="22.0" mnemonicParsing="false" text="Car" />
+                        <Label layoutX="24.0" layoutY="21.0" text="Add Vehicle">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="329.0" layoutY="90.0" text="Date:" />
+                        <Button layoutX="489.0" layoutY="130.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="52.0" text="Add" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="306.0" prefWidth="744.0">
+                     <children>
+                        <Label layoutX="21.0" layoutY="10.0" text="Show Vehile for sale">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <VBox layoutX="12.0" layoutY="49.0" prefHeight="212.0" prefWidth="531.0" />
+                        <Button fx:id="soldButton" layoutX="489.0" layoutY="271.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="52.0" text="Sold" />
+                        <Button fx:id="showButton" layoutX="489.0" layoutY="15.0" mnemonicParsing="false" text="Show" />
+                     </children>
+                  </AnchorPane>
+               </items>
+            </SplitPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
