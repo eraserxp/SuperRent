@@ -10,16 +10,26 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import static javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY;
+import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 
 /**
@@ -169,13 +179,14 @@ public class UserModel {
 
     /**
      * execute multiple sql in a batch
+     *
      * @param SQLs
-     * @return 
+     * @return
      */
-    protected boolean updateDatabaseBatch(String ... SQLs) {
+    protected boolean updateDatabaseBatch(String... SQLs) {
         try {
             Statement statement = con.createStatement();
-            for (String s: SQLs) {
+            for (String s : SQLs) {
                 statement.addBatch(s);
             }
             statement.executeBatch();
@@ -196,7 +207,6 @@ public class UserModel {
 //            return false;
 //        }
 //    }
-
     protected String addQuotation(String s) {
         return " '" + s + "' ";
     }
@@ -214,7 +224,6 @@ public class UserModel {
 //                + "," + addQuotation(type) + ")";
 //        return updateDatabase_noCommit(SQL);
 //    }
-
     public ArrayList<String> getAllBranches() {
         String SQL = "select city, location from branch";
         ResultSet rs = queryDatabase(SQL);
@@ -232,10 +241,118 @@ public class UserModel {
         return branchList;
     }
     
-    
+    public ArrayList<String> getVehicleTypeAtBranch(String city, String location, String carOrTruck) {
+        String SQL = "select distinct typeName from vehicletype VT, vehicleforrent VF, vehicleinbranch VB"
+                + " where VF.vlicense=VB.vlicense and VF.vehicletype=VT.typeName "
+                + " and VB.location=" + addQuotation(location)  
+                + " and VB.city=" + addQuotation(city) 
+                + " and VF.category=" + addQuotation(carOrTruck) 
+                + " order by typeName";
+                ResultSet rs = queryDatabase(SQL);
+        System.out.println(SQL);
+        ArrayList<String> typeList = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                String type;
+                type = rs.getString("typeName") ;
+                typeList.add(type);
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return typeList;
+    }
+
     public boolean changePasswd(String username, String passwd) {
         String changePasswd = "update user set password = " + addQuotation(passwd)
-                              + " where username = " + addQuotation(username);
+                + " where username = " + addQuotation(username);
         return updateDatabase(changePasswd);
     }
+
+    private HashMap<String, Integer> getVehicleRate(String vehicleType) {
+        String getAllRates = "select w_rate, d_rate, h_rate, pk_rate"
+                + " from vehicletype where typename=" + addQuotation(vehicleType);
+        ResultSet rs = queryDatabase(getAllRates);
+        HashMap<String, Integer> rates = new HashMap<>();
+        try {
+            for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
+                String columnName = rs.getMetaData().getColumnName(i + 1);
+                rates.put(columnName, rs.getInt(columnName));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rates;
+    }
+
+    private HashMap<String, Integer> getEquipmentRate(String vehicleType) {
+        String getAllRates = "select d_rate, h_rate "
+                + " from equipment where equipName=" + addQuotation(vehicleType);
+        ResultSet rs = queryDatabase(getAllRates);
+        HashMap<String, Integer> rates = new HashMap<>();
+        try {
+            for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
+                String columnName = rs.getMetaData().getColumnName(i + 1);
+                rates.put(columnName, rs.getInt(columnName));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rates;
+    }
+
+    private HashMap<String, Integer> getInsuranceCost(String vehicleType) {
+        String getAllRates = "select w_insurance, d_insurance, h_insurance"
+                + " from vehicletype where typeName=" + addQuotation(vehicleType);
+        ResultSet rs = queryDatabase(getAllRates);
+        HashMap<String, Integer> insurances = new HashMap<>();
+        try {
+            for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
+                String columnName = rs.getMetaData().getColumnName(i + 1);
+                insurances.put(columnName, rs.getInt(columnName));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return insurances;
+    }
+
+    /**
+     *
+     * calculate the cost for a given return, rent or reservation
+     */
+    public GridPane calculateCost(String vehicleType, ArrayList<String> equipList,
+            ArrayList<Integer> equipQuantityList,
+            LocalDate fromDate, int fromHour,
+            LocalDate toDate, int toHour, boolean isRoadStar, int redeemedPoints,
+            int odometer) {
+        GridPane gridPane = new GridPane();
+//        Instant instant = Instant.ofEpochMilli(fromDate.getTime());
+//        LocalDateTime startDate = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
+//        instant = Instant.ofEpochMilli(toDate.getTime());
+//        LocalDateTime endDate = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
+        int all_days = (int) ChronoUnit.DAYS.between(fromDate, toDate);
+        int week = (int) all_days/7;
+        int days = all_days%7;
+        int hours = toHour - fromHour;
+        
+        //get all the rate and cost from database
+        HashMap<String, Integer> vehicleRates = getVehicleRate(vehicleType);
+        HashMap<String, Integer> vehicleInsurances = getInsuranceCost(vehicleType);
+        HashMap<String, Integer> equipmentRates = getEquipmentRate(vehicleType);
+
+        ArrayList<String> columnHeaders = new ArrayList<>(
+                Arrays.asList("    ", "Time", "Renting fee", "Insurance")
+        );
+        //add the first row
+        int cols = columnHeaders.size();
+        int rowIndex = 0;
+        for (int colIndex=0; colIndex<cols; colIndex++) {
+            gridPane.add(new Label(columnHeaders.get(colIndex)), colIndex, rowIndex);
+        }
+
+        return gridPane;
+    }
+
 }

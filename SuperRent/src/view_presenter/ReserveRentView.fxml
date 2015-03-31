@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.SearchRentViewController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.ReserveRentController">
    <children>
       <SplitPane dividerPositions="0.32456140350877194" layoutX="62.0" layoutY="14.0" prefHeight="339.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
@@ -16,31 +16,31 @@
                <children>
                   <VBox layoutX="16.0" layoutY="53.0" prefHeight="493.0" prefWidth="224.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
+                        <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="200.0" spacing="40.0">
+                           <children>
+                              <RadioButton fx:id="carRB" mnemonicParsing="false" text="Car" />
+                              <RadioButton fx:id="truckRB" mnemonicParsing="false" text="Truck" />
+                           </children>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </HBox>
                         <Label layoutX="13.0" layoutY="62.0" text="Location">
                            <VBox.margin>
                               <Insets bottom="4.0" />
                            </VBox.margin>
                         </Label>
-                        <ComboBox fx:id="VehicleTypeCBOX" layoutX="12.0" layoutY="78.0" prefHeight="26.0" prefWidth="200.0" style="-fx-background-image: white;" AnchorPane.leftAnchor="12.0">
+                        <ComboBox fx:id="locationCMB" layoutX="12.0" layoutY="78.0" prefHeight="26.0" prefWidth="200.0" style="-fx-background-image: white;" AnchorPane.leftAnchor="12.0">
                            <VBox.margin>
                               <Insets bottom="4.0" />
                            </VBox.margin>
                         </ComboBox>
-                        <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="200.0" spacing="40.0">
-                           <children>
-                              <RadioButton mnemonicParsing="false" text="Car" />
-                              <RadioButton mnemonicParsing="false" text="Truck" />
-                           </children>
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </HBox>
                         <Label layoutX="13.0" layoutY="111.0" text="Vehicle type">
                            <VBox.margin>
                               <Insets bottom="4.0" />
                            </VBox.margin>
                         </Label>
-                        <ComboBox fx:id="CategoryCBOX" layoutX="12.0" layoutY="127.0" prefHeight="26.0" prefWidth="200.0" AnchorPane.leftAnchor="12.0">
+                        <ComboBox fx:id="vehicleTypeCMB" layoutX="12.0" layoutY="127.0" prefHeight="26.0" prefWidth="200.0" AnchorPane.leftAnchor="12.0">
                            <VBox.margin>
                               <Insets bottom="4.0" />
                            </VBox.margin>
@@ -52,12 +52,12 @@
                         </Label>
                         <HBox prefHeight="40.0" prefWidth="200.0">
                            <children>
-                              <DatePicker prefHeight="26.0" prefWidth="115.0">
+                              <DatePicker fx:id="fromDatePicker" prefHeight="26.0" prefWidth="115.0">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
                               </DatePicker>
-                              <ComboBox prefHeight="26.0" prefWidth="88.0">
+                              <ComboBox fx:id="fromHourCMB" prefHeight="26.0" prefWidth="88.0">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
@@ -67,12 +67,12 @@
                         <Label text="To time" />
                         <HBox prefHeight="40.0" prefWidth="200.0">
                            <children>
-                              <DatePicker prefHeight="26.0" prefWidth="115.0">
+                              <DatePicker fx:id="toDatePicker" prefHeight="26.0" prefWidth="115.0">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
                               </DatePicker>
-                              <ComboBox prefHeight="26.0" prefWidth="90.0" />
+                              <ComboBox fx:id="toHourCMB" prefHeight="26.0" prefWidth="90.0" />
                            </children>
                         </HBox>
                         <Button fx:id="searchButton" mnemonicParsing="false" onAction="#handleSearchButton" text="Search">
@@ -136,7 +136,7 @@
             </AnchorPane>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="522.0">
                <children>
-                  <VBox fx:id="tableViewBox" layoutX="225.0" layoutY="138.0" prefHeight="407.0" prefWidth="566.0" AnchorPane.bottomAnchor="86.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <VBox fx:id="summaryVBox" layoutX="30.0" prefHeight="505.0" prefWidth="476.0" AnchorPane.bottomAnchor="93.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="29.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
          </items>

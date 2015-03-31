@@ -113,7 +113,7 @@ public class ClerkViewController extends AbstractController implements Initializ
                 public void handle(Event event) {
                     if (SearchRentTab.isSelected()) {
                         try {
-                            Parent root = FXMLLoader.load(getClass().getResource("SearchRentView.fxml"));
+                            Parent root = FXMLLoader.load(getClass().getResource("ReserveRentView.fxml"));
                             SearchRentContents.setCenter(root);
                         } catch (IOException ex) {
                             Logger.getLogger(AdminOverviewController.class.getName()).log(Level.SEVERE, null, ex);

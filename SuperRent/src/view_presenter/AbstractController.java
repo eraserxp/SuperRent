@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -92,6 +94,14 @@ public abstract class AbstractController {
         cmb.setItems(items);
     }
 
+    protected void configureHourCMB(ComboBox cmb) {
+        ArrayList<String> workHours = new ArrayList<>();
+        for (int i = 6; i <= 21; i++) {
+            workHours.add(Integer.toString(i) + ":00");
+        }
+        configureComboBox(cmb, workHours);
+    }
+
     /**
      * checks if the text in the two password fields is a valid password and
      * prints out the corresponding warning in infoLabel
@@ -101,8 +111,8 @@ public abstract class AbstractController {
      * @param infoLabel
      * @return
      */
-    protected boolean checkTwoPasswdFields(PasswordField passwordField, PasswordField repasswordField, 
-                                           Label infoLabel) {
+    protected boolean checkTwoPasswdFields(PasswordField passwordField, PasswordField repasswordField,
+            Label infoLabel) {
         boolean passwordValid = false;
         if (isInputEmpty(passwordField)) {
             showWarning(infoLabel, "Password can't be empty!");
@@ -116,8 +126,8 @@ public abstract class AbstractController {
         return passwordValid;
     }
 
-    protected void setUpPasswordField(PasswordField passwordField, PasswordField repasswordField, 
-                                    Label infoLabel, ValidationResult validationResult) {
+    protected void setUpPasswordField(PasswordField passwordField, PasswordField repasswordField,
+            Label infoLabel, ValidationResult validationResult) {
 
         passwordField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             // when user enter some text and leave the password field, check the password
@@ -154,10 +164,9 @@ public abstract class AbstractController {
         });
 
     }
-    
-    
-        protected void setUpUsernameField_checkEmpty(TextField usernameField, Label infoLabel,
-                                                   ValidationResult validationResult) {
+
+    protected void setUpUsernameField_checkEmpty(TextField usernameField, Label infoLabel,
+            ValidationResult validationResult) {
         usernameField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             // check the input when the focus on this text field is lost
             if (!newValue) {
@@ -175,6 +184,15 @@ public abstract class AbstractController {
                 hide(infoLabel);
             }
         });
+    }
+
+    protected void popUpError(String errorMessage) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Input Error");
+//        alert.setHeaderText("Look, an Error Dialog");
+        alert.setContentText(errorMessage);
+
+        alert.showAndWait();
     }
 
     /**
