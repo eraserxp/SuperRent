@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.SearchRentViewController">
+   <children>
+      <SplitPane dividerPositions="0.32456140350877194" layoutX="62.0" layoutY="14.0" prefHeight="339.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="233.0">
+               <children>
+                  <VBox layoutX="16.0" layoutY="53.0" prefHeight="493.0" prefWidth="224.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutX="13.0" layoutY="62.0" text="Location">
+                           <VBox.margin>
+                              <Insets bottom="4.0" />
+                           </VBox.margin>
+                        </Label>
+                        <ComboBox fx:id="VehicleTypeCBOX" layoutX="12.0" layoutY="78.0" prefHeight="26.0" prefWidth="200.0" style="-fx-background-image: white;" AnchorPane.leftAnchor="12.0">
+                           <VBox.margin>
+                              <Insets bottom="4.0" />
+                           </VBox.margin>
+                        </ComboBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="200.0" spacing="40.0">
+                           <children>
+                              <RadioButton mnemonicParsing="false" text="Car" />
+                              <RadioButton mnemonicParsing="false" text="Truck" />
+                           </children>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                        </HBox>
+                        <Label layoutX="13.0" layoutY="111.0" text="Vehicle type">
+                           <VBox.margin>
+                              <Insets bottom="4.0" />
+                           </VBox.margin>
+                        </Label>
+                        <ComboBox fx:id="CategoryCBOX" layoutX="12.0" layoutY="127.0" prefHeight="26.0" prefWidth="200.0" AnchorPane.leftAnchor="12.0">
+                           <VBox.margin>
+                              <Insets bottom="4.0" />
+                           </VBox.margin>
+                        </ComboBox>
+                        <Label layoutX="13.0" layoutY="156.0" text="From time">
+                           <VBox.margin>
+                              <Insets bottom="4.0" />
+                           </VBox.margin>
+                        </Label>
+                        <HBox prefHeight="40.0" prefWidth="200.0">
+                           <children>
+                              <DatePicker prefHeight="26.0" prefWidth="115.0">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </DatePicker>
+                              <ComboBox prefHeight="26.0" prefWidth="88.0">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </ComboBox>
+                           </children>
+                        </HBox>
+                        <Label text="To time" />
+                        <HBox prefHeight="40.0" prefWidth="200.0">
+                           <children>
+                              <DatePicker prefHeight="26.0" prefWidth="115.0">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </DatePicker>
+                              <ComboBox prefHeight="26.0" prefWidth="90.0" />
+                           </children>
+                        </HBox>
+                        <Button fx:id="searchButton" mnemonicParsing="false" onAction="#handleSearchButton" text="Search">
+                           <VBox.margin>
+                              <Insets left="140.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Separator prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Separator>
+                        <Label text="Add equipments">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER" prefHeight="32.0" prefWidth="200.0">
+                           <children>
+                              <Label alignment="BASELINE_CENTER" prefHeight="16.0" prefWidth="116.0" text="equipment1" />
+                              <ComboBox prefWidth="150.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="32.0" prefWidth="200.0">
+                           <children>
+                              <Label alignment="BASELINE_CENTER" prefHeight="16.0" prefWidth="116.0" text="equipment2" />
+                              <ComboBox prefWidth="150.0" />
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <Separator prefWidth="190.0">
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Separator>
+                        <Label text="Search customer">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER" prefHeight="32.0" prefWidth="200.0">
+                           <children>
+                              <Label alignment="BASELINE_CENTER" prefHeight="16.0" prefWidth="116.0" text="username" />
+                              <TextField />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="32.0" prefWidth="200.0">
+                           <children>
+                              <Label alignment="BASELINE_CENTER" prefHeight="16.0" prefWidth="116.0" text="phone" />
+                              <TextField />
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="522.0">
+               <children>
+                  <VBox fx:id="tableViewBox" layoutX="225.0" layoutY="138.0" prefHeight="407.0" prefWidth="566.0" AnchorPane.bottomAnchor="86.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+         </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

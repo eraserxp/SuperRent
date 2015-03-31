@@ -99,52 +99,77 @@ public class AdminOverviewController extends AbstractController implements Initi
         userTypeLabel.setText(AppContext.getInstance().getUserType());
         userTypeLabel.setTextFill(Color.GREEN);
 
+        tabPane.getSelectionModel().selectedItemProperty().addListener(
+                new ChangeListener<Tab>() {
+                    @Override
+                    public void changed(
+                            ObservableValue<? extends Tab> tab, Tab oldTab, Tab newTab) {
+                                // Process event here...
+                                // find out which tab is selected and load the corresponding fxml
+                                Parent root;
+                                try {
+                                    if (newTab == showTableTab) {
+                                        root = FXMLLoader.load(getClass().getResource("ShowTablesView.fxml"));
+                                        showTableContent.setCenter(root);
+                                    } else if (newTab == manageAccountTab) {
+                                        root = FXMLLoader.load(getClass().getResource("AddRemoveUserView.fxml"));
+                                        manageAccountContent.setCenter(root);
+                                    } else if (newTab == changePasswdTab) {
+                                        root = FXMLLoader.load(getClass().getResource("ChangePasswdView.fxml"));
+                                        changePasswdContent.setCenter(root);
+                                    }
+                                } catch (IOException ex) {
+                                    Logger.getLogger(AdminOverviewController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                });
+
         // when the getTable tab is selected, show the tables
-        showTableTab.setOnSelectionChanged(new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                if (showTableTab.isSelected()) {
-                    try {
-                        //setUpShowTablesTab();
-                        Parent root = FXMLLoader.load(getClass().getResource("ShowTablesView.fxml"));
-                        showTableContent.setCenter(root);
-                    } catch (IOException ex) {
-                        Logger.getLogger(AdminOverviewController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        });
+//        showTableTab.setOnSelectionChanged(new EventHandler<Event>() {
+//            @Override
+//            public void handle(Event event) {
+//                if (showTableTab.isSelected()) {
+//                    try {
+//                        //setUpShowTablesTab();
+//                        Parent root = FXMLLoader.load(getClass().getResource("ShowTablesView.fxml"));
+//                        showTableContent.setCenter(root);
+//                    } catch (IOException ex) {
+//                        Logger.getLogger(AdminOverviewController.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                }
+//            }
+//        });
 
-        manageAccountTab.setOnSelectionChanged(new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                if (manageAccountTab.isSelected()) {
-                    try {
-                        //setUpShowTablesTab();
-                        Parent root = FXMLLoader.load(getClass().getResource("AddRemoveUserView.fxml"));
+//        manageAccountTab.setOnSelectionChanged(new EventHandler<Event>() {
+//            @Override
+//            public void handle(Event event) {
+//                if (manageAccountTab.isSelected()) {
+//                    try {
+//                        //setUpShowTablesTab();
+//                        Parent root = FXMLLoader.load(getClass().getResource("AddRemoveUserView.fxml"));
+//
+//                        manageAccountContent.setCenter(root);
+//                    } catch (IOException ex) {
+//                        Logger.getLogger(AdminOverviewController.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                }
+//            }
+//        });
 
-                        manageAccountContent.setCenter(root);
-                    } catch (IOException ex) {
-                        Logger.getLogger(AdminOverviewController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        });
-
-        changePasswdTab.setOnSelectionChanged(new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                if (changePasswdTab.isSelected()) {
-                    System.out.println("Change password tab has been selected");
-                    try {
-                        Parent root = FXMLLoader.load(getClass().getResource("ChangePasswdView.fxml"));
-                        changePasswdContent.setCenter(root);
-                    } catch (IOException ex) {
-                        Logger.getLogger(AdminOverviewController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        });
+//        changePasswdTab.setOnSelectionChanged(new EventHandler<Event>() {
+//            @Override
+//            public void handle(Event event) {
+//                if (changePasswdTab.isSelected()) {
+//                    System.out.println("Change password tab has been selected");
+//                    try {
+//                        Parent root = FXMLLoader.load(getClass().getResource("ChangePasswdView.fxml"));
+//                        changePasswdContent.setCenter(root);
+//                    } catch (IOException ex) {
+//                        Logger.getLogger(AdminOverviewController.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                }
+//            }
+//        });
 
         // select the showTable tab
         tabPane.getSelectionModel().select(manageAccountTab);
