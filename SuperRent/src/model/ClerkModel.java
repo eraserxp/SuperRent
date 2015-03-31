@@ -98,7 +98,7 @@ public class ClerkModel extends UserModel {
         statement = "SELECT reservation.confirmation_number,vehicleforrent.category,vehicleforrent.vehicleType,vehicleforrent.brand from vehicleforrent,reservation where vehicleforrent.vid = reservation.vid && reservation.confirmation_number = " + connumber + ";";
         }else if(checkvalue==false&&!vehicletype.isEmpty()&&!category.isEmpty()&&!brand.isEmpty()){
 
-        statement = "select category,vehicleType,brand from vehicleforrent where category = "+addQuotation(category)+"&&vehicleType = "+addQuotation(vehicletype)+"&&brand = "+addQuotation(brand)+";";    
+        statement = "select vid,category,vehicleType,brand from vehicleforrent where category = "+addQuotation(category)+"&&vehicleType = "+addQuotation(vehicletype)+"&&brand = "+addQuotation(brand)+";";    
 
         }else{
         System.out.println("please define the validator");

@@ -5,6 +5,7 @@
  */
 package view_presenter;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,13 +17,18 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import model.ClerkModel;
 
 /**
@@ -70,7 +76,7 @@ public class SearchRentViewController implements Initializable {
     
     private ClerkModel clerkModel = new ClerkModel();
     
-    
+    //private Stage dialogStage;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -93,6 +99,8 @@ public class SearchRentViewController implements Initializable {
         
         
     }
+//delete the reserve button and refine the search the page to make it as a separate view?
+    
     
 @FXML   
 private void handleReserveButton() {
@@ -105,10 +113,31 @@ private void handleReserveButton() {
 //        Person currentPerson = (Person) ButtonCell.this.getTableView().getItems().get(ButtonCell.this.getIndex());
 //        //remove selected item from the table list
 //        data.remove(currentPerson);
-        
-        
-        
-        System.out.println("testing");
+       int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
+       String selectedColumn = tableView.getItems().get(selectedIndex).toString();
+       String mystring = selectedColumn.replace("["," ").replace("]"," ");
+       String[] selectedArray = mystring.trim().split(",");
+       String[] trimstring = new String[4]; 
+       trimstring[0] = selectedArray[0].trim();
+       trimstring[1] = selectedArray[1].trim();
+       trimstring[2] = selectedArray[2].trim();
+       trimstring[3] = selectedArray[3].trim();
+       //trim every element!!!
+       //the array stores the attributes in the selected column
+       System.out.println(trimstring[0]);
+       System.out.println(trimstring[1]);
+       System.out.println(trimstring[2]);
+       System.out.println(trimstring[3]);
+       
+        try {
+            //show a dialog to let the users to enter the reservation info
+            showAddReservationDialog();
+        } catch (IOException ex) {
+            Logger.getLogger(SearchRentViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+       
+       tableView.getItems().remove(selectedIndex);
         
     }
     });
@@ -116,6 +145,15 @@ private void handleReserveButton() {
  
     
 }
+
+public void showAddReservationDialog() throws IOException{
+    
+
+    
+}
+
+
+
  
 @FXML
 private void handleRentButton() {
@@ -124,11 +162,19 @@ private void handleRentButton() {
     @Override 
     public void handle(ActionEvent e) {
         //to do  
+        int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
         
         
         
         
-        System.out.println("testing");
+        
+        
+        
+        //tableView.getItems().remove(selectedIndex);
+        
+        
+        
+
     }
     });
     
