@@ -35,4 +35,3 @@ drop table branch;
 drop table vehicletype;
 
 
-
