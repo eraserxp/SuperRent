@@ -11,15 +11,15 @@
    <children>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="490.0" prefWidth="808.0">
          <children>
-            <Separator layoutX="250.0" layoutY="-6.0" orientation="VERTICAL" prefHeight="500.0" prefWidth="9.0" />
+            <Separator layoutX="250.0" layoutY="-5.0" orientation="VERTICAL" prefHeight="500.0" prefWidth="9.0" />
             <Button fx:id="showButton" layoutX="722.0" layoutY="19.0" mnemonicParsing="false" onAction="#handleShowButtonAction" text="Show" />
             <Label layoutX="266.0" layoutY="14.0" text="Show Vehile for sale">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Button fx:id="addButton" layoutX="197.0" layoutY="231.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="52.0" text="Add" />
-            <Label layoutX="42.0" layoutY="197.0" text="Date:" />
+            <Button fx:id="addButton" disable="true" layoutX="197.0" layoutY="259.0" mnemonicParsing="false" onAction="#handleShowButtonAction" onDragDetected="#handleAddButton" prefHeight="26.0" prefWidth="52.0" text="Add" />
+            <Label alignment="CENTER_RIGHT" layoutX="39.0" layoutY="225.0" text="Date:" />
             <Label layoutX="14.0" layoutY="14.0" text="Add Vehicle">
                <font>
                   <Font name="System Bold" size="14.0" />
@@ -27,13 +27,15 @@
             </Label>
             <RadioButton fx:id="carRadioButton" layoutX="110.0" layoutY="77.0" mnemonicParsing="false" text="Car" />
             <RadioButton fx:id="truckRadioButton" layoutX="168.0" layoutY="76.0" mnemonicParsing="false" text="Truck" />
-            <Label layoutX="45.0" layoutY="116.0" text="Type:" />
-            <DatePicker fx:id="startingDateDateBox" layoutX="87.0" layoutY="192.0" prefHeight="26.0" prefWidth="163.0" />
-            <TextField fx:id="typeTextField" layoutX="86.0" layoutY="113.0" />
+            <Label alignment="CENTER_RIGHT" layoutX="45.0" layoutY="116.0" text="Type:" />
+            <DatePicker fx:id="startingDateDateBox" disable="true" layoutX="87.0" layoutY="220.0" prefHeight="26.0" prefWidth="163.0" />
             <VBox fx:id="vehicleForSaleVbox" layoutX="269.0" layoutY="52.0" prefHeight="397.0" prefWidth="441.0" />
             <Button fx:id="soldButton" layoutX="729.0" layoutY="449.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="52.0" text="Sold" />
-            <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="157.0" text="Plate Num" />
-            <TextField fx:id="plateNumTextField" layoutX="86.0" layoutY="153.0" />
+            <Label alignment="CENTER_RIGHT" layoutX="9.0" layoutY="186.0" text="Plate Num:" />
+            <TextField fx:id="plateNumTextField" disable="true" layoutX="86.0" layoutY="181.0" />
+            <ComboBox fx:id="typeCombobox" disable="true" layoutX="86.0" layoutY="111.0" prefHeight="26.0" prefWidth="163.0" />
+            <TextField layoutX="86.0" layoutY="147.0" />
+            <Label alignment="CENTER_RIGHT" layoutX="38.0" layoutY="152.0" text="Brand:" />
          </children>
       </AnchorPane>
    </children>
