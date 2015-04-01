@@ -61,7 +61,7 @@ public class ReturnViewController extends AbstractController implements Initiali
     @FXML
     private Label EquipmentNoLabel;
     @FXML
-    private Label Validator;    
+    private Label Validator;
     //returnbutton
     @FXML
     private Button ReturnButton;
@@ -76,36 +76,35 @@ public class ReturnViewController extends AbstractController implements Initiali
         // Disable the button and hide the labels
         ShowRentCheckBox.setDisable(true);
         ReturnButton.setVisible(false);
-        hide(Validator,DriverLicenseLabel, VehicleLicenseNumberLabel, PickupDate, PickupTime, PickupCity, PickupLocation, CustomerUsernameLabel, EquipmentNameLabel, EquipmentNoLabel);
+        hide(Validator, DriverLicenseLabel, VehicleLicenseNumberLabel, PickupDate, PickupTime, PickupCity, PickupLocation, CustomerUsernameLabel, EquipmentNameLabel, EquipmentNoLabel);
         //the check box should not be checked
         ShowRentCheckBox.setSelected(false);
-        
+
         setUpVehicleTextField();
-        
+
         handleConCheckBox();
-        
+
         handleReturnBox();
 
     }
 
-    
-    public void setUpVehicleTextField(){
-        
-                VehicleTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+    public void setUpVehicleTextField() {
+
+        VehicleTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             // lost focus
-                    String checkString = VehicleTextField.getText();
-                    ArrayList<String> checkValue = new ArrayList<>();
-                    try {
-                        checkValue = clerkModel.getRentDetails(checkString);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+            String checkString = VehicleTextField.getText();
+            ArrayList<String> checkValue = new ArrayList<>();
+            try {
+                checkValue = clerkModel.getRentDetails(checkString);
+            } catch (SQLException ex) {
+                Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             if (!newValue) {
                 if (checkString.isEmpty()) {
                     showWarning(Validator, "Vehicle License Number can't be empty!");
                     VehicleTextField.setDisable(false);
                     ShowRentCheckBox.setDisable(true);
-                } else if (checkValue==null) {
+                } else if (checkValue == null) {
                     showWarning(Validator, "Vehicle License Number is invalid!");
                     VehicleTextField.setDisable(false);
                     ShowRentCheckBox.setDisable(true);
@@ -114,30 +113,29 @@ public class ReturnViewController extends AbstractController implements Initiali
                     VehicleTextField.setDisable(true);
                     ShowRentCheckBox.setDisable(false);
                 }
-            }else{
+            } else {
                 hide(Validator);
                 ShowRentCheckBox.setDisable(true);
             }
         });
-        
-        
+
     }
-    
-        public void handleConCheckBox() {
+
+    public void handleConCheckBox() {
 
         ShowRentCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
             public void changed(ObservableValue<? extends Boolean> ov,
                     Boolean old_val, Boolean new_val) {
-                
+
                 hide(DriverLicenseLabel, VehicleLicenseNumberLabel, PickupDate, PickupTime, PickupCity, PickupLocation, CustomerUsernameLabel, EquipmentNameLabel, EquipmentNoLabel);
 
                 String VehicleNo = VehicleTextField.getText();
-                
+
                 try {
 
                     ArrayList<String> rDetails = clerkModel.getRentDetails(VehicleNo);
                     if (rDetails != null) {
-                        
+
                         VehicleLicenseNumberLabel.setText(rDetails.get(0));
                         DriverLicenseLabel.setText(rDetails.get(1));
                         PickupDate.setText(rDetails.get(2));
@@ -151,7 +149,7 @@ public class ReturnViewController extends AbstractController implements Initiali
 
                         if (new_val) {
                             show(DriverLicenseLabel, VehicleLicenseNumberLabel, PickupDate, PickupTime, PickupCity, PickupLocation, CustomerUsernameLabel, EquipmentNameLabel, EquipmentNoLabel);
-                        }else{
+                        } else {
                             //change the validator content
                             ShowRentCheckBox.setDisable(true);
                             VehicleTextField.clear();
@@ -175,7 +173,7 @@ public class ReturnViewController extends AbstractController implements Initiali
             @Override
             public void handle(ActionEvent e) {
 
-                System.out.println("Hello");
+                //System.out.println("Hello");
 
                 try {
                     showReturnDialog();

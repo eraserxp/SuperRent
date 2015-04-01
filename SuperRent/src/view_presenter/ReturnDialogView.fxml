@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="410.0" prefWidth="438.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.ReservationDialogController">
+<AnchorPane id="AnchorPane" prefHeight="410.0" prefWidth="438.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.ReturnDialogViewController">
    <children>
       <GridPane layoutX="35.0" layoutY="26.0" prefWidth="369.0" style="-fx-border-color: black;">
          <columnConstraints>
@@ -107,8 +107,8 @@
             <Label text="Payment Method" GridPane.rowIndex="10" />
          </children>
       </GridPane>
-      <Button layoutX="332.0" layoutY="368.0" mnemonicParsing="false" text="Confirm" />
-      <Button layoutX="264.0" layoutY="368.0" mnemonicParsing="false" text="Cancel" />
+      <Button fx:id="confirmButton" layoutX="332.0" layoutY="368.0" mnemonicParsing="false" text="Confirm" />
+      <Button fx:id="cancelButton" layoutX="264.0" layoutY="368.0" mnemonicParsing="false" text="Cancel" />
       <ComboBox layoutX="201.0" layoutY="329.0" prefHeight="26.0" prefWidth="200.0" />
    </children>
 </AnchorPane>
