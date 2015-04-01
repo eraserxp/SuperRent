@@ -50,11 +50,11 @@ public class ClerkModel extends UserModel {
      if(rs.next()){
      String confirmationnumber = rs.getString("confirmation_number");
      Date pickupdate = rs.getDate("pickup_date");
-     Time pickuptime = rs.getTime("pickup_time");
+     Integer pickuptime = rs.getInt("pickup_time");
      Date returndate = rs.getDate("return_date");
-     Time returntime = rs.getTime("return_time");
-     Float estimationcost = rs.getFloat("estimation_cost");
-     Integer vid = rs.getInt("vid");
+     Integer returntime = rs.getInt("return_time");
+     Integer estimationcost = rs.getInt("estimation_cost");
+     String vid = rs.getString("vlicense");
      String branchcity = rs.getString("branch_city");
      String branchlocation = rs.getString("branch_location");
      String customerusername = rs.getString("customer_username");     
@@ -68,7 +68,7 @@ public class ClerkModel extends UserModel {
      reservationList.add(returndate.toString()); 
      reservationList.add(returntime.toString());
      reservationList.add(estimationcost.toString());  
-     reservationList.add(vid.toString());  
+     reservationList.add(vid);  
      reservationList.add(branchcity);  
      reservationList.add(branchlocation);  
      reservationList.add(customerusername);  

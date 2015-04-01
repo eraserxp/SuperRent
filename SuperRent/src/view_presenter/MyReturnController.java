@@ -25,11 +25,7 @@ import model.ClerkModel;
  *
  * @author dongshengshen
  */
-public class CheckReservationViewController extends AbstractController implements Initializable {
-
-    /**
-     * Initializes the controller class.
-     */
+public class MyReturnController extends AbstractController implements Initializable {
     @FXML
     private TextField ConfirmationTextField;
     @FXML
@@ -44,7 +40,7 @@ public class CheckReservationViewController extends AbstractController implement
     private Label PickupTime;    
     @FXML
     private Label PickupCity;    
-    @FXML
+    @FXML   
     private Label PickupLocation;
     @FXML
     private Label ReturnDate; 

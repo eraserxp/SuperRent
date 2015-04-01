@@ -73,6 +73,9 @@ public class SearchRentViewController implements Initializable {
     private VBox tableViewBox; // box to hold the table view
     @FXML   
     private TableView tableView = null;
+    @FXML
+    AnchorPane anchorpane;
+    
     
     private ClerkModel clerkModel = new ClerkModel();
     
@@ -147,8 +150,14 @@ private void handleReserveButton() {
 }
 
 public void showAddReservationDialog() throws IOException{
+    AnchorPane loader = (AnchorPane)FXMLLoader.load(ReservationDialogController.class.getResource("ReservationDialog.fxml"));
     
-
+    Stage dialogStage = new Stage();
+    dialogStage.setTitle("Reservation");
+    dialogStage.initModality(Modality.WINDOW_MODAL);
+    Scene scene = new Scene(loader);
+    dialogStage.setScene(scene);
+    dialogStage.showAndWait();
     
 }
 
