@@ -171,12 +171,14 @@ public class ReserveRentController extends AbstractController implements Initial
             popUpError("location is empty!");
             return;
         }
+        String location = locationCMB.getSelectionModel().getSelectedItem();
 
         if (vehicleTypeCMB.getSelectionModel().isEmpty()) {
             popUpError("vehicle type is empty!");
             return;
         }
-
+        String vehicleType = vehicleTypeCMB.getSelectionModel().getSelectedItem();
+        
         LocalDate fromDate = fromDatePicker.getValue();
         if (fromDate == null) {
             popUpError("From date is empty!");
@@ -189,7 +191,8 @@ public class ReserveRentController extends AbstractController implements Initial
         }
 
         String fromHourString = fromHourCMB.getSelectionModel().getSelectedItem();
-        int fromHour = Integer.parseInt(fromHourString.split(":")[0]);
+        int fromHour = Integer.parseInt( fromHourString.split(":")[0] );
+        System.out.println("from hour = " + fromHour);
 
         LocalDate toDate = toDatePicker.getValue();
         if (toDate == null) {
@@ -201,8 +204,9 @@ public class ReserveRentController extends AbstractController implements Initial
             popUpError("To hour is empty!");
             return;
         }
-        String toHourString = fromHourCMB.getSelectionModel().getSelectedItem();
-        int toHour = Integer.parseInt(toHourString.split(":")[0]);
+        String toHourString = toHourCMB.getSelectionModel().getSelectedItem();
+        int toHour = Integer.parseInt( toHourString.split(":")[0] );
+        System.out.println("to hour = " + toHour);
 
         //check the from time is earlier than to time
         if ( fromDate.compareTo(toDate)>0 
@@ -214,8 +218,8 @@ public class ReserveRentController extends AbstractController implements Initial
         
         int redeemedPoints = 0;
         int odometer = 0;
-        GridPane summaryPane = userModel.calculateCost(null, null, null,
-                LocalDate.MIN, fromHour, LocalDate.MIN, toHour, true,
+        GridPane summaryPane = userModel.calculateCost(vehicleType, null, null,
+                fromDate, fromHour, toDate, toHour, true,
                 redeemedPoints, odometer);
         summaryVBox.getChildren().add(summaryPane);
     }
