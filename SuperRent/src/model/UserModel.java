@@ -25,10 +25,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import static javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 
@@ -240,21 +242,21 @@ public class UserModel {
         }
         return branchList;
     }
-    
+
     public ArrayList<String> getVehicleTypeAtBranch(String city, String location, String carOrTruck) {
         String SQL = "select distinct typeName from vehicletype VT, vehicleforrent VF, vehicleinbranch VB"
                 + " where VF.vlicense=VB.vlicense and VF.vehicletype=VT.typeName "
-                + " and VB.location=" + addQuotation(location)  
-                + " and VB.city=" + addQuotation(city) 
-                + " and VF.category=" + addQuotation(carOrTruck) 
+                + " and VB.location=" + addQuotation(location)
+                + " and VB.city=" + addQuotation(city)
+                + " and VF.category=" + addQuotation(carOrTruck)
                 + " order by typeName";
-                ResultSet rs = queryDatabase(SQL);
+        ResultSet rs = queryDatabase(SQL);
         System.out.println(SQL);
         ArrayList<String> typeList = new ArrayList<>();
         try {
             while (rs.next()) {
                 String type;
-                type = rs.getString("typeName") ;
+                type = rs.getString("typeName");
                 typeList.add(type);
 
             }
@@ -273,12 +275,16 @@ public class UserModel {
     private HashMap<String, Integer> getVehicleRate(String vehicleType) {
         String getAllRates = "select w_rate, d_rate, h_rate, pk_rate"
                 + " from vehicletype where typename=" + addQuotation(vehicleType);
+        System.out.println(getAllRates);
         ResultSet rs = queryDatabase(getAllRates);
-        HashMap<String, Integer> rates = new HashMap<>();
+        HashMap<String, Integer> rates = new HashMap<String, Integer>();
         try {
-            for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
-                String columnName = rs.getMetaData().getColumnName(i + 1);
-                rates.put(columnName, rs.getInt(columnName));
+            if (rs.next()) {
+                for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
+                    String columnName = rs.getMetaData().getColumnName(i + 1);
+                    System.out.println(columnName);
+                    rates.put(columnName, rs.getInt(columnName));
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -286,15 +292,17 @@ public class UserModel {
         return rates;
     }
 
-    private HashMap<String, Integer> getEquipmentRate(String vehicleType) {
+    private HashMap<String, Integer> getEquipmentRate(String equipName) {
         String getAllRates = "select d_rate, h_rate "
-                + " from equipment where equipName=" + addQuotation(vehicleType);
+                + " from equipment where equipName=" + addQuotation(equipName);
         ResultSet rs = queryDatabase(getAllRates);
         HashMap<String, Integer> rates = new HashMap<>();
         try {
-            for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
-                String columnName = rs.getMetaData().getColumnName(i + 1);
-                rates.put(columnName, rs.getInt(columnName));
+            if (rs.next()) {
+                for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
+                    String columnName = rs.getMetaData().getColumnName(i + 1);
+                    rates.put(columnName, rs.getInt(columnName));
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -308,9 +316,11 @@ public class UserModel {
         ResultSet rs = queryDatabase(getAllRates);
         HashMap<String, Integer> insurances = new HashMap<>();
         try {
-            for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
-                String columnName = rs.getMetaData().getColumnName(i + 1);
-                insurances.put(columnName, rs.getInt(columnName));
+            if (rs.next()) {
+                for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
+                    String columnName = rs.getMetaData().getColumnName(i + 1);
+                    insurances.put(columnName, rs.getInt(columnName));
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -328,30 +338,87 @@ public class UserModel {
             LocalDate toDate, int toHour, boolean isRoadStar, int redeemedPoints,
             int odometer) {
         GridPane gridPane = new GridPane();
-//        Instant instant = Instant.ofEpochMilli(fromDate.getTime());
-//        LocalDateTime startDate = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
-//        instant = Instant.ofEpochMilli(toDate.getTime());
-//        LocalDateTime endDate = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
+
         int all_days = (int) ChronoUnit.DAYS.between(fromDate, toDate);
-        int week = (int) all_days/7;
-        int days = all_days%7;
+        int weeks = (int) all_days / 7;
+        int days = all_days % 7;
         int hours = toHour - fromHour;
-        
+
         //get all the rate and cost from database
         HashMap<String, Integer> vehicleRates = getVehicleRate(vehicleType);
         HashMap<String, Integer> vehicleInsurances = getInsuranceCost(vehicleType);
-        HashMap<String, Integer> equipmentRates = getEquipmentRate(vehicleType);
+
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setPercentWidth(25);
+        col1.setHalignment(HPos.CENTER);
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setPercentWidth(25);
+        col2.setHalignment(HPos.CENTER);
+        ColumnConstraints col3 = new ColumnConstraints();
+        col3.setPercentWidth(25);
+        col3.setHalignment(HPos.CENTER);
+        ColumnConstraints col4 = new ColumnConstraints();
+        col4.setPercentWidth(25);
+        col4.setHalignment(HPos.CENTER);
+        gridPane.getColumnConstraints().addAll(col1, col2, col3, col4);
 
         ArrayList<String> columnHeaders = new ArrayList<>(
-                Arrays.asList("    ", "Time", "Renting fee", "Insurance")
+                Arrays.asList("Type", "Time", "Renting fee", "Insurance")
         );
         //add the first row
         int cols = columnHeaders.size();
         int rowIndex = 0;
-        for (int colIndex=0; colIndex<cols; colIndex++) {
+        for (int colIndex = 0; colIndex < cols; colIndex++) {
             gridPane.add(new Label(columnHeaders.get(colIndex)), colIndex, rowIndex);
         }
+        rowIndex++;
 
+        //add an empty line
+        for (int colIndex = 0; colIndex < cols; colIndex++) {
+            gridPane.add(new Label("--------------"), colIndex, rowIndex);
+        }
+        rowIndex++;
+
+        gridPane.add(new Label(vehicleType), 0, rowIndex);
+
+        if (weeks > 0) {
+            gridPane.add(new Label(weeks + " week(s)"), 1, rowIndex);
+            gridPane.add(new Label(weeks + " x " + vehicleRates.get("w_rate") / 100 + ".00"),
+                    2, rowIndex);
+            gridPane.add(new Label(weeks + " x " + vehicleInsurances.get("w_insurance") / 100 + ".00"),
+                    3, rowIndex);
+            rowIndex++;
+        }
+
+        if (days > 0) {
+            gridPane.add(new Label(days + " day(s)"), 1, rowIndex);
+            gridPane.add(new Label(days + " x " + vehicleRates.get("d_rate") / 100 + ".00"),
+                    2, rowIndex);
+            gridPane.add(new Label(days + " x " + vehicleInsurances.get("d_insurance") / 100 + ".00"),
+                    3, rowIndex);
+            rowIndex++;
+        }
+
+        if (hours > 0) {
+            gridPane.add(new Label(hours + " hour(s)"), 1, rowIndex);
+            gridPane.add(new Label(hours + " x " + vehicleRates.get("h_rate") / 100 + ".00"),
+                    2, rowIndex);
+            gridPane.add(new Label(hours + " x " + vehicleInsurances.get("h_insurance") / 100 + ".00"),
+                    3, rowIndex);
+            rowIndex++;
+        }
+
+        //add an empty line
+        for (int colIndex = 0; colIndex < cols; colIndex++) {
+            gridPane.add(new Label("--------------"), colIndex, rowIndex);
+        }
+        rowIndex++;
+
+        if (equipList != null && !equipList.isEmpty()) {
+            for (String equipName : equipList) {
+                HashMap<String, Integer> equipmentRates = getEquipmentRate(equipName);
+            }
+        }
         return gridPane;
     }
 

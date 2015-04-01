@@ -6,16 +6,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="501.0" prefWidth="623.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="view_presenter.FindOldVehicleController">
+<AnchorPane id="AnchorPane" prefHeight="489.0" prefWidth="766.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.FindOldVehicleController">
    <children>
-      <Button layoutX="309.0" layoutY="382.0" mnemonicParsing="false" text="Remove" />
-      <TextField layoutX="149.0" layoutY="382.0" prefHeight="26.0" prefWidth="144.0" />
-      <Label alignment="CENTER_RIGHT" layoutX="79.0" layoutY="387.0" text="Set Price:" />
-      <VBox layoutX="47.0" layoutY="69.0" prefHeight="312.0" prefWidth="547.0" />
-      <Button layoutX="517.0" layoutY="37.0" mnemonicParsing="false" text="Show" />
-      <TextField layoutX="176.0" layoutY="37.0" prefHeight="0.0" prefWidth="31.0" />
-      <Label layoutX="214.0" layoutY="42.0" text="years" />
-      <Label alignment="CENTER_RIGHT" layoutX="55.0" layoutY="42.0" text="Vehicles older than" />
+      <Button layoutX="679.0" layoutY="446.0" mnemonicParsing="false" text="Remove" />
+      <TextField layoutX="519.0" layoutY="446.0" prefHeight="26.0" prefWidth="144.0" />
+      <Label alignment="CENTER_RIGHT" layoutX="449.0" layoutY="451.0" text="Set Price:" />
+      <VBox fx:id="oldVehicleVbox" layoutX="228.0" layoutY="15.0" prefHeight="411.0" prefWidth="517.0" />
+      <Button fx:id="showButton" layoutX="161.0" layoutY="93.0" mnemonicParsing="false" onAction="#handleShowButtonAction" text="Show" />
+      <TextField layoutX="143.0" layoutY="38.0" prefHeight="0.0" prefWidth="31.0" />
+      <Label layoutX="183.0" layoutY="43.0" text="years" />
+      <Label alignment="CENTER_RIGHT" layoutX="24.0" layoutY="43.0" text="Vehicles older than" />
+      <Separator layoutX="222.0" orientation="VERTICAL" prefHeight="492.0" prefWidth="4.0" />
    </children>
 </AnchorPane>
