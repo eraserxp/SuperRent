@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -55,6 +56,9 @@ public class ManageVehicleController extends AbstractController implements Initi
     private Button soldButton;
     @FXML
     private TextField handleAddButtonAction;
+    
+    @FXML
+    private Label addingValidator;
 
     @FXML
     private VBox vehicleForSaleVbox; // in show table tab
@@ -100,6 +104,12 @@ public class ManageVehicleController extends AbstractController implements Initi
 
         addOK = managerModel.addVehicle(carCategory, carType, startingDateDateBox.getValue(), plateNumber);
 
+        System.out.print("here");
+            if(addOK==true)
+                showSuccessMessage(addingValidator,"Vehicle Added!");
+            else
+                showWarning(addingValidator,"Vehicle Not Addeds!");
+        
     }
 
     public void setUpCategoryRadioButtons() {
