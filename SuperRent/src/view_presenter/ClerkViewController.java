@@ -55,22 +55,15 @@ public class ClerkViewController extends AbstractController implements Initializ
     
     //the three tabs in the view
     @FXML
-    private Tab CheckReservationTab;
-    @FXML
     private Tab SearchRentTab;   
     @FXML
     private Tab ReturnTab;
     //three corresponeding border panes to hold the contents of the three tab view
     @FXML
-    private BorderPane CheckReservationContents;
-    @FXML
     private BorderPane SearchRentContents;
     @FXML
     private BorderPane ReturnContents;
-    
-    //the tab pane contains the three tabs
-    @FXML
-    private TabPane ClerkTabPane;
+  
     
     
     
@@ -89,24 +82,8 @@ public class ClerkViewController extends AbstractController implements Initializ
         try {
             //when the check reservatoin tab is selected, show the contents of the tab
             
-            Parent root = FXMLLoader.load(getClass().getResource("CheckReservationView.fxml"));
-            CheckReservationContents.setCenter(root);
-            
-            
-            CheckReservationTab.setOnSelectionChanged(new EventHandler<Event>() {
-                @Override
-                public void handle(Event event) {
-                    if (CheckReservationTab.isSelected()) {
-                        try {
-                            Parent root = FXMLLoader.load(getClass().getResource("CheckReservationView.fxml"));
-                            CheckReservationContents.setCenter(root);
-                        } catch (IOException ex) {
-                            Logger.getLogger(AdminOverviewController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                }
-            });
-            
+            Parent root = FXMLLoader.load(getClass().getResource("ReserveRentView.fxml"));
+            SearchRentContents.setCenter(root);
             
             SearchRentTab.setOnSelectionChanged(new EventHandler<Event>() {
                 @Override
@@ -146,26 +123,7 @@ public class ClerkViewController extends AbstractController implements Initializ
         
         
     }   //the end of the initialize 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     //ClerkViewController
     @FXML
     private void handleLogout(ActionEvent event) throws IOException {

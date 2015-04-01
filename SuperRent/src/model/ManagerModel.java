@@ -65,4 +65,3 @@ FOREIGN KEY(manager) REFERENCES manager(userName)
     
     
 }
-    

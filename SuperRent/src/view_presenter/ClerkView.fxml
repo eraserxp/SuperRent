@@ -11,12 +11,8 @@
 
 <AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.ClerkViewController">
    <children>
-      <TabPane fx:id="ClerkTabPane" layoutX="69.0" layoutY="72.0" prefHeight="528.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="72.0">
+      <TabPane layoutX="69.0" layoutY="72.0" prefHeight="528.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="72.0">
          <tabs>
-            <Tab fx:id="CheckReservationTab" text="Check Reservation">
-               <content>
-                  <BorderPane fx:id="CheckReservationContents" prefHeight="200.0" prefWidth="200.0" />
-               </content></Tab>
             <Tab fx:id="SearchRentTab" text="Search&amp;Rent">
                <content>
                   <BorderPane fx:id="SearchRentContents" prefHeight="200.0" prefWidth="200.0" />

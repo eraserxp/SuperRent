@@ -47,7 +47,6 @@ public class SuperRent extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
  
     /**
      * @param args the command line arguments
@@ -55,5 +54,6 @@ public class SuperRent extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+    
 
 }
