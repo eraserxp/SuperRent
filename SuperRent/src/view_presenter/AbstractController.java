@@ -5,20 +5,29 @@
  */
 package view_presenter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import model.AppContext;
 import model.ValidationResult;
 
 /**
@@ -26,6 +35,67 @@ import model.ValidationResult;
  *
  */
 public abstract class AbstractController {
+    
+    private Stage attachedStage;
+
+    private AbstractController previousPageController;
+    
+
+    public void setPreviousController(AbstractController controller) {
+        previousPageController = controller;
+    }
+
+    public AbstractController getPreviousController() {
+        return previousPageController;
+    }
+
+    //update the current view
+    public void update(Object o) {
+
+    }
+
+    /**
+     * pass an object and use previous controller to update previous view
+     * 
+     * For this to work, you need to cast the object o to a specific object
+     * that the previousPageController can recognize and make use of. So the
+     * current page and the next page must both know the actual type of the
+     * object.
+     */
+     
+    public void updatePreviousPage(Object o) {
+        previousPageController.update(o);
+    }
+
+    protected void setStage(Stage stage) {
+        attachedStage = stage;
+    }
+    
+    protected Stage getStage() {
+        return attachedStage;
+    }
+    
+    //create next stage based on the given fxml
+    protected void setupNextPage(AbstractController currentController, String fxml, String title) {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("ShowSearchResultView.fxml"));
+        try {
+            AnchorPane page = (AnchorPane) loader.load();
+            Stage newStage = new Stage();
+            newStage.setTitle("Search results");
+            newStage.initModality(Modality.WINDOW_MODAL);
+            newStage.initOwner(AppContext.getInstance().getPrimaryStage());
+            Scene scene = new Scene(page);
+            newStage.setScene(scene);
+
+            AbstractController controller = loader.getController();
+            controller.setStage(newStage);
+            controller.setPreviousController(this);
+            newStage.showAndWait();
+        } catch (IOException ex) {
+            Logger.getLogger(ReserveRentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     protected boolean isInputEmpty(TextField t) {
         return (t.getText() == null || t.getText().trim().length() == 0);

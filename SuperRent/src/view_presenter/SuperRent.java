@@ -19,6 +19,7 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import model.AppContext;
 
 /**
  *
@@ -29,14 +30,20 @@ public class SuperRent extends Application {
     private MysqlConnection database = MysqlConnection.getInstance();
     private Stage primaryStage;
 
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
+        this.primaryStage = stage;
+        AppContext.getInstance().setMainApp(this);
+        
         // when the application starts, log into the database first
         if (database.connect("team04", "pr0j3ct!")) {
             System.out.println("Connect to database successfully!");
         }
-        this.primaryStage = stage;
-        
+
         /**
          * set up the login page as the first scene and based on the result of
          * login operation, the application will switch to the apropriate scene
@@ -47,13 +54,12 @@ public class SuperRent extends Application {
         stage.setScene(scene);
         stage.show();
     }
- 
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         launch(args);
     }
-    
 
 }

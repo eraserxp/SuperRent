@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import javafx.scene.control.TableView;
 
 /**
  *
@@ -20,6 +21,12 @@ public class ClerkModel extends UserModel {
         super();
     }
 
+    public TableView getSelectedVehicles() {
+        String sql = "select vlicense, category, vehicleType, brand, odometer"
+                + " from vehicleforrent where vehicleType = 'economy'";
+        return getTableViewForSQL(sql);
+    }
+    
     public ArrayList<String> getRentDetails(String VehicleNumber) throws SQLException {
         String SQL = "select * from rent where vlicense=" + addQuotation(VehicleNumber);
         ResultSet rs = queryDatabase(SQL);

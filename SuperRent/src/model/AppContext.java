@@ -5,6 +5,9 @@
  */
 package model;
 
+import javafx.stage.Stage;
+import view_presenter.SuperRent;
+
 /**
  *
  *
@@ -20,7 +23,18 @@ public class AppContext {
     private String username;
     
     private String userType;
+    
+    private SuperRent mainApp = null;
 
+    public void setMainApp(SuperRent mainApp) {
+        this.mainApp = mainApp;
+    }
+    
+    // get the primary stage of the current application
+    public Stage getPrimaryStage() {
+        return mainApp.getPrimaryStage();
+    }
+    
     public String getUsername() {
         return username;
     }

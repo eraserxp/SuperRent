@@ -55,19 +55,13 @@ public class UserModel {
         con = mysqlConnInstance.refreshConnection();
     }
 
-    /**
-     * show a table -- as a test
-     */
-    public TableView getTable(String tableName) {
+    public TableView getTableViewForSQL(String SQL) {
         ObservableList<ObservableList> data;
 
         TableView tableview = new TableView();
 
         data = FXCollections.observableArrayList();
         try {
-
-            //select everything from the given table
-            String SQL = "SELECT * from " + tableName;
 
             //execute the sql statement and obtain the result
             ResultSet rs = con.createStatement().executeQuery(SQL);
@@ -135,6 +129,15 @@ public class UserModel {
         }
 
         return tableview;
+    }
+
+    /**
+     * show a table -- as a test
+     */
+    public TableView getTable(String tableName) {
+        //select everything from the given table
+        String SQL = "SELECT * from " + tableName;
+        return getTableViewForSQL(SQL);
     }
 
     /**

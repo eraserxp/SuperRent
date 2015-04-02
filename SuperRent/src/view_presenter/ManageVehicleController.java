@@ -157,7 +157,7 @@ public class ManageVehicleController extends AbstractController implements Initi
         //========================================================================
         boolean addOK = false;
 
-        addOK = managerModel.addVehicle(plateNumber, startingDateDateBox.getValue(), vehicleCategory, vehicleCategory, brand);
+//        addOK = managerModel.addVehicle(plateNumber, startingDateDateBox.getValue(), vehicleCategory, vehicleCategory, brand);
 
         System.out.print("here");
         if (addOK == true) {

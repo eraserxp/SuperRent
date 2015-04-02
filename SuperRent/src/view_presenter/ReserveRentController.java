@@ -43,6 +43,7 @@ import model.AppContext;
 import model.ClerkModel;
 import model.CustomerModel;
 import model.UserModel;
+import model.VehicleSelection;
 
 /**
  * FXML Controller class
@@ -88,6 +89,8 @@ public class ReserveRentController extends AbstractController implements Initial
     private UserModel userModel;
 
     private String city, location;
+    
+    private VehicleSelection selectedVehicle = new VehicleSelection();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -167,6 +170,7 @@ public class ReserveRentController extends AbstractController implements Initial
     }
 
     public void handleSearchButton() {
+        showSearchResult();
         if (locationCMB.getSelectionModel().isEmpty()) {
             popUpError("location is empty!");
             return;
@@ -178,7 +182,7 @@ public class ReserveRentController extends AbstractController implements Initial
             return;
         }
         String vehicleType = vehicleTypeCMB.getSelectionModel().getSelectedItem();
-        
+
         LocalDate fromDate = fromDatePicker.getValue();
         if (fromDate == null) {
             popUpError("From date is empty!");
@@ -191,7 +195,7 @@ public class ReserveRentController extends AbstractController implements Initial
         }
 
         String fromHourString = fromHourCMB.getSelectionModel().getSelectedItem();
-        int fromHour = Integer.parseInt( fromHourString.split(":")[0] );
+        int fromHour = Integer.parseInt(fromHourString.split(":")[0]);
         System.out.println("from hour = " + fromHour);
 
         LocalDate toDate = toDatePicker.getValue();
@@ -205,23 +209,61 @@ public class ReserveRentController extends AbstractController implements Initial
             return;
         }
         String toHourString = toHourCMB.getSelectionModel().getSelectedItem();
-        int toHour = Integer.parseInt( toHourString.split(":")[0] );
+        int toHour = Integer.parseInt(toHourString.split(":")[0]);
         System.out.println("to hour = " + toHour);
 
         //check the from time is earlier than to time
-        if ( fromDate.compareTo(toDate)>0 
-                || (fromDate.compareTo(toDate)==0 && fromHour>=toHour)
-                ) {
+        if (fromDate.compareTo(toDate) > 0
+                || (fromDate.compareTo(toDate) == 0 && fromHour >= toHour)) {
             popUpError("The 'From time' is not earlier than the 'To time'!");
             return;
         }
-        
-        int redeemedPoints = 0;
-        int odometer = 0;
-        GridPane summaryPane = userModel.calculateCost(vehicleType, null, null,
-                fromDate, fromHour, toDate, toHour, true,
-                redeemedPoints, odometer);
-        summaryVBox.getChildren().add(summaryPane);
+
+//        int redeemedPoints = 0;
+//        int odometer = 0;
+//        GridPane summaryPane = userModel.calculateCost(vehicleType, null, null,
+//                fromDate, fromHour, toDate, toHour, true,
+//                redeemedPoints, odometer);
+//        summaryVBox.getChildren().add(summaryPane);
     }
 
+    private void showSearchResult() {
+        setupNextPage(this, "ShowSearchResultView.fxml", "Search results");
+//        FXMLLoader loader = new FXMLLoader();
+//        loader.setLocation(getClass().getResource("ShowSearchResultView.fxml"));
+//        try {
+//            AnchorPane page = (AnchorPane) loader.load();
+//            Stage searchResultStage = new Stage();
+//            searchResultStage.setTitle("Search results");
+//            searchResultStage.initModality(Modality.WINDOW_MODAL);
+//            searchResultStage.initOwner(AppContext.getInstance().getPrimaryStage());
+//            Scene scene = new Scene(page);
+//            searchResultStage.setScene(scene);
+//            
+//            ShowSearchResultViewController searchResultController = loader.getController();
+//            searchResultController.setStage(searchResultStage);
+//            searchResultController.setPreviousController(this);
+//            searchResultStage.showAndWait();
+//            
+//        } catch (IOException ex) {
+//            Logger.getLogger(ReserveRentController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+    }
+
+    private void showSummary() {
+        System.out.println("show summary");
+    }
+    
+    @Override
+    public void update(Object o) {
+        //convert the object to something that this controller will recognize
+//        selectedVehicle = ( VehicleSelection ) o;
+//        System.out.println(selectedVehicle.getVlicense());
+//        System.out.println(selectedVehicle.getCategory());
+//        System.out.println(selectedVehicle.getVehicleType());
+//        System.out.println(selectedVehicle.getBrand());
+//        System.out.println(selectedVehicle.getOdometer());
+        
+        showSummary();
+    }
 }
