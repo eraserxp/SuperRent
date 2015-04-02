@@ -28,6 +28,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import model.AdminModel;
+import model.AppContext;
 import model.ManagerModel;
 import model.UserModel;
 
@@ -40,22 +41,31 @@ public class ManageVehicleController extends AbstractController implements Initi
 
     @FXML
     private ComboBox<String> typeCombobox;
+    
     @FXML
     private TextField plateNumTextField;
+    
     @FXML
     private TextField brandTextField;
+    
     @FXML
     private RadioButton carRadioButton;
+    
     @FXML
     private RadioButton truckRadioButton;
+    
     @FXML
     private DatePicker startingDateDateBox;
+    
     @FXML
     private Button addButton;
+    
     @FXML
     private Button showButton;
+    
     @FXML
     private Button soldButton;
+    
     @FXML
     private TextField handleAddButtonAction;
 
@@ -83,12 +93,16 @@ public class ManageVehicleController extends AbstractController implements Initi
     private boolean brandIsOk = false;
     final private ToggleGroup group = new ToggleGroup();
     private String city, location;
+    private String username;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        username=AppContext.getInstance().getUsername();
+        
+        System.out.print(username);
         setUpCarTruckRB();
         setUpLocationCMB();
         startingDateDateBoxSetUp();
@@ -137,7 +151,9 @@ public class ManageVehicleController extends AbstractController implements Initi
         }
         else
         {
-        
+            brand=brandTextField.getText();
+            brandIsOk=true;
+          
         
         }
 
@@ -147,9 +163,19 @@ public class ManageVehicleController extends AbstractController implements Initi
             plateNumTextField.requestFocus();
             return;
         }
-        else
-        {
         
+       plateNumber=plateNumTextField.getText();
+       if( managerModel.checkPlateNumber(plateNumber))
+        { showWarning(addingValidator, "Plate Number Exist!");
+            addingValidator.setTextFill(Color.RED);
+            plateNumTextField.requestFocus();
+            return;
+        }  
+            
+         else{ 
+            
+           
+        plateIsOk=true;
         
         
         }
@@ -157,9 +183,10 @@ public class ManageVehicleController extends AbstractController implements Initi
         //========================================================================
         boolean addOK = false;
 
-//        addOK = managerModel.addVehicle(plateNumber, startingDateDateBox.getValue(), vehicleCategory, vehicleCategory, brand);
+        addOK = managerModel.addVehicle(username,plateNumber, startingDateDateBox.getValue(),
+                vehicleCategory, vehicleType, brand);
 
-        System.out.print("here");
+        
         if (addOK == true) {
             showSuccessMessage(addingValidator, "Vehicle Added!");
             addingValidator.setTextFill(Color.GREEN);
@@ -183,7 +210,7 @@ public class ManageVehicleController extends AbstractController implements Initi
 //                    vehicleCategory = group.getSelectedToggle().getUserData().toString();
                     RadioButton rb = (RadioButton) new_toggle.getToggleGroup().getSelectedToggle();
                     vehicleCategory = rb.getText();
-                    System.out.println(vehicleCategory);
+                    //System.out.println(vehicleCategory);
                     vehicleCategory = vehicleCategory.toLowerCase();
 
                     //if location has been selected, reconfigure vehicleType combobox
@@ -206,6 +233,7 @@ public class ManageVehicleController extends AbstractController implements Initi
 
     public void startingDateDateBoxSetUp() {
         startingDateDateBox.setDisable(false);
+        /*
         final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
             public DateCell call(final DatePicker datePicker) {
                 return new DateCell() {
@@ -220,7 +248,7 @@ public class ManageVehicleController extends AbstractController implements Initi
                 };
             }
         };
-
+    */
         //actionHandler
         startingDateDateBox.setOnAction((ActionEvent event) -> {
             addButton.setDisable(false);
@@ -228,9 +256,18 @@ public class ManageVehicleController extends AbstractController implements Initi
 
         });
 
-        startingDateDateBox.setDayCellFactory(dayCellFactory);
+       // startingDateDateBox.setDayCellFactory(dayCellFactory);
 
     }
+    
+    
+    private void handleVehicleType(){
+         typeCombobox.setOnAction((ActionEvent event) -> {
+           vehicleType= typeCombobox.getSelectionModel().getSelectedItem();
+            
+                      
+                  });
+                 }
 
     private void setUpLocationCMB() {
 
@@ -241,17 +278,11 @@ public class ManageVehicleController extends AbstractController implements Initi
             city = branch.split(",")[1].trim();
             configureComboBox(typeCombobox,
                     userModel.getVehicleTypeAtBranch(city, location, vehicleCategory));
+            handleVehicleType();
         });
     }
-  /*
-    private void setUpNameField() {
-        brandTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            // when user enter some text and leave the password field, check the password
-            if (newValue) {
-                hide(addingValidator);
-            }
-        });
-    }
-    */
+    
+    
+    
 
 }
