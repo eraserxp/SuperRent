@@ -1,19 +1,19 @@
 INSERT INTO vehicletype 
 VALUES 
-('boxtrucks',70000, 10000, 2000, 200, 28000, 1000, 200),
-('cargovans',85000, 12500, 2500, 200, 28000, 1000, 200),
-('compact',40000, 5500, 1100, 200, 28000, 1000, 200),
-('economy',35000, 5000, 1000, 200, 28000, 1000, 200),
-('foot12',55000, 8000, 1500, 200, 28000, 1000, 200),
-('foot15',60000, 8500, 1600, 200, 28000, 1000, 200),
-('foot24',60000, 8000, 1700, 200, 28000, 1000, 200),
-('full-size',49000, 7000, 1400, 200, 28000, 1000, 200),
-('luxury',320000, 80000, 16000, 200, 28000, 1000, 200),
-('midsize',35000, 5000, 1200, 200, 28000, 1000, 200),
-('premium',50000, 7500, 1500, 200, 28000, 1000, 200),
-('standard',50000, 6500, 1300, 200, 28000, 1000, 200),
-('suv',63000, 9000, 1800, 200, 28000, 1000, 200),
-('van',70000, 10000, 2000, 200, 28000, 1000, 200);
+('boxtrucks',70000, 10000, 2000, 200, 28000, 1000, 200,40),
+('cargovans',85000, 12500, 2500, 200, 28000, 1000, 200,40),
+('compact',40000, 5500, 1100, 200, 28000, 1000, 200,40),
+('economy',35000, 5000, 1000, 200, 28000, 1000, 200,40),
+('foot12',55000, 8000, 1500, 200, 28000, 1000, 200,40),
+('foot15',60000, 8500, 1600, 200, 28000, 1000, 200,40),
+('foot24',60000, 8000, 1700, 200, 28000, 1000, 200,40),
+('full-size',49000, 7000, 1400, 200, 28000, 1000, 200,40),
+('luxury',320000, 80000, 16000, 200, 28000, 1000, 200,40),
+('midsize',35000, 5000, 1200, 200, 28000, 1000, 200,40),
+('premium',50000, 7500, 1500, 200, 28000, 1000, 200,40),
+('standard',50000, 6500, 1300, 200, 28000, 1000, 200,40),
+('suv',63000, 9000, 1800, 200, 28000, 1000, 200,40),
+('van',70000, 10000, 2000, 200, 28000, 1000, 200,40);
 
 
 INSERT INTO branch
@@ -67,10 +67,10 @@ VALUES
 
 INSERT INTO equipment
 VALUES 
-('ski_rack','car',10,2),
-('child_safety_seat','car',10,2),
-('lift_gate','truck',10,2),
-('car_towing','truck',10,2);
+('ski_rack','car',1000,200),
+('child_safety_seat','car',1000,200),
+('lift_gate','truck',1000,200),
+('car_towing','truck',1000,200);
 
 INSERT INTO vehiclesold
 VALUES 
@@ -80,13 +80,13 @@ VALUES
 INSERT INTO vehicleforrent 
 VALUES
 ('PLT-4D', 0,'1999-5-1','car', 'economy','Honda','frank1',3000),
-('PLT-4M', 1,'2000-5-1','car', 'economy','BMW','frank1',3000),
-('PLT-4T', 1,'2000-5-1','car', 'economy','BMW','frank1',3000),
-('PLT-4C', 1,'2006-5-1','car', 'economy','BMW','frank1',3000),
-('HOW DOO', 1,'2007-5-1','car', 'economy','BMW','frank1',6000),
-('GM', 1,'2008-5-1','car', 'economy','BMW','frank1',6000),
-('OUR BC', 1,'2009-5-1','car', 'economy','BMW','frank1',6000),
-('4U 2DVY', 1,'2010-5-1','truck', 'boxtrucks','BMW','frank1',6000),
+('PLT-4M', 0,'2000-5-1','car', 'economy','BMW','frank1',30000),
+('PLT-4T', 1,'2000-5-1','car', 'economy','BMW','frank1',30000),
+('PLT-4C', 1,'2006-5-1','car', 'economy','BMW','frank1',30000),
+('HOW DOO', 1,'2007-5-1','car', 'economy','BMW','frank1',60000),
+('GM', 0,'2008-5-1','car', 'economy','BMW','frank1',60000),
+('OUR BC', 1,'2009-5-1','car', 'economy','BMW','frank1',60000),
+('4U 2DVY', 1,'2010-5-1','truck', 'boxtrucks','BMW','frank1',60000),
 ('4U 2AVY', 1,'1999-5-1','truck', 'foot24','BMW','frank1',6000),
 ('4U 2NRY', 1,'2000-5-1','truck', 'foot15','BMW','frank1',30000),
 ('4U 2NCY', 1,'2006-5-1','truck', 'foot12','BMW','frank1',30000),
@@ -112,17 +112,17 @@ VALUES
 ('IGOMAR', 1,'2010-5-1', 'car','van','BMW','frank1',30000),
 ('IGONAR', 1,'1999-5-1', 'car','van','BMW','frank1',30000),
 ('IGOOAR', 1,'2000-5-1','truck', 'foot12','Ford FSeries','frank1',30000),
-('IGOPAR', 1,'2013-5-1','truck', 'foot15','Ford FSeries','frank1',3000),
-('GOOGLE', 1,'1999-5-1','truck', 'foot24','Ford FSeries','frank1',3000),
-('YAH-OO', 1,'2000-5-1','truck', 'foot12','Ford FSeries','frank1',3000),
-('AMAZON', 1,'2006-5-1','truck', 'foot15','Ford FSeries','frank1',3000),
-('BMAZON', 1,'2007-5-1','truck', 'foot24','Ford FSeries','frank1',3000),
-('CMAZON', 1,'2008-5-1','truck', 'boxtrucks','Ford FSeries','frank1',3000),
-('DMAZON', 1,'2009-5-1','truck', 'boxtrucks','Ford FSeries','frank1',3000),
-('EMAZON', 1,'2010-5-1','truck', 'boxtrucks','Ford FSeries','frank1',3000),
-('FMAZON', 1,'1999-5-1','truck', 'cargovans','Dodge Ram','frank1',3000),
-('GMAZON', 1,'2000-5-1','truck', 'cargovans','Dodge Ram','frank1',3000),
-('TMAZON', 1,'2013-5-1','truck', 'cargovans','Dodge Ram','frank1',3000),
+('IGOPAR', 1,'2013-5-1','truck', 'foot15','Ford FSeries','frank1',30000),
+('GOOGLE', 0,'1999-5-1','truck', 'foot24','Ford FSeries','frank1',30000),
+('YAH-OO', 1,'2000-5-1','truck', 'foot12','Ford FSeries','frank1',30000),
+('AMAZON', 1,'2006-5-1','truck', 'foot15','Ford FSeries','frank1',30000),
+('BMAZON', 1,'2007-5-1','truck', 'foot24','Ford FSeries','frank1',30000),
+('CMAZON', 0,'2008-5-1','truck', 'boxtrucks','Ford FSeries','frank1',30000),
+('DMAZON', 1,'2009-5-1','truck', 'boxtrucks','Ford FSeries','frank1',30000),
+('EMAZON', 1,'2010-5-1','truck', 'boxtrucks','Ford FSeries','frank1',30000),
+('FMAZON', 1,'1999-5-1','truck', 'cargovans','Dodge Ram','frank1',30000),
+('GMAZON', 1,'2000-5-1','truck', 'cargovans','Dodge Ram','frank1',30000),
+('TMAZON', 1,'2013-5-1','truck', 'cargovans','Dodge Ram','frank1',30000),
 ('QMAZON', 0,'1999-5-1','car', 'economy','BMW','frank1',3000);
 
 INSERT INTO vehicleforsale 
@@ -225,10 +225,72 @@ VALUES
 
 INSERT INTO reservation
 VALUES
-('1','2014-02-04',3,'2014-02-04',8,8000,'QMAZON','Toronto','300 Regina Street','frank7','car',1,'ski_rack');
+('1','2014-02-04',3,'2014-02-06',8,8000,'QMAZON','Toronto','300 Regina Street','frank7'),
+('2','2014-04-04',3,'2014-04-06',8,8000,'QMAZON','Toronto','300 Regina Street','frank7'),
+('3','2014-03-04',3,'2014-03-06',8,18000,'PLT-4M','Vancouver','2660 Wesbrook Mall','frank8'),
+('4','2014-04-04',3,'2014-04-06',8,18000,'PLT-4M','Vancouver','2660 Wesbrook Mall','frank8'),
+('5','2014-03-04',3,'2014-03-06',8,18000,'GM','Vancouver','2660 Wesbrook Mall','frank9'),
+('6','2014-04-04',3,'2014-04-06',8,18000,'GM','Vancouver','2660 Wesbrook Mall','frank9'),
+('7','2014-03-04',3,'2014-03-06',8,28000,'CMAZON','Toronto','300 Regina Street','customer'),
+('8','2014-04-04',3,'2014-04-06',8,28000,'CMAZON','Toronto','300 Regina Street','customer'),
+('9','2014-03-04',3,'2014-03-06',8,24000,'GOOGLE','Toronto','300 Regina Street','frank10'),
+('10','2014-04-04',3,'2014-04-06',8,24000,'GOOGLE','Toronto','300 Regina Street','frank10');
+
 
 INSERT INTO rent
 VALUES
-(1,0,'A123456789876','2008-07-06','PLT-4D','Vancouver','2660 Wesbrook Mall','frank8','car',1,'ski_rack','4507556798979876','2017-03-09','2014-03-12','2014-05-09',3,18);
+(1,1,'A123456789871','PLT-4M','Vancouver','2660 Wesbrook Mall','frank8','4507556798979871','2017-03-01','2014-02-04',3,'2014-02-06',8),
+(2,1,'A123456789871','PLT-4M','Vancouver','2660 Wesbrook Mall','frank8','4507556798979871','2017-03-01','2014-04-04',3,'2014-04-06',8),
+
+(3,1,'A123456789872','QMAZON','Toronto','300 Regina Street','frank7','4507556798979872','2017-03-02','2014-03-04',3,'2014-03-06',8),
+(4,1,'A123456789872','QMAZON','Toronto','300 Regina Street','frank7','4507556798979872','2017-03-02','2014-04-04',3,'2014-04-06',8),
+
+(5,1,'A123456789873','GM','Vancouver','2660 Wesbrook Mall','frank9','4507556798979873','2017-03-03','2014-03-04',3,'2014-03-06',8),
+(6,1,'A123456789873','GM','Vancouver','2660 Wesbrook Mall','frank9','4507556798979873','2017-03-03','2014-04-04',3,'2014-04-06',8),
+
+(7,1,'A123456789874','GOOGLE','Toronto','300 Regina Street','frank10','4507556798979874','2017-03-04','2014-03-04',3,'2014-03-06',8),
+(8,1,'A123456789874','GOOGLE','Toronto','300 Regina Street','frank10','4507556798979874','2017-03-04','2014-04-04',3,'2014-04-06',8),
+
+(9,1,'A123456789875','CMAZON','Toronto','300 Regina Street','customer','4507556798979875','2017-03-09','2014-03-04',3,'2014-03-06',8),
+(10,1,'A123456789875','CMAZON','Toronto','300 Regina Street','customer','4507556798979875','2017-03-09','2014-04-04',3,'2014-04-06',8),
+
+(11,0,'A123456789875','CMAZON','Toronto','300 Regina Street','customer','4507556798979875','2017-03-09','2014-03-11',3,'2014-03-16',8),
+(12,0,'A123456789875','CMAZON','Toronto','300 Regina Street','customer','4507556798979875','2017-03-09','2014-04-17',3,'2014-04-23',8);
+
+INSERT INTO vreturn
+VALUES
+(1,1,'2014-03-06',8,'Vancouver','2660 Wesbrook Mall',1,30070,23000,'Cash'),
+(2,3,'2014-03-08',20,'Toronto','300 Regina Street',1,30080,24000,'Visa'),
+(3,5,'2014-03-06',8,'Vancouver','2660 Wesbrook Mall',1,30090,20000,'Cash'),
+(4,7,'2014-03-08',10,'Toronto','300 Regina Street',1,30060,20000,'Visa'),
+(5,9,'2014-03-06',8,'Toronto','300 Regina Street',1,30070,25000,'Cash'),
+(6,11,'2014-03-19',9,'Toronto','300 Regina Street',1,30070,23000,'Visa');
+
+INSERT INTO reserve_addon
+VALUES
+('1',1,'ski_rack'),
+('2',1,'child_safety_seat'),
+('3',1,'ski_rack'),
+('4',1,'child_safety_seat'),
+('7',2,'lift_gate'),
+('8',1,'car_towing'),
+('9',2,'lift_gate'),
+('10',1,'car_towing');
+
+INSERT INTO rent_addon
+VALUES
+('1',1,'ski_rack'),
+('2',1,'child_safety_seat'),
+('3',1,'ski_rack'),
+('4',1,'child_safety_seat'),
+('5',1,'child_safety_seat'),
+('7',2,'lift_gate'),
+('9',2,'lift_gate'),
+('10',1,'car_towing');
+
+
+
+
+
 
 
