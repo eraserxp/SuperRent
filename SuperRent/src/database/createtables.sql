@@ -1,14 +1,16 @@
 
 
 create table vehicletype
-(typeName varchar(20) not null PRIMARY KEY,
+(typeName varchar(20) not null,
 w_rate integer,
 d_rate integer,
 h_rate integer,
 pk_rate integer,
 w_insurance integer,
 d_insurance integer,
-h_insurance integer
+h_insurance integer,
+milelimit integer,
+PRIMARY KEY(typeName)
 )
 ENGINE = InnoDB;
 
@@ -208,9 +210,6 @@ vlicense varchar(10),
 branch_city varchar(20),
 branch_location varchar(20),
 customer_username varchar(20),
-equipment_type varchar(20),
-no_of_equipment integer,
-equip_name varchar(20),
 PRIMARY KEY(confirmation_number),
 index vehicle_ind (vlicense),
 FOREIGN KEY(vlicense) REFERENCES vehicleinbranch(vlicense)
@@ -221,9 +220,6 @@ FOREIGN KEY(branch_city,branch_location) REFERENCES branch(city,location)
 ON DELETE CASCADE ON UPDATE CASCADE,
 index customer_ind (customer_username),
 FOREIGN KEY(customer_username) REFERENCES customer(username)
-ON DELETE CASCADE ON UPDATE CASCADE,
-index equip_ind (equip_name),
-FOREIGN KEY(equip_name) REFERENCES equipment(equipName)
 ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = InnoDB;
@@ -239,13 +235,12 @@ vlicense varchar(10),
 branch_city varchar(20),
 branch_location varchar(20),
 customer_username varchar(20),
-equipment_type varchar(20),
-no_of_equipment varchar(20),
-equip_name varchar(20),
 card_no varchar(40),
 expiry_date date,
 from_date date,
 from_time integer,
+expected_return_date date,
+expected_return_time integer,
 PRIMARY KEY(rentid),
 index vehicle_ind (vlicense),
 FOREIGN KEY(vlicense) REFERENCES vehicleinbranch(vlicense)
@@ -256,9 +251,6 @@ FOREIGN KEY(branch_city,branch_location) REFERENCES branch(city,location)
 ON DELETE CASCADE ON UPDATE CASCADE,
 index customer_ind (customer_username),
 FOREIGN KEY(customer_username) REFERENCES customer(username)
-ON DELETE CASCADE ON UPDATE CASCADE,
-index equip_ind (equip_name),
-FOREIGN KEY(equip_name) REFERENCES equipment(equipName)
 ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = InnoDB;
@@ -271,33 +263,16 @@ create table vreturn
 rent_id integer,
 return_date date,
 return_time integer,
-vlicense varchar(10),
 branch_city varchar(20),
 branch_location varchar(20),
-customer_username varchar(20),
 tank_full boolean,
-odometer int,
-rental_charge integer,
-insurance_cost integer,
-additional_cost integer,
+odometer integer,
 total_cost integer,
 payment_method varchar(20),
-from_date date,
-from_time integer,
-is_reserve boolean,
-driver_license varchar(20),
-card_no varchar(40),
-expiry_date date,
 PRIMARY KEY(returnid),
-index vehicle_ind (vlicense),
-FOREIGN KEY(vlicense) REFERENCES vehicleinbranch(vlicense)
-ON DELETE CASCADE ON UPDATE CASCADE,
 index branch_ind (branch_city),
 index location_ind (branch_location),
 FOREIGN KEY(branch_city,branch_location) REFERENCES branch(city,location)
-ON DELETE CASCADE ON UPDATE CASCADE,
-index customer_ind (customer_username),
-FOREIGN KEY(customer_username) REFERENCES customer(username)
 ON DELETE CASCADE ON UPDATE CASCADE,
 index rent_ind (rent_id),
 FOREIGN KEY(rent_id) REFERENCES rent(rentid)
@@ -310,6 +285,7 @@ ENGINE = InnoDB;
 
 create table rent_addon
 (rentid integer not null,
+quantity integer,
 equipName varchar(20) not null,
 PRIMARY KEY(rentid,equipName),
 index rent_ind (rentid),
@@ -327,6 +303,7 @@ ENGINE = InnoDB;
 
 create table reserve_addon
 (confirmNo varchar(20) not null,
+quantity integer,
 equipName varchar(20) not null,
 PRIMARY KEY(confirmNo,equipName),
 index reservation_ind (confirmNo),
