@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="604.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.RegisterController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="604.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.RegisterController">
    <children>
       <ImageView id="im1" disable="true" fitHeight="69.0" fitWidth="159.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -61,7 +61,7 @@
          </font>
       </Label>
       <Button id="reg" fx:id="register_button" layoutX="254.0" layoutY="424.0" mnemonicParsing="false" onAction="#handleregisterButtonAction" text="Register" />
-      <Button id="log" fx:id="login_button" layoutX="329.0" layoutY="424.0" mnemonicParsing="false" onAction="#handleloginButtonAction" text="Login" />
+      <Button id="log" fx:id="login_button" layoutX="329.0" layoutY="424.0" mnemonicParsing="false" onAction="#handleGoBack" text="Go back" />
       <Label fx:id="usernameValidator" layoutX="388.0" layoutY="136.0" prefHeight="17.0" prefWidth="142.0" />
       <Label fx:id="passwordValidator" layoutX="388.0" layoutY="182.0" prefHeight="17.0" prefWidth="142.0" />
       <Label fx:id="nameValidator" layoutX="388.0" layoutY="270.0" prefHeight="17.0" prefWidth="142.0" />

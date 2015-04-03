@@ -28,6 +28,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -36,6 +37,7 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -55,6 +57,8 @@ public class ReserveRentController extends AbstractController implements Initial
     @FXML
     private ComboBox<String> locationCMB;
 
+    private String city, location;
+
     @FXML
     private RadioButton carRB;
 
@@ -68,28 +72,59 @@ public class ReserveRentController extends AbstractController implements Initial
     @FXML
     private ComboBox<String> vehicleTypeCMB;
 
+    private String vehicleType;
+
     @FXML
     private DatePicker fromDatePicker;
+
+    private String fromDate;
 
     @FXML
     private ComboBox<String> fromHourCMB;
 
+    private int fromHour;
+
     @FXML
     private DatePicker toDatePicker;
 
+    private String toDate;
+
     @FXML
     private ComboBox<String> toHourCMB;
+
+    private int toHour;
 
     @FXML
     private Button searchButton;
 
     @FXML
+    private Label equip1Label;
+
+    @FXML
+    private ComboBox<String> equip1CMB;
+
+    @FXML
+    private Label equip2Label;
+
+    @FXML
+    private ComboBox<String> equip2CMB;
+
+    @FXML
+    private Button registerButton;
+
+    @FXML
     private VBox summaryVBox;
+
+    private GridPane summaryGP;
+
+    @FXML
+    private Label usernameLabel;
+
+    @FXML
+    private Label plateNoLabel;
 
     private UserModel userModel;
 
-    private String city, location;
-    
     private VehicleSelection selectedVehicle = new VehicleSelection();
 
     @Override
@@ -108,6 +143,10 @@ public class ReserveRentController extends AbstractController implements Initial
         setUpLocationCMB();
         setUpVehicleTypeCMB();
         setUpToHourCMBs();
+        setUpEquipLabelField();
+
+        usernameLabel.setText("");
+        plateNoLabel.setText("");
 
     }
 
@@ -140,6 +179,12 @@ public class ReserveRentController extends AbstractController implements Initial
                     vehicleCategory = rb.getText();
                     System.out.println(vehicleCategory);
                     vehicleCategory = vehicleCategory.toLowerCase();
+                    //configure equipment labels and combobox
+                    ArrayList<String> equipments = userModel.getEquipments(vehicleCategory);
+                    equip1Label.setText(equipments.get(0));
+                    equip2Label.setText(equipments.get(1));
+                    equip1CMB.getSelectionModel().select(0);
+                    equip2CMB.getSelectionModel().select(0);
 
                     //if location has been selected, reconfigure vehicleType combobox
                     if (!locationCMB.getSelectionModel().isEmpty()) {
@@ -151,6 +196,7 @@ public class ReserveRentController extends AbstractController implements Initial
                         //configure the vehicleType Combobox
                         configureComboBox(vehicleTypeCMB,
                                 userModel.getVehicleTypeAtBranch(city, location, vehicleCategory));
+
                     }
 
                 }
@@ -219,51 +265,83 @@ public class ReserveRentController extends AbstractController implements Initial
             return;
         }
 
-//        int redeemedPoints = 0;
-//        int odometer = 0;
-//        GridPane summaryPane = userModel.calculateCost(vehicleType, null, null,
-//                fromDate, fromHour, toDate, toHour, true,
-//                redeemedPoints, odometer);
-//        summaryVBox.getChildren().add(summaryPane);
     }
 
     private void showSearchResult() {
+        passDataToNext();
         setupNextPage(this, "ShowSearchResultView.fxml", "Search results");
-//        FXMLLoader loader = new FXMLLoader();
-//        loader.setLocation(getClass().getResource("ShowSearchResultView.fxml"));
-//        try {
-//            AnchorPane page = (AnchorPane) loader.load();
-//            Stage searchResultStage = new Stage();
-//            searchResultStage.setTitle("Search results");
-//            searchResultStage.initModality(Modality.WINDOW_MODAL);
-//            searchResultStage.initOwner(AppContext.getInstance().getPrimaryStage());
-//            Scene scene = new Scene(page);
-//            searchResultStage.setScene(scene);
-//            
-//            ShowSearchResultViewController searchResultController = loader.getController();
-//            searchResultController.setStage(searchResultStage);
-//            searchResultController.setPreviousController(this);
-//            searchResultStage.showAndWait();
-//            
-//        } catch (IOException ex) {
-//            Logger.getLogger(ReserveRentController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+
     }
+
+    private void setUpEquipLabelField() {
+        String category = "car";
+        ArrayList<String> equipments = userModel.getEquipments(category);
+        equip1Label.setText(equipments.get(0));
+        equip2Label.setText(equipments.get(1));
+
+        ArrayList<String> quantityList = new ArrayList<>();
+        for (int i = 0; i <= 4; i++) {
+            quantityList.add(Integer.toString(i));
+        }
+        configureComboBox(equip1CMB, quantityList);
+        configureComboBox(equip2CMB, quantityList);
+        equip1CMB.getSelectionModel().select(0);
+        equip2CMB.getSelectionModel().select(0);
+    }
+
+    private void passDataToNext() {
+        String branch = locationCMB.getSelectionModel().getSelectedItem();
+        location = branch.split(",")[0].trim();
+        city = branch.split(",")[1].trim();
+        vehicleType = vehicleTypeCMB.getSelectionModel().getSelectedItem();
+        fromDate = fromDatePicker.getValue().toString();
+        toDate = toDatePicker.getValue().toString();
+
+        AppContext.getInstance().setTempData("city", city);
+        AppContext.getInstance().setTempData("location", location);
+        AppContext.getInstance().setTempData("vehicleType", vehicleType);
+        AppContext.getInstance().setTempData("fromDate", fromDate);
+        AppContext.getInstance().setTempData("toDate", toDate);
+    }
+    
+    
 
     private void showSummary() {
         System.out.println("show summary");
+
+        plateNoLabel.setText(selectedVehicle.getVlicense());
+
+        int redeemedPoints = 0;
+        int odometer = 0;
+        LocalDate startDate = fromDatePicker.getValue();
+        LocalDate endDate = toDatePicker.getValue();
+        fromHour = Integer.parseInt(fromHourCMB.getSelectionModel().getSelectedItem().split(":")[0]);
+        toHour = Integer.parseInt(toHourCMB.getSelectionModel().getSelectedItem().split(":")[0]);
+        if (summaryGP != null) {
+            summaryVBox.getChildren().remove(summaryGP);
+        }
+        summaryGP = userModel.calculateCost(vehicleType, null, null,
+                startDate, fromHour, endDate, toHour, false,
+                redeemedPoints, odometer);
+        summaryVBox.getChildren().add(summaryGP);
+
     }
-    
+
     @Override
     public void update(Object o) {
         //convert the object to something that this controller will recognize
-//        selectedVehicle = ( VehicleSelection ) o;
-//        System.out.println(selectedVehicle.getVlicense());
-//        System.out.println(selectedVehicle.getCategory());
-//        System.out.println(selectedVehicle.getVehicleType());
-//        System.out.println(selectedVehicle.getBrand());
-//        System.out.println(selectedVehicle.getOdometer());
-        
+        selectedVehicle = (VehicleSelection) o;
+        System.out.println(selectedVehicle.getVlicense());
+        System.out.println(selectedVehicle.getCategory());
+        System.out.println(selectedVehicle.getVehicleType());
+        System.out.println(selectedVehicle.getBrand());
+        System.out.println(selectedVehicle.getOdometer());
+
         showSummary();
+        carRB.requestFocus();
+    }
+
+    public void handleRegistration() {
+        setupNextPage(this, "Register.fxml", "Register customer");
     }
 }

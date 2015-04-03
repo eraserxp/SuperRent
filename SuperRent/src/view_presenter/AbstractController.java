@@ -78,11 +78,11 @@ public abstract class AbstractController {
     //create next stage based on the given fxml
     protected void setupNextPage(AbstractController currentController, String fxml, String title) {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("ShowSearchResultView.fxml"));
+        loader.setLocation(getClass().getResource(fxml));
         try {
             AnchorPane page = (AnchorPane) loader.load();
             Stage newStage = new Stage();
-            newStage.setTitle("Search results");
+            newStage.setTitle(title);
             newStage.initModality(Modality.WINDOW_MODAL);
             newStage.initOwner(AppContext.getInstance().getPrimaryStage());
             Scene scene = new Scene(page);

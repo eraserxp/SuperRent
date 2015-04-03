@@ -55,6 +55,56 @@ public class UserModel {
         con = mysqlConnInstance.refreshConnection();
     }
 
+    public ArrayList< ArrayList<String>> getMatrixForSQL(String SQL) {
+        ArrayList<ArrayList<String>> matrix = new ArrayList<ArrayList<String>>();
+        try {
+
+            //execute the sql statement and obtain the result
+            ResultSet rs = con.createStatement().executeQuery(SQL);
+            ArrayList<String> headerRow = new ArrayList<>();
+            /**
+             *
+             * add table column dynamically
+             *
+             */
+            for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
+                headerRow.add(rs.getMetaData().getColumnName(i + 1));
+            }
+            matrix.add(headerRow);
+
+            /**
+             * add the data to ObservableList for rendering purpose
+             */
+            while (rs.next()) {
+                ArrayList<String> row = new ArrayList<>();
+                // for each row, we add every columns
+                for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                    row.add(rs.getString(i));
+
+                }
+
+                System.out.println("Row [1] added " + row);
+                System.out.println("Column size = " + row.size());
+                // add each row into the data
+                matrix.add(row);
+
+            }
+
+            //close the result set
+            rs.close();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            System.out.println("Error on Building Data");
+
+        }
+
+        return matrix;
+
+    }
+
     public TableView getTableViewForSQL(String SQL) {
         ObservableList<ObservableList> data;
 
@@ -331,6 +381,24 @@ public class UserModel {
         return insurances;
     }
 
+    public ArrayList<String> getEquipments(String category) {
+        ArrayList<String> equipments = new ArrayList<String>();
+        String getEquipments = "select distinct equipName from equipment where "
+                               + " type = " + addQuotation(category);
+        ResultSet rs = queryDatabase(getEquipments);
+        try {
+            while (rs.next()) {
+                String equipName;
+                equipName = rs.getString("equipName");
+                equipments.add(equipName);
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminModel.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        return equipments;
+    }
+    
     /**
      *
      * calculate the cost for a given return, rent or reservation
@@ -352,21 +420,24 @@ public class UserModel {
         HashMap<String, Integer> vehicleInsurances = getInsuranceCost(vehicleType);
 
         ColumnConstraints col1 = new ColumnConstraints();
-        col1.setPercentWidth(25);
+        col1.setPercentWidth(20);
         col1.setHalignment(HPos.CENTER);
         ColumnConstraints col2 = new ColumnConstraints();
-        col2.setPercentWidth(25);
+        col2.setPercentWidth(20);
         col2.setHalignment(HPos.CENTER);
         ColumnConstraints col3 = new ColumnConstraints();
-        col3.setPercentWidth(25);
+        col3.setPercentWidth(20);
         col3.setHalignment(HPos.CENTER);
         ColumnConstraints col4 = new ColumnConstraints();
-        col4.setPercentWidth(25);
+        col4.setPercentWidth(20);
         col4.setHalignment(HPos.CENTER);
-        gridPane.getColumnConstraints().addAll(col1, col2, col3, col4);
+        ColumnConstraints col5 = new ColumnConstraints();
+        col5.setPercentWidth(20);
+        col5.setHalignment(HPos.CENTER);
+        gridPane.getColumnConstraints().addAll(col1, col2, col3, col4, col5);
 
         ArrayList<String> columnHeaders = new ArrayList<>(
-                Arrays.asList("Type", "Time", "Renting fee", "Insurance")
+                Arrays.asList("Type", "Time", "Renting fee", "Insurance", "subtotal")
         );
         //add the first row
         int cols = columnHeaders.size();
@@ -388,8 +459,12 @@ public class UserModel {
             gridPane.add(new Label(weeks + " week(s)"), 1, rowIndex);
             gridPane.add(new Label(weeks + " x " + vehicleRates.get("w_rate") / 100 + ".00"),
                     2, rowIndex);
+            int w_rent = vehicleRates.get("w_rate") * weeks;
             gridPane.add(new Label(weeks + " x " + vehicleInsurances.get("w_insurance") / 100 + ".00"),
                     3, rowIndex);
+            int w_cost = vehicleInsurances.get("w_insurance") * weeks;
+            gridPane.add(new Label((w_rent + w_cost) / 100 + ".00"),
+                    4, rowIndex);
             rowIndex++;
         }
 
@@ -397,8 +472,12 @@ public class UserModel {
             gridPane.add(new Label(days + " day(s)"), 1, rowIndex);
             gridPane.add(new Label(days + " x " + vehicleRates.get("d_rate") / 100 + ".00"),
                     2, rowIndex);
+            int d_rent = vehicleRates.get("d_rate") * days;
             gridPane.add(new Label(days + " x " + vehicleInsurances.get("d_insurance") / 100 + ".00"),
                     3, rowIndex);
+            int d_cost = vehicleInsurances.get("d_insurance") * days;
+            gridPane.add(new Label((d_rent + d_cost) / 100 + ".00"),
+                    4, rowIndex);
             rowIndex++;
         }
 
@@ -406,8 +485,12 @@ public class UserModel {
             gridPane.add(new Label(hours + " hour(s)"), 1, rowIndex);
             gridPane.add(new Label(hours + " x " + vehicleRates.get("h_rate") / 100 + ".00"),
                     2, rowIndex);
+            int h_rent = vehicleRates.get("h_rate")*hours;
             gridPane.add(new Label(hours + " x " + vehicleInsurances.get("h_insurance") / 100 + ".00"),
                     3, rowIndex);
+            int h_cost = vehicleInsurances.get("h_insurance")*hours;
+            gridPane.add(new Label((h_rent + h_cost) / 100 + ".00"),
+                    4, rowIndex);           
             rowIndex++;
         }
 

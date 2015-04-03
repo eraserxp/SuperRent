@@ -7,9 +7,14 @@ package model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
  *
@@ -21,12 +26,51 @@ public class ClerkModel extends UserModel {
         super();
     }
 
-    public TableView getSelectedVehicles() {
+    public TableView<VehicleSelection> getAvailableVehicles(String city, String location,
+            String vehicleType, String fromDate, String toDate) {
         String sql = "select vlicense, category, vehicleType, brand, odometer"
-                + " from vehicleforrent where vehicleType = 'economy'";
-        return getTableViewForSQL(sql);
+                + " from vehicleforrent where "
+                + " isAvailable = 1 "
+                + " and vehicleType = " + addQuotation(vehicleType)
+                //+ " and "
+                ;
+        TableView<VehicleSelection> tableView = new TableView<>();
+        ArrayList< ArrayList<String>> resultMatrix = getMatrixForSQL(sql);
+        // parse the first row of the result
+        ArrayList<String> firstRow = resultMatrix.get(0);
+        ObservableList<VehicleSelection> data = FXCollections.observableArrayList();
+        for (int i = 1; i < resultMatrix.size(); i++) {
+            VehicleSelection vs = new VehicleSelection();
+            ArrayList<String> row = resultMatrix.get(i);
+            vs.setVlicense(row.get(0));
+            vs.setCategory(row.get(1));
+            vs.setVehicleType(row.get(2));
+            vs.setBrand(row.get(3));
+            vs.setOdometer(Integer.parseInt(row.get(4))/1000);
+            data.add(vs);
+        }
+        TableColumn<VehicleSelection, String> vlicenseCol = new TableColumn("Plate No.");
+        vlicenseCol.setCellValueFactory(cellData -> cellData.getValue().vlicenseProperty());
+
+        TableColumn<VehicleSelection, String> categoryCol = new TableColumn("Category");
+        categoryCol.setCellValueFactory(cellData -> cellData.getValue().categoryProperty());
+
+        TableColumn<VehicleSelection, String> vehicleTypeCol = new TableColumn("Vehicle Type");
+        vehicleTypeCol.setCellValueFactory(cellData -> cellData.getValue().vehicleProperty());
+
+        TableColumn<VehicleSelection, String> brandCol = new TableColumn("Brand");
+        brandCol.setCellValueFactory(cellData -> cellData.getValue().brandProperty());
+
+        TableColumn<VehicleSelection, String> odometerCol = new TableColumn("Odometer(km)");
+        odometerCol.setCellValueFactory(cellData -> cellData.getValue().odometerProperty());
+
+        tableView.getColumns().addAll(vlicenseCol, categoryCol, vehicleTypeCol, brandCol, odometerCol);
+        tableView.setItems(data);
+        
+        return tableView;
+
     }
-    
+
     public ArrayList<String> getRentDetails(String VehicleNumber) throws SQLException {
         String SQL = "select * from rent where vlicense=" + addQuotation(VehicleNumber);
         ResultSet rs = queryDatabase(SQL);
@@ -48,7 +92,6 @@ public class ClerkModel extends UserModel {
             String cardnumber = rs.getString("card_no");
             String expirydate = rs.getString("expiry_date");
 
-
             reservationList.add(vlicense);
             reservationList.add(driver_license);
             reservationList.add(pickupdate.toString());
@@ -59,17 +102,12 @@ public class ClerkModel extends UserModel {
             reservationList.add(equipmentname);
             reservationList.add(noofequipment.toString());
 
-
             rs.close();
 
             return reservationList;
         } else {
             return null;
         }
-        
-        
-        
-        
 
     }
 

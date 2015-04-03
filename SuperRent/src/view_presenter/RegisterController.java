@@ -35,7 +35,7 @@ public class RegisterController extends AbstractController implements Initializa
     private Button register_button;
     
     @FXML
-    private Button login_button;
+    private Button back_button;
     
      @FXML
     private Button clear_button;
@@ -233,6 +233,11 @@ public class RegisterController extends AbstractController implements Initializa
         app_stage.setScene(scene);
         app_stage.show();
                 
+    } 
+    
+    @FXML
+    private void handleGoBack(ActionEvent event) throws IOException {
+        getStage().close();               
     } 
     
     @FXML
