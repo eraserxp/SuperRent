@@ -165,26 +165,26 @@ public class ManageVehicleController extends AbstractController implements Initi
         }
         
        plateNumber=plateNumTextField.getText();
-       if( managerModel.checkPlateNumber(plateNumber))
-        { showWarning(addingValidator, "Plate Number Exist!");
-            addingValidator.setTextFill(Color.RED);
-            plateNumTextField.requestFocus();
-            return;
-        }  
-            
-         else{ 
-            
-           
-        plateIsOk=true;
-        
-        
-        }
+//       if( managerModel.checkPlateNumber(plateNumber))
+//        { showWarning(addingValidator, "Plate Number Exist!");
+//            addingValidator.setTextFill(Color.RED);
+//            plateNumTextField.requestFocus();
+//            return;
+//        }  
+//            
+//         else{ 
+//            
+//           
+//        plateIsOk=true;
+//        
+//        
+//        }
 
         //========================================================================
         boolean addOK = false;
 
-        addOK = managerModel.addVehicle(username,plateNumber, startingDateDateBox.getValue(),
-                vehicleCategory, vehicleType, brand);
+//        addOK = managerModel.addVehicle(username,plateNumber, startingDateDateBox.getValue(),
+//                vehicleCategory, vehicleType, brand);
 
         
         if (addOK == true) {

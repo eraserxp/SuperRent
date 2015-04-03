@@ -211,6 +211,21 @@ public class UserModel {
         return result;
     }
 
+    public boolean isCustomerExisted(String username) {
+        String SQL = "select * from customer where username = '" + username + "'";
+        boolean result = false;
+        try {
+            if (queryDatabase(SQL).next()) {
+                result = true;
+            } else {
+                result = false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
     protected ResultSet queryDatabase(String SQL) {
         ResultSet rs = null;
         try {
@@ -253,15 +268,6 @@ public class UserModel {
         }
     }
 
-//    protected boolean updateDatabase_noCommit(String SQL) {
-//        try {
-//            con.createStatement().executeUpdate(SQL);
-//            return true;
-//        } catch (SQLException ex) {
-//            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
-//            return false;
-//        }
-//    }
     protected String addQuotation(String s) {
         return " '" + s + "' ";
     }
@@ -273,12 +279,40 @@ public class UserModel {
         return updateDatabase(SQL);
     }
 
-//    public boolean addUser_noCommit(String username, String passwd, String name, String type) {
-//        String SQL = "insert into user values (" + addQuotation(username) + ","
-//                + addQuotation(passwd) + "," + addQuotation(name)
-//                + "," + addQuotation(type) + ")";
-//        return updateDatabase_noCommit(SQL);
-//    }
+    public String getCustomerByPhone(String phone) {
+        String SQL = "select username from customer where phone = "
+                + addQuotation(phone);
+        ResultSet rs = queryDatabase(SQL);
+        String username = null;
+        try {
+            while (rs.next()) {
+                username = rs.getString("username");
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return username;
+    }
+
+    public String getCustomerPhone(String username) {
+        String SQL = "select phone from customer where username = "
+                + addQuotation(username);
+        ResultSet rs = queryDatabase(SQL);
+        String phone = null;
+        try {
+            while (rs.next()) {
+                username = rs.getString("phone");
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return phone;
+    }
+
+    
+    
     public ArrayList<String> getAllBranches() {
         String SQL = "select city, location from branch";
         ResultSet rs = queryDatabase(SQL);
@@ -384,7 +418,7 @@ public class UserModel {
     public ArrayList<String> getEquipments(String category) {
         ArrayList<String> equipments = new ArrayList<String>();
         String getEquipments = "select distinct equipName from equipment where "
-                               + " type = " + addQuotation(category);
+                + " type = " + addQuotation(category);
         ResultSet rs = queryDatabase(getEquipments);
         try {
             while (rs.next()) {
@@ -395,10 +429,25 @@ public class UserModel {
             }
         } catch (SQLException ex) {
             Logger.getLogger(AdminModel.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
         return equipments;
     }
-    
+
+    public String getUserType(String username) {
+        String type = null;
+        String getType = "select type from user where username = "
+                + addQuotation(username);
+        ResultSet rs = queryDatabase(getType);
+        try {
+            if (rs.next()) {
+                type = rs.getString("type");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return type;
+    }
+
     /**
      *
      * calculate the cost for a given return, rent or reservation
@@ -485,12 +534,12 @@ public class UserModel {
             gridPane.add(new Label(hours + " hour(s)"), 1, rowIndex);
             gridPane.add(new Label(hours + " x " + vehicleRates.get("h_rate") / 100 + ".00"),
                     2, rowIndex);
-            int h_rent = vehicleRates.get("h_rate")*hours;
+            int h_rent = vehicleRates.get("h_rate") * hours;
             gridPane.add(new Label(hours + " x " + vehicleInsurances.get("h_insurance") / 100 + ".00"),
                     3, rowIndex);
-            int h_cost = vehicleInsurances.get("h_insurance")*hours;
+            int h_cost = vehicleInsurances.get("h_insurance") * hours;
             gridPane.add(new Label((h_rent + h_cost) / 100 + ".00"),
-                    4, rowIndex);           
+                    4, rowIndex);
             rowIndex++;
         }
 

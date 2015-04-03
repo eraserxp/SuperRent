@@ -264,6 +264,7 @@ public class RegisterController extends AbstractController implements Initializa
             password=passwordField.getText();
             name=nameField.getText();
             phone=phoneField.getText();
+            phone=formatPhoneNo(phone);
             address=addressField.getText();
             type="customer";
             System.out.println(username);

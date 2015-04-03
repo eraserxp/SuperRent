@@ -110,6 +110,15 @@ public class ReserveRentController extends AbstractController implements Initial
     private ComboBox<String> equip2CMB;
 
     @FXML
+    private TextField usernameField;
+
+    @FXML
+    private TextField phoneField;
+
+    @FXML
+    private Label foundResult;
+
+    @FXML
     private Button registerButton;
 
     @FXML
@@ -147,6 +156,10 @@ public class ReserveRentController extends AbstractController implements Initial
 
         usernameLabel.setText("");
         plateNoLabel.setText("");
+        setupUsernameField();
+        setupPhoneField();
+        foundResult.setText("");
+        
 
     }
 
@@ -216,7 +229,7 @@ public class ReserveRentController extends AbstractController implements Initial
     }
 
     public void handleSearchButton() {
-        showSearchResult();
+
         if (locationCMB.getSelectionModel().isEmpty()) {
             popUpError("location is empty!");
             return;
@@ -265,8 +278,69 @@ public class ReserveRentController extends AbstractController implements Initial
             return;
         }
 
+        showSearchResult();
+
     }
 
+    private void setupUsernameField() {
+        usernameField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            // check the input when the focus on this text field is lost
+            if (!newValue) {
+                
+                //validate the username
+                if (!isInputEmpty(usernameField)) {
+                    String username = usernameField.getText().trim();
+                    if (!userModel.isCustomerExisted(username)) {
+                        showWarning(foundResult, "Not found");
+                    } else {
+
+                        showSuccessMessage(foundResult, "Found");
+                        usernameLabel.setText(username);
+                    }
+                }
+            }
+
+            //when user is entering something into the field, remove any previous validation message
+            if (newValue) {
+                usernameField.clear();
+                foundResult.setText("");
+            }
+        });
+    }
+
+        private void setupPhoneField() {
+        phoneField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            // check the input when the focus on this text field is lost
+            if (!newValue) {
+                
+                //validate the username
+                if (!isInputEmpty(phoneField)) {
+                    
+                    if (!isInputPhoneNo(phoneField)) {
+                        showWarning(foundResult, "Not found");
+                    }
+                    String phone = phoneField.getText().trim();
+                    phone = formatPhoneNo(phone);
+                    String username = userModel.getCustomerByPhone(phone);
+                    
+                    if (username==null) {
+                        showWarning(foundResult, "Not found");
+                    } else {
+                        showSuccessMessage(foundResult, "Found");
+                        usernameLabel.setText(username);
+                    }
+                }
+            }
+
+            //when user is entering something into the field, remove any previous validation message
+            if (newValue) {
+                phoneField.clear();
+                foundResult.setText("");
+            }
+        });
+    }
+
+    
     private void showSearchResult() {
         passDataToNext();
         setupNextPage(this, "ShowSearchResultView.fxml", "Search results");
@@ -303,8 +377,6 @@ public class ReserveRentController extends AbstractController implements Initial
         AppContext.getInstance().setTempData("fromDate", fromDate);
         AppContext.getInstance().setTempData("toDate", toDate);
     }
-    
-    
 
     private void showSummary() {
         System.out.println("show summary");

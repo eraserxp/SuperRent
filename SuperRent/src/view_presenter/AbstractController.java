@@ -137,6 +137,14 @@ public abstract class AbstractController {
         Matcher matcher = pattern.matcher(t.getText().trim());
         return matcher.matches();
     }
+    
+    protected String formatPhoneNo(String validPhoneNo) {
+        String regex = "^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(validPhoneNo);
+        return matcher.replaceFirst("$1-$2-$3");
+    }
+    
 
     /**
      * Use the infoLabel to show the warning message s
@@ -146,8 +154,9 @@ public abstract class AbstractController {
      */
     protected void showWarning(Label infoLabel, String s) {
         infoLabel.setVisible(true);
+        infoLabel.setTextFill(Color.RED);
         infoLabel.setText(s);
-        infoLabel.setWrapText(true);
+//        infoLabel.setWrapText(true);
     }
 
     protected void showSuccessMessage(Label infoLabel, String s) {

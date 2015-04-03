@@ -26,47 +26,47 @@
       </ImageView>
       <TextField id="user" fx:id="usernameField" focusTraversable="false" layoutX="226.0" layoutY="131.0" promptText="Username" />
       <PasswordField id="pass" fx:id="passwordField" focusTraversable="false" layoutX="226.0" layoutY="178.0" promptText="Password" />
-      <Label layoutX="134.0" layoutY="125.0" prefHeight="29.0" prefWidth="83.0" text="Username">
+      <Label layoutX="134.0" layoutY="130.0" prefHeight="29.0" prefWidth="83.0" text="Username">
          <font>
-            <Font name="Freestyle Script" size="28.0" />
+            <Font size="17.0" />
          </font>
       </Label>
-      <Label layoutX="134.0" layoutY="163.0" prefHeight="29.0" prefWidth="83.0" text="Password">
+      <Label layoutX="134.0" layoutY="176.0" prefHeight="29.0" prefWidth="83.0" text="Password">
          <font>
-            <Font name="Freestyle Script" size="28.0" />
+            <Font size="17.0" />
          </font>
       </Label>
       <PasswordField id="pass" fx:id="repasswordField" focusTraversable="false" layoutX="226.0" layoutY="221.0" promptText="Re-Type Password" />
-      <Label layoutX="75.0" layoutY="215.0" prefHeight="38.0" prefWidth="142.0" text="Re-Type Password">
+      <Label layoutX="63.0" layoutY="215.0" prefHeight="38.0" prefWidth="149.0" text="Re-Type Password">
          <font>
-            <Font name="Freestyle Script" size="28.0" />
+            <Font size="17.0" />
          </font>
       </Label>
       <TextField id="name" fx:id="nameField" focusTraversable="false" layoutX="226.0" layoutY="265.0" promptText="Name" />
-      <Label layoutX="134.0" layoutY="259.0" prefHeight="29.0" prefWidth="83.0" text="Name">
+      <Label layoutX="159.0" layoutY="264.0" prefHeight="29.0" prefWidth="50.0" text="Name">
          <font>
-            <Font name="Freestyle Script" size="28.0" />
+            <Font size="17.0" />
          </font>
       </Label>
       <TextField id="phone" fx:id="phoneField" focusTraversable="false" layoutX="226.0" layoutY="309.0" promptText="Phone" />
-      <Label layoutX="134.0" layoutY="303.0" prefHeight="29.0" prefWidth="83.0" text="Phone">
+      <Label layoutX="156.0" layoutY="308.0" prefHeight="29.0" prefWidth="57.0" text="Phone">
          <font>
-            <Font name="Freestyle Script" size="28.0" />
+            <Font size="17.0" />
          </font>
       </Label>
       <TextField id="add" fx:id="addressField" focusTraversable="false" layoutX="226.0" layoutY="375.0" promptText="Address" />
-      <Label layoutX="134.0" layoutY="369.0" prefHeight="29.0" prefWidth="83.0" text="Address">
+      <Label layoutX="141.0" layoutY="373.0" prefHeight="29.0" prefWidth="69.0" text="Address">
          <font>
-            <Font name="Freestyle Script" size="28.0" />
+            <Font size="17.0" />
          </font>
       </Label>
       <Button id="reg" fx:id="register_button" layoutX="254.0" layoutY="424.0" mnemonicParsing="false" onAction="#handleregisterButtonAction" text="Register" />
       <Button id="log" fx:id="login_button" layoutX="329.0" layoutY="424.0" mnemonicParsing="false" onAction="#handleGoBack" text="Go back" />
-      <Label fx:id="usernameValidator" layoutX="388.0" layoutY="136.0" prefHeight="17.0" prefWidth="142.0" />
-      <Label fx:id="passwordValidator" layoutX="388.0" layoutY="182.0" prefHeight="17.0" prefWidth="142.0" />
-      <Label fx:id="nameValidator" layoutX="388.0" layoutY="270.0" prefHeight="17.0" prefWidth="142.0" />
-      <Label fx:id="addressValidator" layoutX="388.0" layoutY="379.0" prefHeight="17.0" prefWidth="142.0" />
-      <Label fx:id="phoneValidator" layoutX="388.0" layoutY="314.0" prefHeight="17.0" prefWidth="142.0" />
+      <Label fx:id="usernameValidator" layoutX="398.0" layoutY="136.0" prefHeight="17.0" prefWidth="196.0" style="-fx-background-color: pink;" />
+      <Label fx:id="passwordValidator" layoutX="398.0" layoutY="182.0" prefHeight="17.0" prefWidth="186.0" style="-fx-background-color: pink;" />
+      <Label fx:id="nameValidator" layoutX="398.0" layoutY="270.0" prefHeight="17.0" prefWidth="170.0" style="-fx-background-color: pink;" />
+      <Label fx:id="addressValidator" layoutX="398.0" layoutY="379.0" prefHeight="17.0" prefWidth="186.0" style="-fx-background-color: pink;" />
+      <Label fx:id="phoneValidator" layoutX="398.0" layoutY="314.0" prefHeight="17.0" prefWidth="186.0" style="-fx-background-color: pink;" />
       <Label layoutX="120.0" layoutY="350.0" prefHeight="17.0" prefWidth="443.0" text="Example: 1234567890, 123-456-7890, 123.456.7890, 123 456 7890, (123) 456 7890">
          <font>
             <Font name="Arial Italic" size="9.0" />
