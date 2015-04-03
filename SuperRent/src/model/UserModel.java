@@ -40,6 +40,15 @@ import javafx.util.Callback;
  */
 public class UserModel {
 
+    private ArrayList<String> lowRankList = new ArrayList<>(
+            Arrays.asList("economy", "compact", "midsize", "standard", "full-size", "premium")
+    );
+
+    private ArrayList<String> highRankList = new ArrayList<>(
+            Arrays.asList("luxury", "suv", "van", "24foot", "15foot", "12foot",
+                    "boxtruck", "cargovan")
+    );
+
     protected Connection con = null;
     protected MysqlConnection mysqlConnInstance = null;
 
@@ -377,6 +386,36 @@ public class UserModel {
         return rates;
     }
 
+    private int getDailyMileLimit(String vehicleType) {
+        String getLimit = "select milelimit from vehicletype where typename = "
+                + addQuotation(vehicleType);
+        int limit = 0;
+        ResultSet rs = queryDatabase(getLimit);
+        try {
+            if (rs.next()) {
+                limit = rs.getInt("milelimit");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return limit;
+    }
+
+    private int getOldOdometer(String vlicense) {
+        String getLimit = "select odometer from vehicleforrent where vlicense = "
+                + addQuotation(vlicense);
+        int oldOdometer = 0;
+        ResultSet rs = queryDatabase(getLimit);
+        try {
+            if (rs.next()) {
+                oldOdometer = rs.getInt("odometer");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return oldOdometer;
+    }
+
     private HashMap<String, Integer> getEquipmentRate(String equipName) {
         String getAllRates = "select d_rate, h_rate "
                 + " from equipment where equipName=" + addQuotation(equipName);
@@ -469,6 +508,47 @@ public class UserModel {
         return gridPane;
     }
 
+    public boolean isLowRankVehicle(String vehicleType) {
+        return lowRankList.contains(vehicleType.toLowerCase());
+    }
+
+    public boolean isHighRankVehicle(String vehicleType) {
+        return highRankList.contains(vehicleType.toLowerCase());
+    }
+
+    public boolean isMembership(String username) {
+        int isMember = 0;
+        String sql = "select isClubMember from customer where username = "
+                + addQuotation(username);
+        ResultSet rs = queryDatabase(sql);
+        try {
+            if (rs.next()) {
+                isMember = rs.getInt("isClubMember");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (isMember == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public int getPoints(String username) {
+        int point = 0;     
+        String sql = "select point from customer where username = "
+                + addQuotation(username);
+        ResultSet rs = queryDatabase(sql);
+        try {
+            if (rs.next()) {
+                point = rs.getInt("point");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return point;
+    }
+
     /**
      *
      * calculate the cost for a given return, rent or reservation
@@ -479,6 +559,7 @@ public class UserModel {
             LocalDate toDate, int toHour, boolean isRoadStar, int redeemedPoints,
             int odometer) {
         GridPane gridPane = new GridPane();
+        int totalCost = 0;
 
         int all_days = (int) ChronoUnit.DAYS.between(fromDate, toDate);
         int hours = toHour - fromHour;
@@ -534,9 +615,11 @@ public class UserModel {
             gridPane.add(new Label(weeks + " x " + vehicleRates.get("w_rate") / 100 + ".00"),
                     2, rowIndex);
             int w_rent = vehicleRates.get("w_rate") * weeks;
+            totalCost += w_rent;
             gridPane.add(new Label(weeks + " x " + vehicleInsurances.get("w_insurance") / 100 + ".00"),
                     3, rowIndex);
             int w_cost = vehicleInsurances.get("w_insurance") * weeks;
+            totalCost += w_cost;
             gridPane.add(new Label((w_rent + w_cost) / 100 + ".00"),
                     4, rowIndex);
             rowIndex++;
@@ -547,9 +630,11 @@ public class UserModel {
             gridPane.add(new Label(days + " x " + vehicleRates.get("d_rate") / 100 + ".00"),
                     2, rowIndex);
             int d_rent = vehicleRates.get("d_rate") * days;
+            totalCost += d_rent;
             gridPane.add(new Label(days + " x " + vehicleInsurances.get("d_insurance") / 100 + ".00"),
                     3, rowIndex);
             int d_cost = vehicleInsurances.get("d_insurance") * days;
+            totalCost += d_cost;
             gridPane.add(new Label((d_rent + d_cost) / 100 + ".00"),
                     4, rowIndex);
             rowIndex++;
@@ -560,15 +645,80 @@ public class UserModel {
             gridPane.add(new Label(hours + " x " + vehicleRates.get("h_rate") / 100 + ".00"),
                     2, rowIndex);
             int h_rent = vehicleRates.get("h_rate") * hours;
+            totalCost += h_rent;
             gridPane.add(new Label(hours + " x " + vehicleInsurances.get("h_insurance") / 100 + ".00"),
                     3, rowIndex);
             int h_cost = vehicleInsurances.get("h_insurance") * hours;
+            totalCost += h_cost;
             gridPane.add(new Label((h_rent + h_cost) / 100 + ".00"),
                     4, rowIndex);
             rowIndex++;
         }
+        //add an empty line       
+        for (int colIndex = 0; colIndex < cols; colIndex++) {
+            gridPane.add(new Label("  "), colIndex, rowIndex);
+        }
+        rowIndex++;
 
-        //add an empty line
+        //consider the roadstar deduction
+        if (isRoadStar) {
+            for (int colIndex = 0; colIndex < cols; colIndex++) {
+                gridPane.add(new Label("--------------"), colIndex, rowIndex);
+            }
+            rowIndex++;
+            gridPane.add(new Label("Road Star reduction"), 0, rowIndex);
+            if (weeks > 0) {
+                gridPane.add(new Label(weeks + " week(s)"), 1, rowIndex);
+
+                gridPane.add(new Label(weeks + " x " + vehicleInsurances.get("w_insurance") / 100 + ".00/2"),
+                        3, rowIndex);
+                int w_cost = vehicleInsurances.get("w_insurance") * weeks / 2;
+                totalCost -= w_cost;
+                gridPane.add(new Label("-" + w_cost / 100 + ".00"),
+                        4, rowIndex);
+                rowIndex++;
+            }
+
+            if (days > 0) {
+                gridPane.add(new Label(days + " day(s)"), 1, rowIndex);
+
+                gridPane.add(new Label(days + " x " + vehicleInsurances.get("d_insurance") / 100 + ".00/2"),
+                        3, rowIndex);
+                int d_cost = vehicleInsurances.get("d_insurance") * days / 2;
+                totalCost -= d_cost;
+                gridPane.add(new Label("-" + d_cost / 100 + ".00"),
+                        4, rowIndex);
+                rowIndex++;
+            }
+
+            if (hours > 0) {
+                gridPane.add(new Label(hours + " hour(s)"), 1, rowIndex);
+                gridPane.add(new Label(hours + " x " + vehicleInsurances.get("h_insurance") / 100 + ".00/2"),
+                        3, rowIndex);
+                int h_cost = vehicleInsurances.get("h_insurance") * hours / 2;
+                totalCost -= h_cost;
+                gridPane.add(new Label("-" + h_cost / 100 + ".00"),
+                        4, rowIndex);
+                rowIndex++;
+            }
+
+        }
+
+        //consider the redeemed points
+        if (redeemedPoints > 0) {
+
+        }
+
+        // calculate the charge based on odometer
+        if (odometer > 0) {
+
+        }
+
+        //add an empty line       
+        for (int colIndex = 0; colIndex < cols; colIndex++) {
+            gridPane.add(new Label("  "), colIndex, rowIndex);
+        }
+        rowIndex++;
         for (int colIndex = 0; colIndex < cols; colIndex++) {
             gridPane.add(new Label("--------------"), colIndex, rowIndex);
         }
@@ -584,8 +734,8 @@ public class UserModel {
                     gridPane.add(new Label(all_days + " day(s)"), 1, rowIndex);
                     gridPane.add(new Label(quantity + " x " + all_days + " x " + equipmentRates.get("d_rate") / 100 + ".00"),
                             2, rowIndex);
-                    int d_rent = equipmentRates.get("d_rate") * all_days*quantity;
-
+                    int d_rent = equipmentRates.get("d_rate") * all_days * quantity;
+                    totalCost += d_rent;
                     gridPane.add(new Label(d_rent / 100 + ".00"),
                             4, rowIndex);
                     rowIndex++;
@@ -593,10 +743,10 @@ public class UserModel {
 
                 if (hours > 0) {
                     gridPane.add(new Label(hours + " hour(s)"), 1, rowIndex);
-                    gridPane.add(new Label(quantity + " x " +hours + " x " + equipmentRates.get("h_rate") / 100 + ".00"),
+                    gridPane.add(new Label(quantity + " x " + hours + " x " + equipmentRates.get("h_rate") / 100 + ".00"),
                             2, rowIndex);
-                    int h_rent = equipmentRates.get("h_rate") * hours*quantity;
-
+                    int h_rent = equipmentRates.get("h_rate") * hours * quantity;
+                    totalCost += h_rent;
                     gridPane.add(new Label(h_rent / 100 + ".00"),
                             4, rowIndex);
                     rowIndex++;
@@ -604,12 +754,20 @@ public class UserModel {
 
                 //add an empty line
                 for (int colIndex = 0; colIndex < cols; colIndex++) {
+                    gridPane.add(new Label("  "), colIndex, rowIndex);
+                }
+                rowIndex++;
+                for (int colIndex = 0; colIndex < cols; colIndex++) {
                     gridPane.add(new Label("--------------"), colIndex, rowIndex);
                 }
                 rowIndex++;
                 counter++;
             }
         }
+
+        //add the total sum
+        rowIndex++;
+        gridPane.add(new Label("total: " + totalCost / 100 + ".00"), 4, rowIndex);
         return gridPane;
     }
 

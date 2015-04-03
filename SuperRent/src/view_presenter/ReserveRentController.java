@@ -26,6 +26,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -77,7 +78,9 @@ public class ReserveRentController extends AbstractController implements Initial
     @FXML
     private DatePicker fromDatePicker;
 
-    private String fromDate;
+    private String fromDateString;
+
+    private LocalDate fromDate;
 
     @FXML
     private ComboBox<String> fromHourCMB;
@@ -87,7 +90,9 @@ public class ReserveRentController extends AbstractController implements Initial
     @FXML
     private DatePicker toDatePicker;
 
-    private String toDate;
+    private String toDateString;
+
+    private LocalDate toDate;
 
     @FXML
     private ComboBox<String> toHourCMB;
@@ -114,10 +119,10 @@ public class ReserveRentController extends AbstractController implements Initial
 
     @FXML
     private Label foundResult;
-    
+
     @FXML
     private Label fromTimeLabel;
-    
+
     @FXML
     private Label toTimeLabel;
 
@@ -137,6 +142,15 @@ public class ReserveRentController extends AbstractController implements Initial
 
     @FXML
     private Label plateNoLabel;
+
+    @FXML
+    private CheckBox roadStarCB;
+
+    @FXML
+    private CheckBox redeem1000CB;
+
+    @FXML
+    private CheckBox redeem1500CB;
 
     private UserModel userModel;
 
@@ -166,6 +180,10 @@ public class ReserveRentController extends AbstractController implements Initial
         fromTimeLabel.setText("");
         toTimeLabel.setText("");
 
+        disableNodes(roadStarCB, redeem1000CB, redeem1500CB);
+        setupUsernameLabel();
+        setupRoadStarCB();
+        setupRedeem1000CB();
     }
 
     private void setUpLocationCMB() {
@@ -285,7 +303,7 @@ public class ReserveRentController extends AbstractController implements Initial
             return;
         }
         fromTimeLabel.setText(fromDate.toString() + ", " + fromHourString);
-        toTimeLabel.setText(toDate.toString() + ", " + toHourString  );
+        toTimeLabel.setText(toDate.toString() + ", " + toHourString);
         showSearchResult();
 
     }
@@ -296,6 +314,74 @@ public class ReserveRentController extends AbstractController implements Initial
                 usernameLabel.setText("");
                 foundResult.setText("");
             }
+        });
+    }
+
+    private void setupUsernameLabel() {
+        usernameLabel.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> ov, String t, String t1) {
+                System.out.println("Label Text Changed");
+                if (t1 != null && t1.trim() != "") { //if there is a username
+                    //clear and enable the checkbox
+                    roadStarCB.setDisable(false);
+                    roadStarCB.setSelected(false);
+                    redeem1000CB.setDisable(false);
+                    redeem1000CB.setSelected(false);
+                    redeem1500CB.setDisable(false);
+                    redeem1500CB.setSelected(false);
+                } else { // if there isn't a username
+                    roadStarCB.setSelected(false);
+                    roadStarCB.setDisable(true);
+                    redeem1000CB.setSelected(false);
+                    redeem1000CB.setDisable(true);
+                    redeem1500CB.setSelected(false);
+                    redeem1500CB.setDisable(true);
+                }
+            }
+        });
+
+    }
+
+    private void setupRoadStarCB() {
+        roadStarCB.selectedProperty().addListener((ov, oldv, newv) -> {
+            showSummary();
+        });
+    }
+
+    private void setupRedeem1000CB() {
+        redeem1000CB.selectedProperty().addListener((ov, oldv, newv) -> {
+            if (newv) {
+                String username = usernameLabel.getText().trim();
+                if (!userModel.isMembership(username)) {
+                    popUpError(username + " is not a Club member!");
+                    redeem1000CB.setSelected(false);
+                    return;
+                }
+                if (userModel.getPoints(username) < 1000) {
+                    popUpError(username + " doesn't have enough points!");
+                    redeem1000CB.setSelected(false);
+                    return;
+                }
+                if (daysBetween(fromDate, toDate) < 1) {
+                    popUpError("Time duration must be larger than 1 day to redeem!");
+                    redeem1000CB.setSelected(false);
+                    return;
+                }
+                String vt = selectedVehicle.getVehicleType();
+                if (!userModel.isLowRankVehicle(vt)) {
+                    popUpError("You can't redeem 1000 points with type: " + vt);
+                    redeem1000CB.setSelected(false);
+                    return;
+                }
+            }
+            showSummary();
+        });
+    }
+
+    private void setupRedeem1500CB() {
+        redeem1500CB.selectedProperty().addListener((ov, oldv, newv) -> {
+            showSummary();
         });
     }
 
@@ -356,14 +442,14 @@ public class ReserveRentController extends AbstractController implements Initial
         location = branch.split(",")[0].trim();
         city = branch.split(",")[1].trim();
         vehicleType = vehicleTypeCMB.getSelectionModel().getSelectedItem();
-        fromDate = fromDatePicker.getValue().toString();
-        toDate = toDatePicker.getValue().toString();
+        fromDateString = fromDatePicker.getValue().toString();
+        toDateString = toDatePicker.getValue().toString();
 
         AppContext.getInstance().setTempData("city", city);
         AppContext.getInstance().setTempData("location", location);
         AppContext.getInstance().setTempData("vehicleType", vehicleType);
-        AppContext.getInstance().setTempData("fromDate", fromDate);
-        AppContext.getInstance().setTempData("toDate", toDate);
+        AppContext.getInstance().setTempData("fromDate", fromDateString);
+        AppContext.getInstance().setTempData("toDate", toDateString);
     }
 
     private void showSummary() {
@@ -373,8 +459,8 @@ public class ReserveRentController extends AbstractController implements Initial
 
         int redeemedPoints = 0;
         int odometer = 0;
-        LocalDate startDate = fromDatePicker.getValue();
-        LocalDate endDate = toDatePicker.getValue();
+        fromDate = fromDatePicker.getValue();
+        toDate = toDatePicker.getValue();
         fromHour = Integer.parseInt(fromHourCMB.getSelectionModel().getSelectedItem().split(":")[0]);
         toHour = Integer.parseInt(toHourCMB.getSelectionModel().getSelectedItem().split(":")[0]);
 
@@ -396,11 +482,16 @@ public class ReserveRentController extends AbstractController implements Initial
             quantities.add(equp2Quantity);
         }
 
+        boolean isRoadStar = false;
+        if (!roadStarCB.isDisabled() && roadStarCB.isSelected()) {
+            isRoadStar = true;
+        }
+
         if (summaryGP != null) {
             summaryVBox.getChildren().remove(summaryGP);
         }
         summaryGP = userModel.calculateCost(vehicleType, equipments, quantities,
-                startDate, fromHour, endDate, toHour, false,
+                fromDate, fromHour, toDate, toHour, isRoadStar,
                 redeemedPoints, odometer);
         summaryVBox.getChildren().add(summaryGP);
 
