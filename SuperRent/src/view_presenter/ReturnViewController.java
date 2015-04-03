@@ -16,6 +16,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -27,6 +28,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import model.ClerkModel;
 
 /**
@@ -63,8 +65,9 @@ public class ReturnViewController extends AbstractController implements Initiali
     @FXML
     private Label Validator;
     //returnbutton
+
     @FXML
-    private Button ReturnButton;
+    Button ReturnButton;
 
     @FXML
     AnchorPane anchorpane;
@@ -173,8 +176,6 @@ public class ReturnViewController extends AbstractController implements Initiali
             @Override
             public void handle(ActionEvent e) {
 
-                //System.out.println("Hello");
-
                 try {
                     showReturnDialog();
                 } catch (IOException ex) {
@@ -194,6 +195,14 @@ public class ReturnViewController extends AbstractController implements Initiali
         dialogStage.initModality(Modality.WINDOW_MODAL);
         Scene scene = new Scene(loader);
         dialogStage.setScene(scene);
+
+        //do sth when the dialog is closed
+        dialogStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                System.out.println("Do sth when user click the X close icon of the dialog");
+                
+            }
+        });
         dialogStage.showAndWait();
 
     }
