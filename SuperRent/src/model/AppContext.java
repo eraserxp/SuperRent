@@ -5,6 +5,10 @@
  */
 package model;
 
+import java.util.HashMap;
+import javafx.stage.Stage;
+import view_presenter.SuperRent;
+
 /**
  *
  *
@@ -20,7 +24,20 @@ public class AppContext {
     private String username;
     
     private String userType;
+    
+    private SuperRent mainApp = null;
+    
+    private HashMap<String, String> tmpData = new HashMap<>();
 
+    public void setMainApp(SuperRent mainApp) {
+        this.mainApp = mainApp;
+    }
+    
+    // get the primary stage of the current application
+    public Stage getPrimaryStage() {
+        return mainApp.getPrimaryStage();
+    }
+    
     public String getUsername() {
         return username;
     }
@@ -35,6 +52,21 @@ public class AppContext {
     
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+    
+    public void setTempData(String k, String v) {
+        tmpData.put(k, v);
+    }
+    
+    public String getTempData(String k) {
+        return tmpData.get(k);
+    }
+    
+    /**
+     * it is the responsibility of the receiver to clear the tmp data
+     */
+    public void emptyTempData() {
+        tmpData.clear();
     }
 
 }

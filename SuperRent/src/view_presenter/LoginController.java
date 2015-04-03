@@ -196,13 +196,14 @@ public class LoginController extends AbstractController implements Initializable
     @FXML
     private void handleregisterButtonAction(ActionEvent event) throws IOException {
         // get the stage for the application
-        Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        app_stage.hide();
-               
-        Parent root = FXMLLoader.load(getClass().getResource("Register.fxml"));
-        Scene scene = new Scene(root);
-        app_stage.setScene(scene);
-        app_stage.show();
+//        Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        app_stage.hide();
+//               
+//        Parent root = FXMLLoader.load(getClass().getResource("Register.fxml"));
+//        Scene scene = new Scene(root);
+//        app_stage.setScene(scene);
+//        app_stage.show();
+        setupNextPage(this, "Register.fxml", "Customer Registration");
         
         
     }

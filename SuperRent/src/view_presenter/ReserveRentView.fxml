@@ -92,14 +92,14 @@
                         </Label>
                         <HBox alignment="CENTER" prefHeight="32.0" prefWidth="200.0">
                            <children>
-                              <Label alignment="BASELINE_CENTER" prefHeight="16.0" prefWidth="116.0" text="equipment1" />
-                              <ComboBox prefWidth="150.0" />
+                              <Label fx:id="equip1Label" alignment="BASELINE_CENTER" prefHeight="16.0" prefWidth="116.0" text="equipment1" />
+                              <ComboBox fx:id="equip1CMB" prefWidth="150.0" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="32.0" prefWidth="200.0">
                            <children>
-                              <Label alignment="BASELINE_CENTER" prefHeight="16.0" prefWidth="116.0" text="equipment2" />
-                              <ComboBox prefWidth="150.0" />
+                              <Label fx:id="equip2Label" alignment="BASELINE_CENTER" prefHeight="16.0" prefWidth="116.0" text="equipment2" />
+                              <ComboBox fx:id="equip2CMB" prefWidth="150.0" />
                            </children>
                            <VBox.margin>
                               <Insets bottom="10.0" />
@@ -110,23 +110,36 @@
                               <Insets bottom="10.0" top="10.0" />
                            </VBox.margin>
                         </Separator>
-                        <Label text="Search customer">
+                        <Label text="Confirm customer ">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font>
                         </Label>
                         <HBox alignment="CENTER" prefHeight="32.0" prefWidth="200.0">
                            <children>
-                              <Label alignment="BASELINE_CENTER" prefHeight="16.0" prefWidth="116.0" text="username" />
-                              <TextField />
+                              <Label alignment="BASELINE_CENTER" prefHeight="16.0" prefWidth="116.0" text="by phone" />
+                              <TextField fx:id="phoneField" />
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="32.0" prefWidth="200.0">
+                        <HBox prefHeight="34.0" prefWidth="245.0">
                            <children>
-                              <Label alignment="BASELINE_CENTER" prefHeight="16.0" prefWidth="116.0" text="phone" />
-                              <TextField />
+                              <Label fx:id="foundResult" alignment="BASELINE_CENTER" prefHeight="16.0" prefWidth="101.0" text="foundResult">
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Button fx:id="submitButton" mnemonicParsing="false" onAction="#checkPhoneField" text="Submit">
+                                 <HBox.margin>
+                                    <Insets left="10.0" top="5.0" />
+                                 </HBox.margin>
+                              </Button>
                            </children>
                         </HBox>
+                        <Button fx:id="registerButton" mnemonicParsing="false" onAction="#handleRegistration" text="Register customer">
+                           <VBox.margin>
+                              <Insets left="50.0" top="20.0" />
+                           </VBox.margin>
+                        </Button>
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -136,7 +149,65 @@
             </AnchorPane>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="522.0">
                <children>
-                  <VBox fx:id="summaryVBox" layoutX="30.0" prefHeight="505.0" prefWidth="476.0" AnchorPane.bottomAnchor="93.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="29.0" AnchorPane.topAnchor="0.0" />
+                  <VBox fx:id="summaryVBox" layoutX="30.0" prefHeight="505.0" prefWidth="476.0" AnchorPane.bottomAnchor="93.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="476.0">
+                           <children>
+                              <Label text="Customer username:" />
+                              <Label fx:id="usernameLabel" text="username">
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Vehicle plate No: ">
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Label fx:id="plateNoLabel" text="plateNo">
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="26.0" prefWidth="446.0">
+                           <children>
+                              <Label text="From: " />
+                              <Label fx:id="fromTimeLabel" text="fromTime">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Label text="To: ">
+                                 <HBox.margin>
+                                    <Insets left="50.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Label fx:id="toTimeLabel" text="toTime">
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <Separator prefWidth="200.0" />
+                     </children>
+                     <padding>
+                        <Insets left="30.0" />
+                     </padding></VBox>
                </children>
             </AnchorPane>
          </items>

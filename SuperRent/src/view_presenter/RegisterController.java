@@ -35,7 +35,7 @@ public class RegisterController extends AbstractController implements Initializa
     private Button register_button;
     
     @FXML
-    private Button login_button;
+    private Button back_button;
     
      @FXML
     private Button clear_button;
@@ -236,6 +236,11 @@ public class RegisterController extends AbstractController implements Initializa
     } 
     
     @FXML
+    private void handleGoBack(ActionEvent event) throws IOException {
+        getStage().close();               
+    } 
+    
+    @FXML
     private void handleregisterButtonAction(ActionEvent event) throws IOException {
         // get the stage for the application
         
@@ -259,6 +264,7 @@ public class RegisterController extends AbstractController implements Initializa
             password=passwordField.getText();
             name=nameField.getText();
             phone=phoneField.getText();
+            phone=formatPhoneNo(phone);
             address=addressField.getText();
             type="customer";
             System.out.println(username);

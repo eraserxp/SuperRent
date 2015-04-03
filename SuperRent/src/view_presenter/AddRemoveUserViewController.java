@@ -380,6 +380,7 @@ public class AddRemoveUserViewController extends AbstractController implements I
                     String passwd = passwdField_add.getText().trim();
                     String name = nameField.getText().trim();
                     String phone = phoneField.getText().trim();
+                    phone = formatPhoneNo(phone);
                     String address = addressField.getText().trim();
 
                     System.out.println(username);

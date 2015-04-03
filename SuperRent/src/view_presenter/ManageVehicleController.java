@@ -8,7 +8,6 @@ package view_presenter;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -19,14 +18,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import model.AdminModel;
+import model.AppContext;
 import model.ManagerModel;
 import model.UserModel;
 
@@ -38,23 +40,40 @@ import model.UserModel;
 public class ManageVehicleController extends AbstractController implements Initializable {
 
     @FXML
-    private ComboBox typeCombobox;
+    private ComboBox<String> typeCombobox;
+    
     @FXML
     private TextField plateNumTextField;
+    
+    @FXML
+    private TextField brandTextField;
+    
     @FXML
     private RadioButton carRadioButton;
+    
     @FXML
     private RadioButton truckRadioButton;
+    
     @FXML
     private DatePicker startingDateDateBox;
+    
     @FXML
     private Button addButton;
+    
     @FXML
     private Button showButton;
+    
     @FXML
     private Button soldButton;
+    
     @FXML
     private TextField handleAddButtonAction;
+
+    @FXML
+    private ComboBox<String> locationCMB;
+
+    @FXML
+    private Label addingValidator;
 
     @FXML
     private VBox vehicleForSaleVbox; // in show table tab
@@ -64,17 +83,31 @@ public class ManageVehicleController extends AbstractController implements Initi
     private UserModel userModel = new UserModel();
 
     //=========
-    private String carCategory;
-    private String carType;
+    
+    private String vehicleCategory;
+    private String vehicleType;
+    private boolean vehicleTypeIsOk = false;
     private String plateNumber;
+    private boolean plateIsOk = false;
+    private String brand;
+    private boolean brandIsOk = false;
+    final private ToggleGroup group = new ToggleGroup();
+    private String city, location;
+    private String username;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        setUpCategoryRadioButtons();
+        username=AppContext.getInstance().getUsername();
+        
+        System.out.print(username);
+        setUpCarTruckRB();
+        setUpLocationCMB();
         startingDateDateBoxSetUp();
+        setUpLocationCMB();
+        setUpCarTruckRB();
 
     }
 
@@ -88,39 +121,110 @@ public class ManageVehicleController extends AbstractController implements Initi
         vehicleForSaleVbox.getChildren().add(tableContent);
     }
 
-    private void setUpTypeCombobox() {
-
-        ArrayList<String> VehicleType = userModel.getVehicleTypeAtBranch("Vancouver", "2660 Wesbrook Mall", carType);
-        configureComboBox(typeCombobox, VehicleType);
-
-    }
-
     public void handleAddButton() {
+        if (locationCMB.getSelectionModel().isEmpty()) {
+            showWarning(addingValidator, "Location is empty!");
+            addingValidator.setTextFill(Color.RED);
+            return;
+        }
+        
+
+        if (typeCombobox.getSelectionModel().isEmpty()) {
+            showWarning(addingValidator, "Vehicle type is empty!");
+            addingValidator.setTextFill(Color.RED);
+            return;
+        }
+        
+        LocalDate startDate = startingDateDateBox.getValue();
+        if (startDate == null) {
+            showWarning(addingValidator, "Date is empty!");
+            addingValidator.setTextFill(Color.RED);
+            return;
+        }
+       
+
+        if (isInputEmpty(brandTextField)) {
+            showWarning(addingValidator, "Brand is empty!");
+            addingValidator.setTextFill(Color.RED);
+            brandTextField.requestFocus();
+            return;
+        }
+        else
+        {
+            brand=brandTextField.getText();
+            brandIsOk=true;
+          
+        
+        }
+
+        if (isInputEmpty(plateNumTextField)) {
+            showWarning(addingValidator, "Plate Number is empty!");
+            addingValidator.setTextFill(Color.RED);
+            plateNumTextField.requestFocus();
+            return;
+        }
+        
+       plateNumber=plateNumTextField.getText();
+//       if( managerModel.checkPlateNumber(plateNumber))
+//        { showWarning(addingValidator, "Plate Number Exist!");
+//            addingValidator.setTextFill(Color.RED);
+//            plateNumTextField.requestFocus();
+//            return;
+//        }  
+//            
+//         else{ 
+//            
+//           
+//        plateIsOk=true;
+//        
+//        
+//        }
+
+        //========================================================================
         boolean addOK = false;
 
-        addOK = managerModel.addVehicle(carCategory, carType, startingDateDateBox.getValue(), plateNumber);
+//        addOK = managerModel.addVehicle(username,plateNumber, startingDateDateBox.getValue(),
+//                vehicleCategory, vehicleType, brand);
 
+        
+        if (addOK == true) {
+            showSuccessMessage(addingValidator, "Vehicle Added!");
+            addingValidator.setTextFill(Color.GREEN);
+        } else {
+            showWarning(addingValidator, "Vehicle Not Added!");
+            addingValidator.setTextFill(Color.RED);
+
+        }
     }
 
-    public void setUpCategoryRadioButtons() {
-
-        final ToggleGroup group = new ToggleGroup();
-
-        truckRadioButton.setToggleGroup(group);
-        truckRadioButton.setUserData("Truck");
-
+    private void setUpCarTruckRB() {
         carRadioButton.setToggleGroup(group);
-        carRadioButton.setUserData("Car");
+        truckRadioButton.setToggleGroup(group);
+        carRadioButton.setSelected(true);
+        vehicleCategory = "car";
 
         group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             public void changed(ObservableValue<? extends Toggle> ov,
                     Toggle old_toggle, Toggle new_toggle) {
                 if (group.getSelectedToggle() != null) {
-                    //System.out.println(group.getSelectedToggle().getUserData().toString());
+//                    vehicleCategory = group.getSelectedToggle().getUserData().toString();
+                    RadioButton rb = (RadioButton) new_toggle.getToggleGroup().getSelectedToggle();
+                    vehicleCategory = rb.getText();
+                    //System.out.println(vehicleCategory);
+                    vehicleCategory = vehicleCategory.toLowerCase();
 
-                    carCategory = group.getSelectedToggle().getUserData().toString();
-                    setUpTypeCombobox();
-                    typeCombobox.setDisable(false);
+                    //if location has been selected, reconfigure vehicleType combobox
+                    if (!locationCMB.getSelectionModel().isEmpty()) {
+                        String branch = locationCMB.getSelectionModel().getSelectedItem();
+                        location = branch.split(",")[0].trim();
+                        city = branch.split(",")[1].trim();
+                        //enable vehicleTypeCMB
+                        typeCombobox.setDisable(false);
+                        //configure the vehicleType Combobox
+                        configureComboBox(typeCombobox,
+                                userModel.getVehicleTypeAtBranch(city, location, vehicleCategory));
+                    }
+
                 }
             }
         });
@@ -129,12 +233,13 @@ public class ManageVehicleController extends AbstractController implements Initi
 
     public void startingDateDateBoxSetUp() {
         startingDateDateBox.setDisable(false);
+        /*
         final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
             public DateCell call(final DatePicker datePicker) {
                 return new DateCell() {
                     @Override
                     public void updateItem(LocalDate item, boolean empty) {
-                        System.out.println("pickUpUstartingDateDateBoxpdate");
+                        //System.out.println("pickUpUstartingDateDateBoxpdate");
                         super.updateItem(item, empty);
                         if (item.compareTo(LocalDate.now()) < 0) {
                             setDisable(true);
@@ -143,7 +248,7 @@ public class ManageVehicleController extends AbstractController implements Initi
                 };
             }
         };
-
+    */
         //actionHandler
         startingDateDateBox.setOnAction((ActionEvent event) -> {
             addButton.setDisable(false);
@@ -151,8 +256,33 @@ public class ManageVehicleController extends AbstractController implements Initi
 
         });
 
-        startingDateDateBox.setDayCellFactory(dayCellFactory);
+       // startingDateDateBox.setDayCellFactory(dayCellFactory);
 
     }
+    
+    
+    private void handleVehicleType(){
+         typeCombobox.setOnAction((ActionEvent event) -> {
+           vehicleType= typeCombobox.getSelectionModel().getSelectedItem();
+            
+                      
+                  });
+                 }
+
+    private void setUpLocationCMB() {
+
+        configureComboBox(locationCMB, userModel.getAllBranches());
+        locationCMB.setOnAction((ActionEvent event) -> {
+            String branch = locationCMB.getSelectionModel().getSelectedItem();
+            location = branch.split(",")[0].trim();
+            city = branch.split(",")[1].trim();
+            configureComboBox(typeCombobox,
+                    userModel.getVehicleTypeAtBranch(city, location, vehicleCategory));
+            handleVehicleType();
+        });
+    }
+    
+    
+    
 
 }
