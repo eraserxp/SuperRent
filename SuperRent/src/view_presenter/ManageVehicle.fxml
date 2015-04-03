@@ -13,7 +13,7 @@
          <children>
             <Separator layoutX="250.0" layoutY="-5.0" orientation="VERTICAL" prefHeight="500.0" prefWidth="9.0" />
             <Button fx:id="showButton" layoutX="722.0" layoutY="19.0" mnemonicParsing="false" onAction="#handleShowButtonAction" text="Show" />
-            <Label layoutX="266.0" layoutY="14.0" text="Show Vehile for sale">
+            <Label layoutX="266.0" layoutY="14.0" text="Show Vehicle for sale">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
