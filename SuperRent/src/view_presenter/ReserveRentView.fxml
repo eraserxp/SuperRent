@@ -149,7 +149,7 @@
             </AnchorPane>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="522.0">
                <children>
-                  <VBox fx:id="summaryVBox" layoutX="30.0" prefHeight="505.0" prefWidth="476.0" AnchorPane.bottomAnchor="93.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="29.0" AnchorPane.topAnchor="0.0">
+                  <VBox fx:id="summaryVBox" layoutX="30.0" prefHeight="505.0" prefWidth="476.0" AnchorPane.bottomAnchor="93.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="476.0">
                            <children>
@@ -162,17 +162,38 @@
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <Separator orientation="VERTICAL" prefHeight="200.0">
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                              </Separator>
                               <Label text="Vehicle plate No: ">
                                  <HBox.margin>
                                     <Insets left="20.0" />
                                  </HBox.margin>
                               </Label>
                               <Label fx:id="plateNoLabel" text="plateNo">
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="26.0" prefWidth="446.0">
+                           <children>
+                              <Label text="From: " />
+                              <Label fx:id="fromTimeLabel" text="fromTime">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Label text="To: ">
+                                 <HBox.margin>
+                                    <Insets left="50.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Label fx:id="toTimeLabel" text="toTime">
                                  <HBox.margin>
                                     <Insets left="20.0" />
                                  </HBox.margin>

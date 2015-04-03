@@ -311,8 +311,6 @@ public class UserModel {
         return phone;
     }
 
-    
-    
     public ArrayList<String> getAllBranches() {
         String SQL = "select city, location from branch";
         ResultSet rs = queryDatabase(SQL);
@@ -448,6 +446,29 @@ public class UserModel {
         return type;
     }
 
+    public GridPane generateReportAsGridPane(ArrayList<ArrayList<String>> reportContent) {
+        GridPane gridPane = new GridPane();
+        int rows = reportContent.size();
+        int cols = reportContent.get(0).size();
+        double percentWidth = 100.0 / (double) cols;
+        for (int i = 0; i < cols; i++) {
+            ColumnConstraints col = new ColumnConstraints();
+            col.setPercentWidth(percentWidth);
+            col.setHalignment(HPos.RIGHT);
+            gridPane.getColumnConstraints().add(col);
+        }
+
+        for (int i = 0; i < rows; i++) {
+            ArrayList<String> row = reportContent.get(i);
+            for (int j = 0; j < cols; j++) {
+                String text = row.get(j);
+                gridPane.add(new Label(text), j, i);
+            }
+        }
+
+        return gridPane;
+    }
+
     /**
      *
      * calculate the cost for a given return, rent or reservation
@@ -460,9 +481,13 @@ public class UserModel {
         GridPane gridPane = new GridPane();
 
         int all_days = (int) ChronoUnit.DAYS.between(fromDate, toDate);
+        int hours = toHour - fromHour;
+        if (hours < 0) {
+            hours += 24;
+            all_days -= 1;
+        }
         int weeks = (int) all_days / 7;
         int days = all_days % 7;
-        int hours = toHour - fromHour;
 
         //get all the rate and cost from database
         HashMap<String, Integer> vehicleRates = getVehicleRate(vehicleType);
@@ -473,16 +498,16 @@ public class UserModel {
         col1.setHalignment(HPos.CENTER);
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setPercentWidth(20);
-        col2.setHalignment(HPos.CENTER);
+        col2.setHalignment(HPos.RIGHT);
         ColumnConstraints col3 = new ColumnConstraints();
         col3.setPercentWidth(20);
-        col3.setHalignment(HPos.CENTER);
+        col3.setHalignment(HPos.RIGHT);
         ColumnConstraints col4 = new ColumnConstraints();
         col4.setPercentWidth(20);
-        col4.setHalignment(HPos.CENTER);
+        col4.setHalignment(HPos.RIGHT);
         ColumnConstraints col5 = new ColumnConstraints();
         col5.setPercentWidth(20);
-        col5.setHalignment(HPos.CENTER);
+        col5.setHalignment(HPos.RIGHT);
         gridPane.getColumnConstraints().addAll(col1, col2, col3, col4, col5);
 
         ArrayList<String> columnHeaders = new ArrayList<>(
@@ -549,9 +574,40 @@ public class UserModel {
         }
         rowIndex++;
 
+        int counter = 0;
         if (equipList != null && !equipList.isEmpty()) {
             for (String equipName : equipList) {
                 HashMap<String, Integer> equipmentRates = getEquipmentRate(equipName);
+                int quantity = equipQuantityList.get(counter);
+                gridPane.add(new Label(equipName + "(" + quantity + ")"), 0, rowIndex);
+                if (all_days > 0) {
+                    gridPane.add(new Label(all_days + " day(s)"), 1, rowIndex);
+                    gridPane.add(new Label(quantity + " x " + all_days + " x " + equipmentRates.get("d_rate") / 100 + ".00"),
+                            2, rowIndex);
+                    int d_rent = equipmentRates.get("d_rate") * all_days*quantity;
+
+                    gridPane.add(new Label(d_rent / 100 + ".00"),
+                            4, rowIndex);
+                    rowIndex++;
+                }
+
+                if (hours > 0) {
+                    gridPane.add(new Label(hours + " hour(s)"), 1, rowIndex);
+                    gridPane.add(new Label(quantity + " x " +hours + " x " + equipmentRates.get("h_rate") / 100 + ".00"),
+                            2, rowIndex);
+                    int h_rent = equipmentRates.get("h_rate") * hours*quantity;
+
+                    gridPane.add(new Label(h_rent / 100 + ".00"),
+                            4, rowIndex);
+                    rowIndex++;
+                }
+
+                //add an empty line
+                for (int colIndex = 0; colIndex < cols; colIndex++) {
+                    gridPane.add(new Label("--------------"), colIndex, rowIndex);
+                }
+                rowIndex++;
+                counter++;
             }
         }
         return gridPane;

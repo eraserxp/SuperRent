@@ -114,6 +114,12 @@ public class ReserveRentController extends AbstractController implements Initial
 
     @FXML
     private Label foundResult;
+    
+    @FXML
+    private Label fromTimeLabel;
+    
+    @FXML
+    private Label toTimeLabel;
 
     @FXML
     private Button submitButton;
@@ -157,6 +163,8 @@ public class ReserveRentController extends AbstractController implements Initial
         usernameLabel.setText("");
         plateNoLabel.setText("");
         foundResult.setText("");
+        fromTimeLabel.setText("");
+        toTimeLabel.setText("");
 
     }
 
@@ -222,7 +230,9 @@ public class ReserveRentController extends AbstractController implements Initial
 
     private void setUpToHourCMBs() {
         configureHourCMB(fromHourCMB);
+        fromHourCMB.getSelectionModel().select(0);
         configureHourCMB(toHourCMB);
+        toHourCMB.getSelectionModel().select(0);
     }
 
     public void handleSearchButton() {
@@ -274,7 +284,8 @@ public class ReserveRentController extends AbstractController implements Initial
             popUpError("The 'From time' is not earlier than the 'To time'!");
             return;
         }
-
+        fromTimeLabel.setText(fromDate.toString() + ", " + fromHourString);
+        toTimeLabel.setText(toDate.toString() + ", " + toHourString  );
         showSearchResult();
 
     }
@@ -326,6 +337,18 @@ public class ReserveRentController extends AbstractController implements Initial
         configureComboBox(equip2CMB, quantityList);
         equip1CMB.getSelectionModel().select(0);
         equip2CMB.getSelectionModel().select(0);
+        // if the quantity has been changed, redo the summary part
+        equip1CMB.setOnAction((ActionEvent event) -> {
+            if (plateNoLabel.getText().trim() != "") {
+                showSummary();
+            }
+        });
+
+        equip2CMB.setOnAction((ActionEvent event) -> {
+            if (plateNoLabel.getText().trim() != "") {
+                showSummary();
+            }
+        });
     }
 
     private void passDataToNext() {
@@ -354,10 +377,29 @@ public class ReserveRentController extends AbstractController implements Initial
         LocalDate endDate = toDatePicker.getValue();
         fromHour = Integer.parseInt(fromHourCMB.getSelectionModel().getSelectedItem().split(":")[0]);
         toHour = Integer.parseInt(toHourCMB.getSelectionModel().getSelectedItem().split(":")[0]);
+
+        //get the equipments
+        ArrayList<String> equipments = new ArrayList<>();
+        ArrayList<Integer> quantities = new ArrayList<>();
+
+        String equip1 = equip1Label.getText();
+        int equp1Quantity = Integer.parseInt(equip1CMB.getSelectionModel().getSelectedItem());
+        if (equp1Quantity > 0) {
+            equipments.add(equip1);
+            quantities.add(equp1Quantity);
+        }
+
+        String equip2 = equip2Label.getText();
+        int equp2Quantity = Integer.parseInt(equip2CMB.getSelectionModel().getSelectedItem());
+        if (equp2Quantity > 0) {
+            equipments.add(equip2);
+            quantities.add(equp2Quantity);
+        }
+
         if (summaryGP != null) {
             summaryVBox.getChildren().remove(summaryGP);
         }
-        summaryGP = userModel.calculateCost(vehicleType, null, null,
+        summaryGP = userModel.calculateCost(vehicleType, equipments, quantities,
                 startDate, fromHour, endDate, toHour, false,
                 redeemedPoints, odometer);
         summaryVBox.getChildren().add(summaryGP);
