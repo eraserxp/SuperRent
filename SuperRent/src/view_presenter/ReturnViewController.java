@@ -8,6 +8,7 @@ package view_presenter;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -23,6 +24,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -38,146 +41,120 @@ import model.ClerkModel;
  */
 public class ReturnViewController extends AbstractController implements Initializable {
 
+    //Return Details
     @FXML
-    private TextField VehicleTextField;
+    private TextField PlateNoTextField;
     @FXML
-    private CheckBox ShowRentCheckBox;
+    private DatePicker ReturnDatePicker;
+    @FXML
+    private ComboBox ReturnTimeCombox;
+    @FXML
+    private TextField OdometerTextField;
+    @FXML
+    private ComboBox TankFullCombox;
+    @FXML
+    private ComboBox Equip1Combox;
+    @FXML
+    private ComboBox Equip2Combox;
+    @FXML
+    private Button ConfirmButton;
+    //Rent Summary
+    //Customer username
+    @FXML
+    private Label UsernameLabel;
+    @FXML
+    private Label PlatenoLabel;
+    @FXML
+    private Label PickupLocationLabel;
+    @FXML
+    private Label PickupTimeLabel;
+    @FXML
+    private Label ReturnLocationLabel;
+    @FXML
+    private Label ReturnTimeLabel;
+    @FXML
+    private Label Equipment1;
+    @FXML
+    private Label Number1;
+    @FXML
+    private Label Equipment2;
+    @FXML
+    private Label Number2;
+    @FXML
+    private Button CheckOutButton;    
 
-    //Labels to show the reservation details
+    //labels to show the cost
     @FXML
-    private Label VehicleLicenseNumberLabel;
+    private Label rentalCharge;
     @FXML
-    private Label DriverLicenseLabel;
+    private Label insuranceCost;
     @FXML
-    private Label PickupDate;
+    private Label additionalCost;
     @FXML
-    private Label PickupTime;
-    @FXML
-    private Label PickupLocation;
-    @FXML
-    private Label PickupCity;
-    @FXML
-    private Label CustomerUsernameLabel;
-    @FXML
-    private Label EquipmentNameLabel;
-    @FXML
-    private Label EquipmentNoLabel;
-    @FXML
-    private Label Validator;
-    //returnbutton
+    private Label totalCost;
 
-    @FXML
-    Button ReturnButton;
-
-    @FXML
-    AnchorPane anchorpane;
-
+    //check thos in rent but not in return
+    //date should be used
     private ClerkModel clerkModel = new ClerkModel();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Disable the button and hide the labels
-        ShowRentCheckBox.setDisable(true);
-        ReturnButton.setVisible(false);
-        hide(Validator, DriverLicenseLabel, VehicleLicenseNumberLabel, PickupDate, PickupTime, PickupCity, PickupLocation, CustomerUsernameLabel, EquipmentNameLabel, EquipmentNoLabel);
-        //the check box should not be checked
-        ShowRentCheckBox.setSelected(false);
+        hide(UsernameLabel, PlatenoLabel, PickupLocationLabel, PickupTimeLabel, ReturnLocationLabel, ReturnTimeLabel, Equipment1, Number1, Equipment2, Number2);
 
-        setUpVehicleTextField();
-
-        handleConCheckBox();
-
-        handleReturnBox();
-
+        handleConfirmButton();
+        handleCheckOutButton();
     }
 
-    public void setUpVehicleTextField() {
-
-        VehicleTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            // lost focus
-            String checkString = VehicleTextField.getText();
-            ArrayList<String> checkValue = new ArrayList<>();
-            try {
-                checkValue = clerkModel.getRentDetails(checkString);
-            } catch (SQLException ex) {
-                Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            if (!newValue) {
-                if (checkString.isEmpty()) {
-                    showWarning(Validator, "Vehicle License Number can't be empty!");
-                    VehicleTextField.setDisable(false);
-                    ShowRentCheckBox.setDisable(true);
-                } else if (checkValue == null) {
-                    showWarning(Validator, "Vehicle License Number is invalid!");
-                    VehicleTextField.setDisable(false);
-                    ShowRentCheckBox.setDisable(true);
-                } else {
-                    showWarning(Validator, "Valid!");
-                    VehicleTextField.setDisable(true);
-                    ShowRentCheckBox.setDisable(false);
-                }
-            } else {
-                hide(Validator);
-                ShowRentCheckBox.setDisable(true);
-            }
-        });
-
-    }
-
-    public void handleConCheckBox() {
-
-        ShowRentCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            public void changed(ObservableValue<? extends Boolean> ov,
-                    Boolean old_val, Boolean new_val) {
-
-                hide(DriverLicenseLabel, VehicleLicenseNumberLabel, PickupDate, PickupTime, PickupCity, PickupLocation, CustomerUsernameLabel, EquipmentNameLabel, EquipmentNoLabel);
-
-                String VehicleNo = VehicleTextField.getText();
-
-                try {
-
-                    ArrayList<String> rDetails = clerkModel.getRentDetails(VehicleNo);
-                    if (rDetails != null) {
-
-                        VehicleLicenseNumberLabel.setText(rDetails.get(0));
-                        DriverLicenseLabel.setText(rDetails.get(1));
-                        PickupDate.setText(rDetails.get(2));
-                        PickupTime.setText(rDetails.get(3));
-                        PickupCity.setText(rDetails.get(4));
-                        PickupLocation.setText(rDetails.get(5));
-                        CustomerUsernameLabel.setText(rDetails.get(6));
-                        EquipmentNameLabel.setText(rDetails.get(7));
-                        EquipmentNoLabel.setText(rDetails.get(8));
-                        ReturnButton.setVisible(true);
-
-                        if (new_val) {
-                            show(DriverLicenseLabel, VehicleLicenseNumberLabel, PickupDate, PickupTime, PickupCity, PickupLocation, CustomerUsernameLabel, EquipmentNameLabel, EquipmentNoLabel);
-                        } else {
-                            //change the validator content
-                            ShowRentCheckBox.setDisable(true);
-                            VehicleTextField.clear();
-                            VehicleTextField.setDisable(false);
-                            ReturnButton.setVisible(false);
-                        }
-                    }
-
-                    //System.out.println("lll");
-                } catch (SQLException ex) {
-                    Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+//    public void setUpVehicleTextField() {
+//
+//        PlateNoTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+//            // lost focus
+//            String checkString = PlateNoTextField.getText();
+//            ArrayList<String> checkValue = new ArrayList<>();
+//            try {
+//                checkValue = clerkModel.getRentDetails(checkString);
+//            } catch (SQLException ex) {
+//                Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            if (!newValue) {
+//                if (checkString.isEmpty()) {
+//                    //showWarning(Validator, "Vehicle License Number can't be empty!");
+//                    PlateNoTextField.setDisable(false);
+//                } else if (checkValue == null) {
+//                    //showWarning(Validator, "Vehicle License Number is invalid!");
+//                    PlateNoTextField.setDisable(false);
+//                } else {
+//                    //showWarning(Validator, "Valid!");
+//                    PlateNoTextField.setDisable(true);
+//                }
+//            }
+//        });
+//
+//    }
+    //handle the actions of the confirm button
+    //use to check all input are valid
+    //then, show the rent and return details and all kinds of costs with the valid input
+    public void handleConfirmButton() {
+        ConfirmButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                String checkString = PlateNoTextField.getText();
+                LocalDate returnDate = ReturnDatePicker.getValue();
+                Integer returnTime = ReturnTimeCombox.getSelectionModel().getSelectedIndex();
             }
         });
 
     }
 
-    //handle the actions of the return button
-    public void handleReturnBox() {
-        ReturnButton.setOnAction(new EventHandler<ActionEvent>() {
+    //when all input are valid
+    //check out to the payment view to make payment
+    public void handleCheckOutButton() {
+        CheckOutButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
 
                 try {
-                    showReturnDialog();
+                    showPaymentDialog();
                 } catch (IOException ex) {
                     Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -187,11 +164,11 @@ public class ReturnViewController extends AbstractController implements Initiali
 
     }
 
-    public void showReturnDialog() throws IOException {
-        AnchorPane loader = (AnchorPane) FXMLLoader.load(ReturnDialogViewController.class.getResource("ReturnDialogView.fxml"));
+    public void showPaymentDialog() throws IOException {
+        AnchorPane loader = (AnchorPane) FXMLLoader.load(ReturnDialogViewController.class.getResource("PaymentView.fxml"));
 
         Stage dialogStage = new Stage();
-        dialogStage.setTitle("Return Information");
+        dialogStage.setTitle("Payment");
         dialogStage.initModality(Modality.WINDOW_MODAL);
         Scene scene = new Scene(loader);
         dialogStage.setScene(scene);
@@ -200,11 +177,25 @@ public class ReturnViewController extends AbstractController implements Initiali
         dialogStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
                 System.out.println("Do sth when user click the X close icon of the dialog");
-                
+
             }
         });
         dialogStage.showAndWait();
 
+    }
+
+    public void calculateCosts() {
+
+        //get the required information
+        //check reserve or not
+        //overdue or not (penality applied?)
+        //insurance for the overdue time
+        //get the weeks,days and hours to calculate the rent charge
+        //also include pk_rate and set a limit to it
+        //calculate the insurance cost according to the time
+        //calculate the additional cost considering the type of equipments and their quantities
+        //how to set the gasline fees
+        //calculate the total cost and set it to show automatically
     }
 
 }
