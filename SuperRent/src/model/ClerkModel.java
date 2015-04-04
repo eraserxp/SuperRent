@@ -28,14 +28,27 @@ public class ClerkModel extends UserModel {
 
     public TableView<VehicleSelection> getAvailableVehicles(String city, String location,
             String vehicleType, String fromDate, String toDate) {
-        String sql = "select vlicense, category, vehicleType, brand, odometer"
-                + " from vehicleforrent where "
-                + " isAvailable = 1 "
+        String SQL = "select distinct VR.vlicense, VR.category, VR.vehicleType, VR.brand, VR.odometer"
+                + " from vehicleforrent VR,reservation R, vehicleinbranch VB"
+                + " where vehicleType = " + addQuotation(vehicleType)
+                + " and VR.isAvailable=1 "
+                + " and VB.vlicense = VR.vlicense "
+                + " and VB.city = " + addQuotation(city)
+                + " and VB.location = " + addQuotation(location)
+                
+                + " or ( VR.vlicense = R.vlicense "
+                + " and VB.vlicense = VR.vlicense "
                 + " and vehicleType = " + addQuotation(vehicleType)
-                //+ " and "
-                ;
+                + " and VB.city = " + addQuotation(city)
+                + " and VB.location = " + addQuotation(location)
+                + " and ( " + addQuotation(fromDate)
+                + " not between R.pickup_date and R.return_date ) "
+                + " and ( " + addQuotation(toDate)
+                + " not between R.pickup_date and R.return_date ) )";
+        System.out.println(SQL);
+
         TableView<VehicleSelection> tableView = new TableView<>();
-        ArrayList< ArrayList<String>> resultMatrix = getMatrixForSQL(sql);
+        ArrayList< ArrayList<String>> resultMatrix = getMatrixForSQL(SQL);
         // parse the first row of the result
         ArrayList<String> firstRow = resultMatrix.get(0);
         ObservableList<VehicleSelection> data = FXCollections.observableArrayList();
@@ -46,7 +59,7 @@ public class ClerkModel extends UserModel {
             vs.setCategory(row.get(1));
             vs.setVehicleType(row.get(2));
             vs.setBrand(row.get(3));
-            vs.setOdometer(Integer.parseInt(row.get(4))/1000);
+            vs.setOdometer(Integer.parseInt(row.get(4)) / 1000);
             data.add(vs);
         }
         TableColumn<VehicleSelection, String> vlicenseCol = new TableColumn("Plate No.");
@@ -66,7 +79,7 @@ public class ClerkModel extends UserModel {
 
         tableView.getColumns().addAll(vlicenseCol, categoryCol, vehicleTypeCol, brandCol, odometerCol);
         tableView.setItems(data);
-        
+
         return tableView;
 
     }

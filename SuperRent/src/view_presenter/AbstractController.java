@@ -6,6 +6,8 @@
 package view_presenter;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -272,6 +274,10 @@ public abstract class AbstractController {
         alert.setContentText(errorMessage);
 
         alert.showAndWait();
+    }
+    
+    protected int daysBetween(LocalDate fromDate, LocalDate toDate) {
+        return (int) ChronoUnit.DAYS.between(fromDate, toDate);
     }
 
     /**
