@@ -38,6 +38,7 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -152,6 +153,22 @@ public class ReserveRentController extends AbstractController implements Initial
     @FXML
     private CheckBox redeem1500CB;
 
+    @FXML
+    private Button reserveButton;
+
+    // the following fxml component should be hidden from customer
+    @FXML
+    private Button rentButton;
+
+    @FXML
+    private Label confirmCustomerLabel;
+
+    @FXML
+    private HBox byPhoneHBox;
+
+    @FXML
+    private HBox submitHBox;
+
     private UserModel userModel;
 
     private VehicleSelection selectedVehicle = new VehicleSelection();
@@ -184,6 +201,15 @@ public class ReserveRentController extends AbstractController implements Initial
         setupUsernameLabel();
         setupRoadStarCB();
         setupRedeem1000CB();
+        setupRedeem1500CB();
+
+        // do things differently for customer and employee
+        String userType = AppContext.getInstance().getUserType();
+        if (userType.equals("CUSTOMER")) {
+            hide(rentButton, confirmCustomerLabel, byPhoneHBox, submitHBox, registerButton);
+        } else {
+
+        }
     }
 
     private void setUpLocationCMB() {
@@ -381,6 +407,30 @@ public class ReserveRentController extends AbstractController implements Initial
 
     private void setupRedeem1500CB() {
         redeem1500CB.selectedProperty().addListener((ov, oldv, newv) -> {
+            if (newv) {
+                String username = usernameLabel.getText().trim();
+                if (!userModel.isMembership(username)) {
+                    popUpError(username + " is not a Club member!");
+                    redeem1500CB.setSelected(false);
+                    return;
+                }
+                if (userModel.getPoints(username) < 1000) {
+                    popUpError(username + " doesn't have enough points!");
+                    redeem1500CB.setSelected(false);
+                    return;
+                }
+                if (daysBetween(fromDate, toDate) < 1) {
+                    popUpError("Time duration must be larger than 1 day to redeem!");
+                    redeem1500CB.setSelected(false);
+                    return;
+                }
+                String vt = selectedVehicle.getVehicleType();
+                if (!userModel.isHighRankVehicle(vt)) {
+                    popUpError("You can't redeem 1500 points with type: " + vt);
+                    redeem1500CB.setSelected(false);
+                    return;
+                }
+            }
             showSummary();
         });
     }
@@ -487,12 +537,20 @@ public class ReserveRentController extends AbstractController implements Initial
             isRoadStar = true;
         }
 
+        if (!redeem1000CB.isDisabled() && redeem1000CB.isSelected()) {
+            redeemedPoints = 1000;
+        }
+
+        if (!redeem1500CB.isDisabled() && redeem1500CB.isSelected()) {
+            redeemedPoints = 1500;
+        }
+
         if (summaryGP != null) {
             summaryVBox.getChildren().remove(summaryGP);
         }
         summaryGP = userModel.calculateCost(vehicleType, equipments, quantities,
                 fromDate, fromHour, toDate, toHour, isRoadStar,
-                redeemedPoints, odometer);
+                redeemedPoints, odometer, null);
         summaryVBox.getChildren().add(summaryGP);
 
     }
@@ -513,5 +571,13 @@ public class ReserveRentController extends AbstractController implements Initial
 
     public void handleRegistration() {
         setupNextPage(this, "Register.fxml", "Register customer");
+    }
+
+    public void handleReserve() {
+
+    }
+
+    public void handleRent() {
+
     }
 }

@@ -46,7 +46,7 @@ public class UserModel {
 
     private ArrayList<String> highRankList = new ArrayList<>(
             Arrays.asList("luxury", "suv", "van", "24foot", "15foot", "12foot",
-                    "boxtruck", "cargovan")
+                    "boxtrucks", "cargovans")
     );
 
     protected Connection con = null;
@@ -286,6 +286,21 @@ public class UserModel {
                 + addQuotation(passwd) + "," + addQuotation(name)
                 + "," + addQuotation(type) + ")";
         return updateDatabase(SQL);
+    }
+
+    public int getOdometer(String vlicense) {
+        int odometer = -1;
+        String SQL = "select odometer from vehicleforrent where vlicense = "
+                + addQuotation(vlicense);
+        ResultSet rs = queryDatabase(SQL);
+        try {
+            if (rs.next()) {
+                odometer = rs.getInt("odometer");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return odometer;
     }
 
     public String getCustomerByPhone(String phone) {
@@ -535,7 +550,7 @@ public class UserModel {
     }
 
     public int getPoints(String username) {
-        int point = 0;     
+        int point = 0;
         String sql = "select point from customer where username = "
                 + addQuotation(username);
         ResultSet rs = queryDatabase(sql);
@@ -557,7 +572,7 @@ public class UserModel {
             ArrayList<Integer> equipQuantityList,
             LocalDate fromDate, int fromHour,
             LocalDate toDate, int toHour, boolean isRoadStar, int redeemedPoints,
-            int odometer) {
+            int odometer, String vlicense) {
         GridPane gridPane = new GridPane();
         int totalCost = 0;
 
@@ -654,6 +669,7 @@ public class UserModel {
                     4, rowIndex);
             rowIndex++;
         }
+
         //add an empty line       
         for (int colIndex = 0; colIndex < cols; colIndex++) {
             gridPane.add(new Label("  "), colIndex, rowIndex);
@@ -704,29 +720,30 @@ public class UserModel {
 
         }
 
-        //consider the redeemed points
-        if (redeemedPoints > 0) {
-
-        }
-
-        // calculate the charge based on odometer
-        if (odometer > 0) {
-
-        }
-
         //add an empty line       
-        for (int colIndex = 0; colIndex < cols; colIndex++) {
-            gridPane.add(new Label("  "), colIndex, rowIndex);
-        }
-        rowIndex++;
-        for (int colIndex = 0; colIndex < cols; colIndex++) {
-            gridPane.add(new Label("--------------"), colIndex, rowIndex);
-        }
-        rowIndex++;
+//        for (int colIndex = 0; colIndex < cols; colIndex++) {
+//            gridPane.add(new Label("  "), colIndex, rowIndex);
+//        }
+//        rowIndex++;
+//        for (int colIndex = 0; colIndex < cols; colIndex++) {
+//            gridPane.add(new Label("--------------"), colIndex, rowIndex);
+//        }
+//        rowIndex++;
 
         int counter = 0;
         if (equipList != null && !equipList.isEmpty()) {
             for (String equipName : equipList) {
+
+                //add an empty line
+                for (int colIndex = 0; colIndex < cols; colIndex++) {
+                    gridPane.add(new Label("  "), colIndex, rowIndex);
+                }
+                rowIndex++;
+                for (int colIndex = 0; colIndex < cols; colIndex++) {
+                    gridPane.add(new Label("--------------"), colIndex, rowIndex);
+                }
+                rowIndex++;
+
                 HashMap<String, Integer> equipmentRates = getEquipmentRate(equipName);
                 int quantity = equipQuantityList.get(counter);
                 gridPane.add(new Label(equipName + "(" + quantity + ")"), 0, rowIndex);
@@ -752,7 +769,34 @@ public class UserModel {
                     rowIndex++;
                 }
 
-                //add an empty line
+                counter++;
+            }
+        }
+
+        //consider the redeemed points
+        if (redeemedPoints > 0) {
+            for (int colIndex = 0; colIndex < cols; colIndex++) {
+                gridPane.add(new Label("--------------"), colIndex, rowIndex);
+            }
+            rowIndex++;
+            gridPane.add(new Label("Redeem " + redeemedPoints + " points"), 0, rowIndex);
+            gridPane.add(new Label("equivalent 1 day"), 1, rowIndex);
+
+            gridPane.add(new Label("" + vehicleRates.get("d_rate") / 100 + ".00"),
+                    2, rowIndex);
+            int d_rate = vehicleRates.get("d_rate");
+            totalCost -= d_rate;
+            gridPane.add(new Label("-" + d_rate / 100 + ".00"),
+                    4, rowIndex);
+            rowIndex++;
+        }
+
+        // calculate the charge based on odometer
+        if (vlicense != null) {
+            int outstandingOdometer = odometer - getOdometer(vlicense)
+                    - all_days * getDailyMileLimit(vehicleType);
+            if (outstandingOdometer > 0) {
+                //add an empty line       
                 for (int colIndex = 0; colIndex < cols; colIndex++) {
                     gridPane.add(new Label("  "), colIndex, rowIndex);
                 }
@@ -761,11 +805,25 @@ public class UserModel {
                     gridPane.add(new Label("--------------"), colIndex, rowIndex);
                 }
                 rowIndex++;
-                counter++;
+
+                //
+                gridPane.add(new Label("Exceed mileage limt"), 0, rowIndex);
+                gridPane.add(new Label("by " + outstandingOdometer / 1000 + " km"), 0, rowIndex + 1);
+                gridPane.add(new Label(outstandingOdometer + " x " + vehicleRates.get("pk_rate") / 100 + ".00"),
+                        2, rowIndex);
+                int pk_rent = vehicleRates.get("pk_rate") * outstandingOdometer;
+                totalCost += pk_rent;
+                gridPane.add(new Label(pk_rent + ".00"),
+                        2, rowIndex);
+                rowIndex++;
             }
         }
 
         //add the total sum
+        rowIndex++;
+        for (int colIndex = 0; colIndex < cols; colIndex++) {
+            gridPane.add(new Label("--------------"), colIndex, rowIndex);
+        }
         rowIndex++;
         gridPane.add(new Label("total: " + totalCost / 100 + ".00"), 4, rowIndex);
         return gridPane;
