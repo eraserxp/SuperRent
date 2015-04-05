@@ -74,8 +74,8 @@ VALUES
 
 INSERT INTO vehiclesold
 VALUES 
-('PLT-4UP','2014-02-02','economy','car','BMW','frank1',30000),
-('PLT-4U1','2014-02-03','economy','car','BMW','frank1',60000);
+('PLT-4UP',100000,'2014-02-02','economy','car','BMW','frank1',30000),
+('PLT-4U1',200000,'2014-02-03','economy','car','BMW','frank1',60000);
 
 INSERT INTO vehicleforrent 
 VALUES
