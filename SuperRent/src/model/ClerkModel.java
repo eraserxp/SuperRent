@@ -29,22 +29,13 @@ public class ClerkModel extends UserModel {
     public TableView<VehicleSelection> getAvailableVehicles(String city, String location,
             String vehicleType, String fromDate, String toDate) {
         String SQL = "select distinct VR.vlicense, VR.category, VR.vehicleType, VR.brand, VR.odometer"
-                + " from vehicleforrent VR,reservation R, vehicleinbranch VB"
+                + " from vehicleforrent VR, vehicleinbranch VB"
                 + " where vehicleType = " + addQuotation(vehicleType)
                 + " and VR.isAvailable=1 "
                 + " and VB.vlicense = VR.vlicense "
                 + " and VB.city = " + addQuotation(city)
-                + " and VB.location = " + addQuotation(location)
-                
-                + " or ( VR.vlicense = R.vlicense "
-                + " and VB.vlicense = VR.vlicense "
-                + " and vehicleType = " + addQuotation(vehicleType)
-                + " and VB.city = " + addQuotation(city)
-                + " and VB.location = " + addQuotation(location)
-                + " and ( " + addQuotation(fromDate)
-                + " not between R.pickup_date and R.return_date ) "
-                + " and ( " + addQuotation(toDate)
-                + " not between R.pickup_date and R.return_date ) )";
+                + " and VB.location = " + addQuotation(location);
+
         System.out.println(SQL);
 
         TableView<VehicleSelection> tableView = new TableView<>();

@@ -77,6 +77,9 @@ public class ReserveRentController extends AbstractController implements Initial
     private String vehicleType;
 
     @FXML
+    private Label vehicleTypeLabel;
+
+    @FXML
     private DatePicker fromDatePicker;
 
     private String fromDateString;
@@ -101,7 +104,7 @@ public class ReserveRentController extends AbstractController implements Initial
     private int toHour;
 
     @FXML
-    private Button searchButton;
+    private Button checkAvailabilityButton;
 
     @FXML
     private Label equip1Label;
@@ -120,6 +123,9 @@ public class ReserveRentController extends AbstractController implements Initial
 
     @FXML
     private Label foundResult;
+    
+    @FXML
+    private Label branchLabel;
 
     @FXML
     private Label fromTimeLabel;
@@ -161,6 +167,9 @@ public class ReserveRentController extends AbstractController implements Initial
     private Button rentButton;
 
     @FXML
+    private Button selectButton;
+
+    @FXML
     private Label confirmCustomerLabel;
 
     @FXML
@@ -192,21 +201,26 @@ public class ReserveRentController extends AbstractController implements Initial
         setUpEquipLabelField();
         setupPhoneField();
         usernameLabel.setText("");
+        vehicleTypeLabel.setText("");
         plateNoLabel.setText("");
         foundResult.setText("");
+        branchLabel.setText("");
         fromTimeLabel.setText("");
         toTimeLabel.setText("");
 
-        disableNodes(roadStarCB, redeem1000CB, redeem1500CB);
+        disableNodes(roadStarCB, redeem1000CB, redeem1500CB, selectButton);
         setupUsernameLabel();
+        setupPlateNoLabel();
         setupRoadStarCB();
         setupRedeem1000CB();
         setupRedeem1500CB();
+        setupRentButton();
 
         // do things differently for customer and employee
         String userType = AppContext.getInstance().getUserType();
         if (userType.equals("CUSTOMER")) {
-            hide(rentButton, confirmCustomerLabel, byPhoneHBox, submitHBox, registerButton);
+            hide(rentButton, confirmCustomerLabel, byPhoneHBox, submitHBox,
+                    registerButton, selectButton);
         } else {
 
         }
@@ -279,19 +293,20 @@ public class ReserveRentController extends AbstractController implements Initial
         toHourCMB.getSelectionModel().select(0);
     }
 
-    public void handleSearchButton() {
+    public void handleCheckAvailability() {
 
         if (locationCMB.getSelectionModel().isEmpty()) {
             popUpError("location is empty!");
             return;
         }
         String location = locationCMB.getSelectionModel().getSelectedItem();
-
+        branchLabel.setText(location);
         if (vehicleTypeCMB.getSelectionModel().isEmpty()) {
             popUpError("vehicle type is empty!");
             return;
         }
         String vehicleType = vehicleTypeCMB.getSelectionModel().getSelectedItem();
+        vehicleTypeLabel.setText(vehicleType);
 
         LocalDate fromDate = fromDatePicker.getValue();
         if (fromDate == null) {
@@ -328,9 +343,14 @@ public class ReserveRentController extends AbstractController implements Initial
             popUpError("The 'From time' is not earlier than the 'To time'!");
             return;
         }
+        
         fromTimeLabel.setText(fromDate.toString() + ", " + fromHourString);
         toTimeLabel.setText(toDate.toString() + ", " + toHourString);
-        showSearchResult();
+//        showSearchResult();
+//        if (userModel.isVehicleTypeAvailable(city, location, vehicleType, fromDateString, toDateString)) {
+//            showSummary();
+//        }
+        showSummary();
 
     }
 
@@ -356,6 +376,7 @@ public class ReserveRentController extends AbstractController implements Initial
                     redeem1000CB.setSelected(false);
                     redeem1500CB.setDisable(false);
                     redeem1500CB.setSelected(false);
+                    selectButton.setDisable(false);
                 } else { // if there isn't a username
                     roadStarCB.setSelected(false);
                     roadStarCB.setDisable(true);
@@ -363,10 +384,27 @@ public class ReserveRentController extends AbstractController implements Initial
                     redeem1000CB.setDisable(true);
                     redeem1500CB.setSelected(false);
                     redeem1500CB.setDisable(true);
+                    selectButton.setDisable(true);
                 }
             }
         });
 
+    }
+
+    private void setupPlateNoLabel() {
+        //allow the rent to proceed only if plate no is not empty
+        plateNoLabel.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> ov, String t, String t1) {
+                System.out.println("Plate No. Changed");
+                if (t1 != null && t1.trim() != "") { //if there is a username
+                    //enable rent
+                    rentButton.setDisable(false);
+                } else { // if there isn't a username
+                    rentButton.setDisable(true);
+                }
+            }
+        });
     }
 
     private void setupRoadStarCB() {
@@ -394,7 +432,7 @@ public class ReserveRentController extends AbstractController implements Initial
                     redeem1000CB.setSelected(false);
                     return;
                 }
-                String vt = selectedVehicle.getVehicleType();
+                String vt = vehicleTypeLabel.getText(); //selectedVehicle.getVehicleType();
                 if (!userModel.isLowRankVehicle(vt)) {
                     popUpError("You can't redeem 1000 points with type: " + vt);
                     redeem1000CB.setSelected(false);
@@ -424,7 +462,7 @@ public class ReserveRentController extends AbstractController implements Initial
                     redeem1500CB.setSelected(false);
                     return;
                 }
-                String vt = selectedVehicle.getVehicleType();
+                String vt = vehicleTypeLabel.getText(); //selectedVehicle.getVehicleType();
                 if (!userModel.isHighRankVehicle(vt)) {
                     popUpError("You can't redeem 1500 points with type: " + vt);
                     redeem1500CB.setSelected(false);
@@ -440,7 +478,7 @@ public class ReserveRentController extends AbstractController implements Initial
             showWarning(foundResult, "Not found");
         }
         String phone = phoneField.getText().trim();
-        phone = formatPhoneNo(phone);
+        //phone = formatPhoneNo(phone);
         String username = userModel.getCustomerByPhone(phone);
 
         if (username == null) {
@@ -459,6 +497,26 @@ public class ReserveRentController extends AbstractController implements Initial
 
     }
 
+    public void setupRentButton() {
+        //disable the button at the beginning
+        rentButton.setDisable(true);
+    }
+
+    public void handleSelectButton() {
+        showSearchResult();
+        if (AppContext.getInstance().getTempData("vehicleSelected").equals("true")) {
+            //update plate no
+            plateNoLabel.setText(selectedVehicle.getVlicense());
+            AppContext.getInstance().emptyTempData();
+            //enable rent button
+            rentButton.setDisable(false);
+        } else {
+            //if no vehicle is selected, clear the plate no label
+            plateNoLabel.setText("");
+            disableNodes(rentButton);
+        }
+    }
+
     private void setUpEquipLabelField() {
         String category = "car";
         ArrayList<String> equipments = userModel.getEquipments(category);
@@ -475,13 +533,13 @@ public class ReserveRentController extends AbstractController implements Initial
         equip2CMB.getSelectionModel().select(0);
         // if the quantity has been changed, redo the summary part
         equip1CMB.setOnAction((ActionEvent event) -> {
-            if (plateNoLabel.getText().trim() != "") {
+            if (vehicleTypeLabel.getText().trim() != "") {
                 showSummary();
             }
         });
 
         equip2CMB.setOnAction((ActionEvent event) -> {
-            if (plateNoLabel.getText().trim() != "") {
+            if (vehicleTypeLabel.getText().trim() != "") {
                 showSummary();
             }
         });
@@ -505,7 +563,12 @@ public class ReserveRentController extends AbstractController implements Initial
     private void showSummary() {
         System.out.println("show summary");
 
-        plateNoLabel.setText(selectedVehicle.getVlicense());
+        //update the plate no label so that the rent button will be enabled/disabled
+//        if (selectedVehicle.getVlicense() != null) {
+//            plateNoLabel.setText(selectedVehicle.getVlicense());
+//        } else {
+//            plateNoLabel.setText("");
+//        }
 
         int redeemedPoints = 0;
         int odometer = 0;
@@ -513,6 +576,7 @@ public class ReserveRentController extends AbstractController implements Initial
         toDate = toDatePicker.getValue();
         fromHour = Integer.parseInt(fromHourCMB.getSelectionModel().getSelectedItem().split(":")[0]);
         toHour = Integer.parseInt(toHourCMB.getSelectionModel().getSelectedItem().split(":")[0]);
+        vehicleType = vehicleTypeCMB.getSelectionModel().getSelectedItem();
 
         //get the equipments
         ArrayList<String> equipments = new ArrayList<>();

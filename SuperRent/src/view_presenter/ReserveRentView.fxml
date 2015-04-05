@@ -75,9 +75,9 @@
                               <ComboBox fx:id="toHourCMB" prefHeight="26.0" prefWidth="90.0" />
                            </children>
                         </HBox>
-                        <Button fx:id="searchButton" mnemonicParsing="false" onAction="#handleSearchButton" text="Search">
+                        <Button fx:id="checkAvailabilityButton" mnemonicParsing="false" onAction="#handleCheckAvailability" prefHeight="26.0" prefWidth="134.0" text="Check availability">
                            <VBox.margin>
-                              <Insets left="140.0" />
+                              <Insets left="40.0" />
                            </VBox.margin>
                         </Button>
                         <Separator prefWidth="200.0">
@@ -153,23 +153,36 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="476.0">
                            <children>
-                              <Label text="Customer username:" />
+                              <Label text="Customer:" />
                               <Label fx:id="usernameLabel" text="username">
                                  <HBox.margin>
-                                    <Insets left="20.0" />
+                                    <Insets left="5.0" />
                                  </HBox.margin>
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <Label text="Vehicle plate No: ">
+                              <Label text="Vehicle type: ">
                                  <HBox.margin>
-                                    <Insets left="20.0" />
+                                    <Insets left="25.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Label fx:id="vehicleTypeLabel" text="type">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Label text="Plate No: ">
+                                 <HBox.margin>
+                                    <Insets left="25.0" />
                                  </HBox.margin>
                               </Label>
                               <Label fx:id="plateNoLabel" text="plateNo">
                                  <HBox.margin>
-                                    <Insets left="20.0" />
+                                    <Insets left="5.0" />
                                  </HBox.margin>
                                  <font>
                                     <Font name="System Bold" size="13.0" />
@@ -179,23 +192,35 @@
                         </HBox>
                         <HBox prefHeight="26.0" prefWidth="446.0">
                            <children>
-                              <Label text="From: " />
+                              <Label text="Pickup:" />
+                              <Label fx:id="branchLabel" text="branch">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label text="From: ">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin></Label>
                               <Label fx:id="fromTimeLabel" text="fromTime">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                                  <HBox.margin>
-                                    <Insets left="20.0" />
+                                    <Insets left="5.0" />
                                  </HBox.margin>
                               </Label>
                               <Label text="To: ">
                                  <HBox.margin>
-                                    <Insets left="50.0" />
+                                    <Insets left="10.0" />
                                  </HBox.margin>
                               </Label>
                               <Label fx:id="toTimeLabel" text="toTime">
                                  <HBox.margin>
-                                    <Insets left="20.0" />
+                                    <Insets left="5.0" />
                                  </HBox.margin>
                                  <font>
                                     <Font name="System Bold" size="13.0" />
@@ -226,10 +251,18 @@
                      <padding>
                         <Insets left="30.0" />
                      </padding></VBox>
-                  <HBox layoutX="354.0" layoutY="545.0" prefHeight="32.0" prefWidth="147.0">
+                  <HBox layoutX="243.0" layoutY="545.0" prefHeight="32.0" prefWidth="258.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Reserve" />
-                        <Button mnemonicParsing="false" text="Rent">
+                        <Button fx:id="reserveButton" mnemonicParsing="false" text="Reserve">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin></Button>
+                        <Button fx:id="selectButton" mnemonicParsing="false" onAction="#handleSelectButton" text="Select vehicle">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="rentButton" mnemonicParsing="false" text="Rent">
                            <HBox.margin>
                               <Insets left="20.0" />
                            </HBox.margin>

@@ -56,6 +56,8 @@ public class ShowSearchResultViewController extends AbstractController implement
         String toDate = AppContext.getInstance().getTempData("toDate");
         //once get the data, clear them immediately
         AppContext.getInstance().emptyTempData();
+        
+        AppContext.getInstance().setTempData("vehicleSelected", "false");
         searchResult = clerkModel.getAvailableVehicles(city, location, vehicleType,
                 fromDate, toDate);
         borderPane.setCenter(searchResult);
@@ -65,9 +67,11 @@ public class ShowSearchResultViewController extends AbstractController implement
 //        searchResultStage = stage;
 //    }
     public void handleSelect() {
+        
         if (!searchResult.getSelectionModel().isEmpty()) {
             VehicleSelection vs = searchResult.getSelectionModel().getSelectedItem();
-
+            // tell the previous page that a vehicle has been selected
+            AppContext.getInstance().setTempData("vehicleSelected", "true");
             getPreviousController().update(vs);
         }
         getStage().close();
