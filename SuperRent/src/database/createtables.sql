@@ -112,6 +112,7 @@ ENGINE = InnoDB;
 
 create table vehiclesold
 (vlicense varchar(10) not null,
+price integer,
 solddate date,
 typeName varchar(20),
 category varchar(20),
