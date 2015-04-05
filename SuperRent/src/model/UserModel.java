@@ -281,6 +281,12 @@ public class UserModel {
         return " '" + s + "' ";
     }
 
+    //check whether a store has the vehicle type that is available in a certain time period
+    public boolean isVehicleTypeAvailable(String city, String location,
+            String vehicleType, String fromDate, String toDate) {
+        return false;
+    }
+    
     public boolean addUser(String username, String passwd, String name, String type) {
         String SQL = "insert into user values (" + addQuotation(username) + ","
                 + addQuotation(passwd) + "," + addQuotation(name)
