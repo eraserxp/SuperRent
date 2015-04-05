@@ -140,7 +140,7 @@ public class UserModel {
                 col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
 
                     public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-
+                        
                         return new SimpleStringProperty(param.getValue().get(j).toString());
 
                     }
@@ -162,7 +162,12 @@ public class UserModel {
                 ObservableList<String> row = FXCollections.observableArrayList();
                 // for each row, we add every columns
                 for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-                    row.add(rs.getString(i));
+                    String value = rs.getString(i);
+                    if (!rs.wasNull()) {
+                        row.add(value);
+                    } else {
+                        row.add("NULL");
+                    }
 
                 }
 

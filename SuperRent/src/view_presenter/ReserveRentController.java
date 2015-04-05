@@ -397,7 +397,7 @@ public class ReserveRentController extends AbstractController implements Initial
             @Override
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
                 System.out.println("Plate No. Changed");
-                if (t1 != null && t1.trim() != "") { //if there is a username
+                if (t1 != null && !"".equals(t1.trim())) { //if there is a username
                     //enable rent
                     rentButton.setDisable(false);
                 } else { // if there isn't a username
