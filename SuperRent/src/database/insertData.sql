@@ -41,11 +41,11 @@ VALUES
 
 INSERT INTO customer
 VALUES 
-('frank7','5197816707','94 Mcdonald Road',1,0,0,0,NULL),
-('frank8','5197816708','94 Mcdonald Road',0,0,0,0,NULL),
-('frank9','5197816709','94 Mcdonald Road',0,1,500,1,'2014-12-04'),
-('customer','5197816787','94 Mcdonald Road',0,1,1000,0,'2014-02-04'),
-('frank10','5197816700','94 Mcdonald Road',1,1,2300,0,'2014-03-04');
+('frank7','519-781-6707','94 Mcdonald Road',1,0,0,NULL),
+('frank8','519-781-6708','94 Mcdonald Road',0,0,0,NULL),
+('frank9','519-781-6709','94 Mcdonald Road',0,1,500,'2014-12-04'),
+('customer','519-781-6787','94 Mcdonald Road',0,1,1000,'2014-02-04'),
+('frank10','519-781-6700','94 Mcdonald Road',1,1,2300,'2014-03-04');
 
 INSERT INTO clerk
 VALUES 
