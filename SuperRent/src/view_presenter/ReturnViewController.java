@@ -113,9 +113,13 @@ public class ReturnViewController extends AbstractController implements Initiali
     //date should be used
     private ClerkModel clerkModel = new ClerkModel();
     private UserModel userModel = new UserModel();
+    ArrayList<String> equipmentslist = new ArrayList<>();
+    ArrayList<String> equipments = new ArrayList<>();
+    ArrayList<Integer> quantities = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         hide(UsernameLabel, PlatenoLabel, PickupLocationLabel, PickupTimeLabel, ReturnLocationLabel, ReturnTimeLabel, Equipment1, Number1, Equipment2, Number2, ReturnedEquipment1Label, ReturnedEquipment2Label);
         Equip1Combox.setVisible(false);
         Equip2Combox.setVisible(false);
@@ -181,15 +185,12 @@ public class ReturnViewController extends AbstractController implements Initiali
         ReturnTimeLabel.setText(returnTime);
 
         String rentid = rentList.get(5);
-        ArrayList<String> equipmentslist = new ArrayList<>();
+        equipmentslist = new ArrayList<>();
         equipmentslist = clerkModel.getEquipmentDetails(rentid);
 
-        ArrayList<String> equipments = new ArrayList<>();
-        equipments.add(equipmentslist.get(0));
-        equipments.add(equipmentslist.get(2));
-        ArrayList<Integer> quantities = new ArrayList<>();
-        quantities.add(Integer.parseInt(equipmentslist.get(1).trim()));
-        quantities.add(Integer.parseInt(equipmentslist.get(3).trim()));
+        equipments = new ArrayList<>();
+
+        quantities = new ArrayList<>();
 
         show(UsernameLabel, PlatenoLabel, PickupLocationLabel, PickupTimeLabel, ReturnLocationLabel, ReturnTimeLabel);
 
@@ -197,15 +198,25 @@ public class ReturnViewController extends AbstractController implements Initiali
             Equipment1.setText(equipmentslist.get(0));
             //ReturnedEquipment1Label.setText(equipmentslist.get(0));
             Number1.setText(equipmentslist.get(1));
+            equipments.add(equipmentslist.get(0));
+            quantities.add(Integer.parseInt(equipmentslist.get(1).trim()));
             show(Equipment1, Number1);
-        } else {
+        } else if (equipmentslist.size() == 4) {
             Equipment1.setText(equipmentslist.get(0));
             Number1.setText("-" + equipmentslist.get(1));
             //ReturnedEquipment1Label.setText(equipmentslist.get(0));
             Equipment2.setText(equipmentslist.get(2));
             //ReturnedEquipment1Label.setText(equipmentslist.get(0));
             Number2.setText("-" + equipmentslist.get(3));
+            equipments.add(equipmentslist.get(0));
+            equipments.add(equipmentslist.get(2));
+            quantities.add(Integer.parseInt(equipmentslist.get(1).trim()));
+            quantities.add(Integer.parseInt(equipmentslist.get(3).trim()));
             show(Equipment1, Number1, Equipment2, Number2);
+        } else {
+            System.out.println("No equipments");
+            equipments = null;
+            quantities = null;
         }
 
         int redeemedPoints = 0;
@@ -272,14 +283,21 @@ public class ReturnViewController extends AbstractController implements Initiali
                     }
 
                     //use if to show the names of equipment1 and equipment2
-                    if (Equip1Combox.getValue() == null) {
-                        popUpError("The equipment 1 column is empty!");
-                        return;
-                    }
+                    if (equipmentslist.size() == 4) {
+                        if (Equip1Combox.getValue() == null) {
+                            popUpError("The equipment 1 column is empty!");
+                            return;
+                        }
 
-                    if (Equip2Combox.getValue() == null) {
-                        popUpError("The equipment 2 column is empty!");
-                        return;
+                        if (Equip2Combox.getValue() == null) {
+                            popUpError("The equipment 2 column is empty!");
+                            return;
+                        }
+                    } else if (equipmentslist.size() == 2) {
+                        if (Equip1Combox.getValue() == null) {
+                            popUpError("The equipment 1 column is empty!");
+                            return;
+                        }
                     }
 
                     //if the input are valid the summary of the rent will be shown
@@ -393,10 +411,28 @@ public class ReturnViewController extends AbstractController implements Initiali
                     Redeem1000P.setSelected(false);
                     return;
                 }
+                String PlateNumString = PlateNoTextField.getText();
+                String vehicleType;
+                try {
+                    vehicleType = clerkModel.getVehicleType(PlateNumString);
+                    if (!userModel.isLowRankVehicle(vehicleType)) {
+                        popUpError("You can't redeem 1000 points with type: " + vehicleType);
+                        Redeem1000P.setSelected(false);
+                        return;
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
+            }
+            try {
+                showSummary();
+            } catch (SQLException ex) {
+                Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         });
+
     }
 
     private void setupRedeem1500CB() {
@@ -413,6 +449,23 @@ public class ReturnViewController extends AbstractController implements Initiali
                     Redeem1500P.setSelected(false);
                     return;
                 }
+                String PlateNumString = PlateNoTextField.getText();
+                String vehicleType;
+                try {
+                    vehicleType = clerkModel.getVehicleType(PlateNumString);
+                    if (!userModel.isLowRankVehicle(vehicleType)) {
+                        popUpError("You can't redeem 1500 points with type: " + vehicleType);
+                        Redeem1500P.setSelected(false);
+                        return;
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            try {
+                showSummary();
+            } catch (SQLException ex) {
+                Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         });
@@ -435,26 +488,43 @@ public class ReturnViewController extends AbstractController implements Initiali
 
                 if (rentList != null) {
                     String rentid = rentList.get(5);
-                    ArrayList<String> equipmentslist = new ArrayList<>();
+                    equipmentslist = new ArrayList<>();
                     try {
                         equipmentslist = clerkModel.getEquipmentDetails(rentid);
                     } catch (SQLException ex) {
                         Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
-                    ArrayList<String> equipments = new ArrayList<>();
-                    equipments.add(equipmentslist.get(0));
-                    equipments.add(equipmentslist.get(2));
-                    ArrayList<Integer> quantities = new ArrayList<>();
-                    quantities.add(Integer.parseInt(equipmentslist.get(1).trim()));
-                    quantities.add(Integer.parseInt(equipmentslist.get(3).trim()));
+                    equipments = new ArrayList<>();
+                    quantities = new ArrayList<>();
 
-                    ReturnedEquipment1Label.setText(equipmentslist.get(0));
-                    ReturnedEquipment2Label.setText(equipmentslist.get(2));
-
-                    Equip1Combox.setVisible(true);
-                    Equip2Combox.setVisible(true);
-                    show(ReturnedEquipment1Label, ReturnedEquipment2Label);
+                    if (equipmentslist.size() == 2) {
+                        ReturnedEquipment1Label.setText(equipmentslist.get(0));
+                        equipments.add(equipmentslist.get(0));
+                        quantities.add(Integer.parseInt(equipmentslist.get(1).trim()));
+                        Equip1Combox.setVisible(true);
+                        show(ReturnedEquipment1Label);
+                        hide(ReturnedEquipment2Label);
+                        Equip2Combox.setVisible(false);
+                    } else if (equipmentslist.size() == 4) {
+                        ReturnedEquipment1Label.setText(equipmentslist.get(0));
+                        ReturnedEquipment2Label.setText(equipmentslist.get(2));
+                        Equip1Combox.setVisible(true);
+                        Equip2Combox.setVisible(true);
+                        equipments.add(equipmentslist.get(0));
+                        equipments.add(equipmentslist.get(2));
+                        quantities.add(Integer.parseInt(equipmentslist.get(1).trim()));
+                        quantities.add(Integer.parseInt(equipmentslist.get(3).trim()));
+                        show(ReturnedEquipment1Label, ReturnedEquipment2Label);
+                    } else {
+                        System.out.println("No equipments");
+                        hide(ReturnedEquipment1Label);
+                        hide(ReturnedEquipment2Label);
+                        Equip1Combox.setVisible(false);
+                        Equip2Combox.setVisible(false);
+                        equipments = null;
+                        quantities = null;
+                    }
 
                 } else {
                     popUpError("Please input a valid vehicle plate number!");

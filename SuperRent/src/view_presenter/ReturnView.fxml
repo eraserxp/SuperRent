@@ -277,7 +277,10 @@
                               <Insets top="5.0" />
                            </VBox.margin>
                         </HBox>
-                        <Separator prefWidth="200.0" />
+                        <Separator prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin></Separator>
                         <Label text="Cost Summary">
                            <font>
                               <Font name="System Bold" size="18.0" />
