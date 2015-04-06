@@ -140,7 +140,7 @@ public class UserModel {
                 col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
 
                     public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-                        
+
                         return new SimpleStringProperty(param.getValue().get(j).toString());
 
                     }
@@ -292,48 +292,47 @@ public class UserModel {
         int vCount = 0;
         int rCount = 0;
         // find out the vehicle of the given type that are now in the given branch
-        String countNotRented = "select count(distinct VR.vlicense)" 
-                + " from vehicleforrent VR, vehicleinbranch VB " 
-                + " where VR.isAvailable=1 and VR.vlicense = VB.vlicense " 
+        String countNotRented = "select count(distinct VR.vlicense)"
+                + " from vehicleforrent VR, vehicleinbranch VB "
+                + " where VR.isAvailable=1 and VR.vlicense = VB.vlicense "
                 + " and VB.city = " + addQuotation(city)
-                + " and VB.location =" +  addQuotation(location)
+                + " and VB.location =" + addQuotation(location)
                 + " and VR.vehicleType " + addQuotation(vehicleType);
-        
+
         // find out the number of vehicle that has been reserved in the time period
-        String countReserved = "select count(*) from reservation R " 
+        String countReserved = "select count(*) from reservation R "
                 + " where R.branch_city = " + addQuotation(city)
                 + " and R.branch_location = " + addQuotation(location)
                 + " and R.vehicleType = " + addQuotation(vehicleType)
                 + " and R.status = 'pending' "
-                + " and ( " 
-                + " (R.pickup_date between " + addQuotation(fromDate) 
-                + " and "  + addQuotation(toDate) + ") or " 
-                + " (R.return_date between " + addQuotation(fromDate) 
-                + " and " + addQuotation(toDate) + ") " 
+                + " and ( "
+                + " (R.pickup_date between " + addQuotation(fromDate)
+                + " and " + addQuotation(toDate) + ") or "
+                + " (R.return_date between " + addQuotation(fromDate)
+                + " and " + addQuotation(toDate) + ") "
                 + " )";
         ResultSet rs = queryDatabase(countNotRented);
         ResultSet rs2 = queryDatabase(countReserved);
-        
+
         try {
             if (rs.next()) {
                 vCount = rs.getInt(1);
             } else {
                 return false;
             }
-            
+
             if (rs2.next()) {
                 rCount = rs2.getInt(1);
             } else {
                 return false;
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return (vCount-rCount)>0;
+        return (vCount - rCount) > 0;
     }
-    
-    
+
     public boolean addUser(String username, String passwd, String name, String type) {
         String SQL = "insert into user values (" + addQuotation(username) + ","
                 + addQuotation(passwd) + "," + addQuotation(name)
@@ -881,7 +880,7 @@ public class UserModel {
                 int pk_rent = vehicleRates.get("pk_rate") * outstandingOdometer;
                 totalCost += pk_rent;
                 gridPane.add(new Label(pk_rent + ".00"),
-                        2, rowIndex);
+                        4, rowIndex);
                 rowIndex++;
             }
         }

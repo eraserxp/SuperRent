@@ -110,12 +110,12 @@ public class ClerkModel extends UserModel {
             rentList.add(pickupdate.toString());
             rentList.add(pickuptime.toString());
             rentList.add(rentid);
-
+            rs.close();
+            return rentList;
 //            rentList.add(equipmentname);
 //            rentList.add(noofequipment.toString());
         }
-        rs.close();
-        return rentList;
+        return null;
 
     }
 
@@ -167,8 +167,11 @@ public class ClerkModel extends UserModel {
                 + " where vlicense = " + addQuotation(Vlicense);
 
         ResultSet rs = queryDatabase(SQL);
-        String vehicletype = rs.getString("vehicleType");
-        return vehicletype;
+        if (rs.next()) {
+            String vehicletype = rs.getString("vehicleType");
+            return vehicletype;
+        }
+        return null;
     }
 
 }

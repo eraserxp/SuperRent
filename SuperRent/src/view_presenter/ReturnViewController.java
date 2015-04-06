@@ -59,9 +59,9 @@ public class ReturnViewController extends AbstractController implements Initiali
     @FXML
     private ComboBox TankFullCombox;
     @FXML
-    private Label Equipment1Label;
+    private Label ReturnedEquipment1Label;
     @FXML
-    private Label Equipment2Label;
+    private Label ReturnedEquipment2Label;
     @FXML
     private ComboBox Equip1Combox;
     @FXML
@@ -91,7 +91,9 @@ public class ReturnViewController extends AbstractController implements Initiali
     @FXML
     private Label Number2;
     @FXML
-    private Button CheckOutButton;
+    private Button ReturnButton;
+    @FXML
+    private Button CheckButton;
 
     @FXML
     private CheckBox RoadStar;
@@ -114,7 +116,9 @@ public class ReturnViewController extends AbstractController implements Initiali
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        hide(UsernameLabel, PlatenoLabel, PickupLocationLabel, PickupTimeLabel, ReturnLocationLabel, ReturnTimeLabel, Equipment1, Number1, Equipment2, Number2);
+        hide(UsernameLabel, PlatenoLabel, PickupLocationLabel, PickupTimeLabel, ReturnLocationLabel, ReturnTimeLabel, Equipment1, Number1, Equipment2, Number2, ReturnedEquipment1Label, ReturnedEquipment2Label);
+        Equip1Combox.setVisible(false);
+        Equip2Combox.setVisible(false);
         RoadStar.setDisable(true);
         Redeem1000P.setDisable(true);
         Redeem1500P.setDisable(true);
@@ -123,6 +127,7 @@ public class ReturnViewController extends AbstractController implements Initiali
         setUpTankFullCombox();
         setUpEquipmentCombox();
 
+        handleEquipmentAction();
         handleConfirmButton();
         handleCheckOutButton();
 
@@ -140,7 +145,7 @@ public class ReturnViewController extends AbstractController implements Initiali
         String PlateNumString = PlateNoTextField.getText();
         LocalDate returnDate = ReturnDatePicker.getValue();
         String returnTimeString = ReturnTimeCombox.getSelectionModel().getSelectedItem().toString();
-        Integer returnTimeInt = Integer.parseInt(returnTimeString);
+        Integer returnTimeInt = Integer.parseInt(returnTimeString.split(":")[0]);
         //Integer returnTime = Integer.parseInt(returnTimeString.split(":")[0]);
         //String OdometerReading = OdometerTextField.getText();
         //String TankFull = TankFullCombox.getSelectionModel().getSelectedItem().toString();
@@ -148,7 +153,7 @@ public class ReturnViewController extends AbstractController implements Initiali
         //String Equipment2Selection = Equip2Combox.getSelectionModel().getSelectedItem().toString();
 
         ArrayList<String> rentList = new ArrayList<>();
-        rentList = clerkModel.getRentDetails(PlateNumString);
+        rentList = clerkModel.getRentDetails(PlateNumString.trim());
         //System.out.println(rentList);
         String customerusername = rentList.get(0);
         UsernameLabel.setText(customerusername);
@@ -156,9 +161,11 @@ public class ReturnViewController extends AbstractController implements Initiali
         String pickuplocation = rentList.get(2) + ", " + rentList.get(1);
         PickupLocationLabel.setText(pickuplocation);
 
-        LocalDate pickupDate = LocalDate.parse("rentList.get(3)");
+        LocalDate pickupDate = LocalDate.parse(rentList.get(3).trim());
 
-        Integer pickuptimeint = Integer.parseInt(rentList.get(4));
+        String pickuptimestring = rentList.get(4);
+        Integer pickuptimeint = Integer.parseInt(pickuptimestring.split(":")[0]);
+
         String pickupTime = " at " + rentList.get(4) + ":00" + " in " + rentList.get(3);
         PickupTimeLabel.setText(pickupTime);
 
@@ -181,19 +188,22 @@ public class ReturnViewController extends AbstractController implements Initiali
         equipments.add(equipmentslist.get(0));
         equipments.add(equipmentslist.get(2));
         ArrayList<Integer> quantities = new ArrayList<>();
-        quantities.add(Integer.parseInt(equipmentslist.get(1)));
-        quantities.add(Integer.parseInt(equipmentslist.get(2)));
+        quantities.add(Integer.parseInt(equipmentslist.get(1).trim()));
+        quantities.add(Integer.parseInt(equipmentslist.get(3).trim()));
 
         show(UsernameLabel, PlatenoLabel, PickupLocationLabel, PickupTimeLabel, ReturnLocationLabel, ReturnTimeLabel);
 
         if (equipmentslist.size() == 2) {
             Equipment1.setText(equipmentslist.get(0));
+            //ReturnedEquipment1Label.setText(equipmentslist.get(0));
             Number1.setText(equipmentslist.get(1));
             show(Equipment1, Number1);
         } else {
             Equipment1.setText(equipmentslist.get(0));
             Number1.setText("-" + equipmentslist.get(1));
+            //ReturnedEquipment1Label.setText(equipmentslist.get(0));
             Equipment2.setText(equipmentslist.get(2));
+            //ReturnedEquipment1Label.setText(equipmentslist.get(0));
             Number2.setText("-" + equipmentslist.get(3));
             show(Equipment1, Number1, Equipment2, Number2);
         }
@@ -223,8 +233,7 @@ public class ReturnViewController extends AbstractController implements Initiali
                 pickupDate, pickuptimeint, returnDate, returnTimeInt, isRoadStar,
                 redeemedPoints, odometer, PlateNumString);
         summaryVBox.getChildren().add(summaryGP);
-
-        //System.out.println(equipmentslist);
+        System.out.println(equipmentslist);
         //[child_safety_seat, 1, ski_rack, 1]
     }
 
@@ -292,7 +301,7 @@ public class ReturnViewController extends AbstractController implements Initiali
     //when all input are valid
     //check out to the payment view to make payment
     public void handleCheckOutButton() {
-        CheckOutButton.setOnAction(new EventHandler<ActionEvent>() {
+        ReturnButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
 
@@ -407,6 +416,57 @@ public class ReturnViewController extends AbstractController implements Initiali
             }
 
         });
+    }
+
+    public void handleEquipmentAction() {
+
+        CheckButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+
+                String PlateNumString = PlateNoTextField.getText();
+
+                ArrayList<String> rentList = new ArrayList<>();
+                try {
+                    rentList = clerkModel.getRentDetails(PlateNumString.trim());
+                } catch (SQLException ex) {
+                    Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                if (rentList != null) {
+                    String rentid = rentList.get(5);
+                    ArrayList<String> equipmentslist = new ArrayList<>();
+                    try {
+                        equipmentslist = clerkModel.getEquipmentDetails(rentid);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    ArrayList<String> equipments = new ArrayList<>();
+                    equipments.add(equipmentslist.get(0));
+                    equipments.add(equipmentslist.get(2));
+                    ArrayList<Integer> quantities = new ArrayList<>();
+                    quantities.add(Integer.parseInt(equipmentslist.get(1).trim()));
+                    quantities.add(Integer.parseInt(equipmentslist.get(3).trim()));
+
+                    ReturnedEquipment1Label.setText(equipmentslist.get(0));
+                    ReturnedEquipment2Label.setText(equipmentslist.get(2));
+
+                    Equip1Combox.setVisible(true);
+                    Equip2Combox.setVisible(true);
+                    show(ReturnedEquipment1Label, ReturnedEquipment2Label);
+
+                } else {
+                    popUpError("Please input a valid vehicle plate number!");
+                    Equip1Combox.setVisible(false);
+                    Equip2Combox.setVisible(false);
+                    hide(ReturnedEquipment1Label, ReturnedEquipment2Label);
+                }
+
+            }
+
+        });
+
     }
 
 }
