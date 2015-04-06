@@ -633,6 +633,21 @@ public class UserModel {
 
     }
 
+    public boolean isRoadStar(String username) throws SQLException {
+        int isRoadStar = 0;
+        String sql = "select isRoadStar from customer where username = "
+                + addQuotation(username);
+        ResultSet rs = queryDatabase(sql);
+        if (rs.next()) {
+            isRoadStar = rs.getInt("isRoadStar");
+        }
+        if (isRoadStar == 1) {
+            return true;
+        }
+        return false;
+
+    }
+
     public int getPoints(String username) {
         int point = 0;
         String sql = "select point from customer where username = "
