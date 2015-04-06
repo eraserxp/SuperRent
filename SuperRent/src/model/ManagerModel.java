@@ -131,15 +131,41 @@ public class ManagerModel extends UserModel {
 
     }
 
-    public boolean addVehicleForSale(String plateNumber, String price, String date, String category, String brand, String type, String odometer) throws SQLException {
+    public boolean addVehicleForSale(String plateNumber, String price) throws SQLException {
 
-        String addVehicle = "insert into vehicleforsale values (" + addQuotation(plateNumber)
-                + "," + addQuotation(price) + "," + addQuotation(date) + ","
-                + addQuotation(category) + "," + addQuotation(brand) + "," + addQuotation(type) + ","
-                + addQuotation(odometer) + ")";
-        System.out.println(" \n " + addVehicle);
+        int count = 0;
+        String SQL = "select vlicense,starting_date,category,vehicletype,brand,odometer  from vehicleforrent where vlicense =" + addQuotation(plateNumber) + ";";
 
-        return updateDatabase(addVehicle);
+        String addForSaleVehicle = "";
+
+        System.out.println(SQL);
+
+        try (ResultSet rs = con.createStatement().executeQuery(SQL)) {
+
+           // rs.getString("name");
+            while (rs.next()) {
+                System.out.println(rs.getString("vlicense"));
+                System.out.println(price);
+                System.out.println(rs.getString("starting_date"));
+
+                addForSaleVehicle = "insert into vehicleforsale values (" + addQuotation(rs.getString("vlicense"))
+                        + "," + addQuotation(price) + "," + addQuotation(rs.getString("starting_date")) + "," + addQuotation(rs.getString("category")) + ","
+                        + addQuotation(rs.getString("brand")) + "," + addQuotation(rs.getString("vehicletype")) + "," + addQuotation(rs.getString("odometer"))
+                        + ")";
+
+                System.out.println(addForSaleVehicle);
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            System.out.println("Error on Building Data");
+            return false;
+
+        }
+
+        return updateDatabase(addForSaleVehicle);
 
     }
 
