@@ -7,46 +7,220 @@ package view_presenter;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
+import static java.util.UUID.fromString;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import model.AdminModel;
+import model.ManagerModel;
+import model.UserModel;
 
 /**
  * FXML Controller class
  *
  * @author NakMac
  */
-public class FindOldVehicleController implements Initializable {
+public class FindOldVehicleController extends AbstractController implements Initializable {
 
-    
-        @FXML
+    @FXML
     private VBox oldVehicleVbox; // in show table tab
     private TableView tableContent = null;
     private AdminModel adminModel = new AdminModel();
+
+    @FXML
+    private TextField yearTextField;
+    @FXML
+    private TextField priceTextField;
+
+    @FXML
+    private Label validationLabel;
+
+    @FXML
+    private Label priceValidationLabel;
+
+    @FXML
+    private Button removeButton;
+
+    @FXML
+    private RadioButton carRadioButton;
+
+    @FXML
+    private RadioButton truckRadioButton;
+
+    @FXML
+    private ComboBox<String> locationCMB;
+
+    private String vehicleCategory;
+
+    private String vehicleForRent;
+
+    private ManagerModel managerModel;
+    private UserModel userModel;
+
+    final private ToggleGroup group = new ToggleGroup();
+    private String city;
+    private String location;
+    boolean categorySelected = false;
+    boolean locationSelected = false;
+    boolean yearSelected = false;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    } 
-    
-    
-    
-    
-      @FXML
-    private void handleShowButtonAction(ActionEvent event) throws IOException {
-    if (tableContent != null) {
+        city = "";
+        location = "";
+        userModel = new UserModel();
+        managerModel = new ManagerModel();
+        setUpCarTruckRB();
+        setUpLocationCMB();
+    }
+
+    @FXML
+    private void handleShowButtonAction() throws IOException {
+        /*
+   
+         */
+
+        if (tableContent != null) {
             oldVehicleVbox.getChildren().remove(tableContent);
         }
-        adminModel.refeshDatabaseConnection();
+
+        tableContent = managerModel.getVehicles(location, vehicleCategory, yearTextField.getText());
+        oldVehicleVbox.getChildren().add(tableContent);
+
+        tableContent.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.isPrimaryButtonDown() && event.getClickCount() == 1) {
+                    System.out.print(priceValidationLabel.getText());
+                    priceValidationLabel.setVisible(false);
+                    vehicleForRent = tableContent.getSelectionModel().getSelectedItem().toString();
+                    System.out.print("\n" + vehicleForRent);
+                    removeButton.setDisable(false);
+
+                }
+            }
+        });
+
+        //refressh all the boxes!
+        // refreshBoxes();
+    }
+
+    private void setUpLocationCMB() {
+
+        configureComboBox(locationCMB, userModel.getAllBranches());
+        locationCMB.setOnAction((ActionEvent event) -> {
+            String branch = locationCMB.getSelectionModel().getSelectedItem();
+            location = branch.split(",")[0].trim();
+            city = branch.split(",")[1].trim();
+
+        });
+    }
+
+    private void setUpCarTruckRB() {
+        carRadioButton.setToggleGroup(group);
+        truckRadioButton.setToggleGroup(group);
+        categorySelected = false;
+        // carRadioButton.setSelected(true);
+        vehicleCategory = "";
+        group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            public void changed(ObservableValue<? extends Toggle> ov,
+                    Toggle old_toggle, Toggle new_toggle) {
+                if (group.getSelectedToggle() != null) {
+                    RadioButton rb = (RadioButton) new_toggle.getToggleGroup().getSelectedToggle();
+                    vehicleCategory = rb.getText();
+               
+                    vehicleCategory = vehicleCategory.toLowerCase();
+                    categorySelected = true;
+
+                }
+            }
+        });
+
+    }
+
+    @FXML
+    private void handleRemoveButtonAction(ActionEvent event) throws IOException, SQLException {
+        boolean addOk = false;
+        boolean removeOk = false;
+
+        if (isInputEmpty(priceTextField)) {
+            showWarning(priceValidationLabel, "Please input the price!");
+            priceValidationLabel.setTextFill(Color.RED);
+            priceTextField.requestFocus();
+            return;
+        } else {
+            showWarning(priceValidationLabel, "");
+        }
+
+        String plateNumber = vehicleForRent.split(",")[0].substring(1);
+        String price = priceTextField.getText();
+        String date = vehicleForRent.split(",")[2].trim();
+        String category = vehicleForRent.split(",")[3].trim();
+        String type = vehicleForRent.split(",")[4].trim();
+        String brand = vehicleForRent.split(",")[5].trim();
+        String odometer = vehicleForRent.split(",")[7].split("]")[0].trim();
+
+        //remove from rent tabel
+        removeOk = managerModel.removeFromRent(plateNumber);
+
+        //add to sale tabel
+        addOk = managerModel.addVehicleForSale(plateNumber, price, date, category, brand, type, odometer);
+
+        if (addOk && removeOk) {
+            showWarning(priceValidationLabel, "Vehicle Removed!");
+            priceValidationLabel.setTextFill(Color.GREEN);
+            //refresh the table
+            handleShowButtonAction();
+            //refreshVehicleForRentTable();
+            priceTextField.setText("");
+
+        } else {
+            showWarning(priceValidationLabel, "Vehicle Not Removed!");
+            priceValidationLabel.setTextFill(Color.RED);
+
+        }
+
+    }
+
+    public void refreshVehicleForRentTable() {
+        if (tableContent != null) {
+            oldVehicleVbox.getChildren().remove(tableContent);
+        }
         tableContent = adminModel.getTable("vehicleforrent");
         oldVehicleVbox.getChildren().add(tableContent);
     }
-    
-    
+
+    public void refreshBoxes() {
+
+        carRadioButton.setSelected(false);
+        truckRadioButton.setSelected(false);
+        vehicleCategory = "";
+          //.getSelectionModel().clearSelection();
+        //  locationCMB.valueProperty().set(null);
+        location = "";
+        city = "";
+        yearTextField.setText("");
+
+    }
+
 }
