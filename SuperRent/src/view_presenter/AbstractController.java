@@ -313,5 +313,14 @@ public abstract class AbstractController {
             n.setDisable(true);
         }
     }
+    
+    
+    
+    protected boolean isInputInteger(TextField t) {
+        System.out.print("injaa");
+        
+          return  t.getText().trim().matches("^[0-9]+$");
+      
+    }
 
 }
