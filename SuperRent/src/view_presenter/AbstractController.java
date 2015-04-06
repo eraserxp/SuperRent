@@ -147,7 +147,52 @@ public abstract class AbstractController {
         return matcher.replaceFirst("$1-$2-$3");
     }
     
+    protected boolean isCardNo(TextField t,String cardtype) {
+        
+        boolean valid=false;
+        
+        if(cardtype=="MasterCard")
+            valid=isMasterCardNo(t);
+        else if(cardtype=="Visa")
+            valid=isVisaCardNo(t);
+         else if(cardtype=="American Express")
+            valid=isAmericanCardNo(t);
+        
+        return valid;
+    }
+    
 
+    protected boolean isVisaCardNo(TextField t) {
+        String regex_visa = "^4[0-9]{12}(?:[0-9]{3})?$";
+        Pattern pattern = Pattern.compile(regex_visa);
+        Matcher matcher = pattern.matcher(t.getText().trim());
+        return matcher.matches();
+        
+    }
+
+    protected boolean isMasterCardNo(TextField t) {
+        String regex_master="^5[1-5][0-9]{14}$";
+        Pattern pattern = Pattern.compile(regex_master);
+        Matcher matcher = pattern.matcher(t.getText().trim());
+        return matcher.matches();
+        
+    }
+    
+    protected boolean isAmericanCardNo(TextField t) {
+        String regex_america="^3[47][0-9]{13}$";
+        Pattern pattern = Pattern.compile(regex_america);
+        Matcher matcher = pattern.matcher(t.getText().trim());
+        return matcher.matches();
+        
+    }
+    
+    protected boolean isExpiryDateNo(TextField t) {
+        String regex = "^(0[1-9]|1[012])[- /.](20)\\d\\d$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(t.getText().trim());
+        return matcher.matches();
+    }
+    
     /**
      * Use the infoLabel to show the warning message s
      *
@@ -311,6 +356,12 @@ public abstract class AbstractController {
     protected void disableNodes(Node... nodes) {
         for (Node n : nodes) {
             n.setDisable(true);
+        }
+    }
+    
+    protected void enableNodes(Node... nodes) {
+        for (Node n : nodes) {
+            n.setDisable(false);
         }
     }
 

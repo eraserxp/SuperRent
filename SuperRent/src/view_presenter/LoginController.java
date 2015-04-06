@@ -18,6 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
@@ -55,7 +56,7 @@ public class LoginController extends AbstractController implements Initializable
     private TextField usernameField;
 
     @FXML
-    private TextField passwordField;
+    private PasswordField passwordField;
     
      String username,password,type;
      
@@ -122,7 +123,7 @@ public class LoginController extends AbstractController implements Initializable
     private void handleloginButtonAction(ActionEvent event) throws IOException {
         // get the stage for the application
         Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        //app_stage.hide();
+        
         Parent next_page_parent = null;
         
         usernameField.requestFocus();
@@ -146,6 +147,8 @@ public class LoginController extends AbstractController implements Initializable
             // switch to different pages according to the type of the user
             switch (user_type) {
                 case "CUSTOMER":
+                    AppContext.getInstance().setUsername(username);
+                    AppContext.getInstance().setUserType(user_type);
                   next_page_parent = FXMLLoader.load(getClass().getResource("CustomerView.fxml"));
                     break;
                 case "CLERK":
