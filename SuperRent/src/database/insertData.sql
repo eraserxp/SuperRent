@@ -74,8 +74,9 @@ VALUES
 
 INSERT INTO vehiclesold
 VALUES 
-('PLT-4UP',100000,'2014-02-02','economy','car','BMW','frank1',30000),
-('PLT-4U1',200000,'2014-02-03','economy','car','BMW','frank1',60000);
+('PLT-4UP',5000000,'2014-02-02','economy','car','BMW','frank1',30000),
+('PLT-4U1',6000000,'2014-02-03','economy','car','BMW','frank1',60000);
+
 
 INSERT INTO vehicleforrent 
 VALUES
@@ -225,16 +226,18 @@ VALUES
 
 INSERT INTO reservation
 VALUES
-('1','2014-02-04',3,'2014-02-06',8,8000,'QMAZON','Toronto','300 Regina Street','frank7', 'rented'),
-('2','2014-04-04',3,'2014-04-06',8,8000,'QMAZON','Toronto','300 Regina Street','frank7', 'rented'),
-('3','2014-03-04',3,'2014-03-06',8,18000,'PLT-4M','Vancouver','2660 Wesbrook Mall','frank8', 'rented'),
-('4','2014-04-04',3,'2014-04-06',8,18000,'PLT-4M','Vancouver','2660 Wesbrook Mall','frank8', 'rented'),
-('5','2014-03-04',3,'2014-03-06',8,18000,'GM','Vancouver','2660 Wesbrook Mall','frank9', 'rented'),
-('6','2014-04-04',3,'2014-04-06',8,18000,'GM','Vancouver','2660 Wesbrook Mall','frank9', 'rented'),
-('7','2014-03-04',3,'2014-03-06',8,28000,'CMAZON','Toronto','300 Regina Street','customer', 'rented'),
-('8','2014-04-04',3,'2014-04-06',8,28000,'CMAZON','Toronto','300 Regina Street','customer', 'rented'),
-('9','2014-03-04',3,'2014-03-06',8,24000,'GOOGLE','Toronto','300 Regina Street','frank10', 'rented'),
-('10','2014-04-04',3,'2014-04-06',8,24000,'GOOGLE','Toronto','300 Regina Street','frank10', 'rented');
+('1','2014-02-04',3,'2014-02-06',8,8000,'Toronto','300 Regina Street','frank7','expired','economy'),
+('2','2014-04-04',3,'2014-04-06',8,8000,'Toronto','300 Regina Street','frank7','rented','economy'),
+('3','2014-03-04',3,'2014-03-06',8,18000,'Vancouver','2660 Wesbrook Mall','frank8','expired','economy'),
+('4','2014-04-04',3,'2014-04-06',8,18000,'Vancouver','2660 Wesbrook Mall','frank8','rented','economy'),
+('5','2014-03-04',3,'2014-03-06',8,18000,'Vancouver','2660 Wesbrook Mall','frank9','expired','economy'),
+('6','2014-04-04',3,'2014-04-06',8,18000,'Vancouver','2660 Wesbrook Mall','frank9','rented','economy'),
+('7','2014-03-04',3,'2014-03-06',8,28000,'Toronto','300 Regina Street','customer','expired','foot24'),
+('8','2014-04-04',3,'2014-04-06',8,28000,'Toronto','300 Regina Street','customer','rented','foot24'),
+('9','2014-03-04',3,'2014-03-06',8,24000,'Toronto','300 Regina Street','frank10','expired','boxtrucks'),
+('10','2014-04-04',3,'2014-04-06',8,24000,'Toronto','300 Regina Street','frank10','rented','boxtrucks'),
+('11','2012-02-04',3,'2012-02-06',8,8000,'Toronto','300 Regina Street','frank7','expired','boxtrucks'),
+('12','2012-06-04',3,'2012-06-06',8,8000,'Toronto','300 Regina Street','frank7','pending','boxtrucks');
 
 
 INSERT INTO rent
