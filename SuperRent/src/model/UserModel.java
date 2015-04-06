@@ -501,7 +501,7 @@ public class UserModel {
         }
         return rates;
     }
-    
+
     private HashMap<String, String> getOneRowAsHashMap(String SQL) {
         ResultSet rs = queryDatabase(SQL);
         HashMap<String, String> result = new HashMap<>();
@@ -618,28 +618,17 @@ public class UserModel {
         return false;
     }
 
-    public boolean isRoadStar(String username) throws SQLException {
+    public boolean isRoadStar(String username)  {
         int isRoadStar = 0;
         String sql = "select isRoadStar from customer where username = "
                 + addQuotation(username);
         ResultSet rs = queryDatabase(sql);
-        if (rs.next()) {
-            isRoadStar = rs.getInt("isRoadStar");
-        }
-        if (isRoadStar == 1) {
-            return true;
-        }
-        return false;
-
-    }
-
-    public boolean isRoadStar(String username) throws SQLException {
-        int isRoadStar = 0;
-        String sql = "select isRoadStar from customer where username = "
-                + addQuotation(username);
-        ResultSet rs = queryDatabase(sql);
-        if (rs.next()) {
-            isRoadStar = rs.getInt("isRoadStar");
+        try {
+            if (rs.next()) {
+                isRoadStar = rs.getInt("isRoadStar");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (isRoadStar == 1) {
             return true;
@@ -938,11 +927,10 @@ public class UserModel {
 
     }
 
-    public HashMap<String, String> getReservationDetails(String ConNumber)  {
+    public HashMap<String, String> getReservationDetails(String ConNumber) {
         String SQL = "select * from reservation where confirmation_number=" + ConNumber
                 + " and status = 'pending' ";
         return getOneRowAsHashMap(SQL);
     }
 
-    
 }
