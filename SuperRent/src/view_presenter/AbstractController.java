@@ -21,6 +21,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -365,4 +366,15 @@ public abstract class AbstractController {
         }
     }
 
+    protected void clearLabels(Label... labels) {
+        for (Label l: labels) {
+            l.setText("");
+        }
+    }
+    
+    protected void unSelect(CheckBox... cbs) {
+        for (CheckBox cb: cbs) {
+            cb.setSelected(false);
+        }
+    }
 }

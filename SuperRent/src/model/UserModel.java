@@ -140,7 +140,7 @@ public class UserModel {
                 col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
 
                     public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-                        
+
                         return new SimpleStringProperty(param.getValue().get(j).toString());
 
                     }
@@ -292,48 +292,48 @@ public class UserModel {
         int vCount = 0;
         int rCount = 0;
         // find out the vehicle of the given type that are now in the given branch
-        String countNotRented = "select count(distinct VR.vlicense)" 
-                + " from vehicleforrent VR, vehicleinbranch VB " 
-                + " where VR.isAvailable=1 and VR.vlicense = VB.vlicense " 
+        String countNotRented = "select count(distinct VR.vlicense)"
+                + " from vehicleforrent VR, vehicleinbranch VB "
+                + " where VR.isAvailable=1 and VR.vlicense = VB.vlicense "
                 + " and VB.city = " + addQuotation(city)
-                + " and VB.location =" +  addQuotation(location)
-                + " and VR.vehicleType " + addQuotation(vehicleType);
-        
+                + " and VB.location =" + addQuotation(location)
+                + " and VR.vehicleType = " + addQuotation(vehicleType);
+        System.out.println(countNotRented);
         // find out the number of vehicle that has been reserved in the time period
-        String countReserved = "select count(*) from reservation R " 
+        String countReserved = "select count(*) from reservation R "
                 + " where R.branch_city = " + addQuotation(city)
                 + " and R.branch_location = " + addQuotation(location)
                 + " and R.vehicleType = " + addQuotation(vehicleType)
                 + " and R.status = 'pending' "
-                + " and ( " 
-                + " (R.pickup_date between " + addQuotation(fromDate) 
-                + " and "  + addQuotation(toDate) + ") or " 
-                + " (R.return_date between " + addQuotation(fromDate) 
-                + " and " + addQuotation(toDate) + ") " 
+                + " and ( "
+                + " (R.pickup_date between " + addQuotation(fromDate)
+                + " and " + addQuotation(toDate) + ") or "
+                + " (R.return_date between " + addQuotation(fromDate)
+                + " and " + addQuotation(toDate) + ") "
                 + " )";
+        System.out.println(countReserved);
         ResultSet rs = queryDatabase(countNotRented);
         ResultSet rs2 = queryDatabase(countReserved);
-        
+
         try {
             if (rs.next()) {
                 vCount = rs.getInt(1);
             } else {
                 return false;
             }
-            
+
             if (rs2.next()) {
                 rCount = rs2.getInt(1);
             } else {
                 return false;
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return (vCount-rCount)>0;
+        return (vCount - rCount) > 0;
     }
-    
-    
+
     public boolean addUser(String username, String passwd, String name, String type) {
         String SQL = "insert into user values (" + addQuotation(username) + ","
                 + addQuotation(passwd) + "," + addQuotation(name)
@@ -502,6 +502,22 @@ public class UserModel {
         return rates;
     }
 
+    private HashMap<String, String> getOneRowAsHashMap(String SQL) {
+        ResultSet rs = queryDatabase(SQL);
+        HashMap<String, String> result = new HashMap<>();
+        try {
+            if (rs.next()) {
+                for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
+                    String columnName = rs.getMetaData().getColumnName(i + 1);
+                    result.put(columnName, rs.getString(columnName));
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
     private HashMap<String, Integer> getInsuranceCost(String vehicleType) {
         String getAllRates = "select w_insurance, d_insurance, h_insurance"
                 + " from vehicletype where typeName=" + addQuotation(vehicleType);
@@ -600,6 +616,25 @@ public class UserModel {
             return true;
         }
         return false;
+    }
+
+    public boolean isRoadStar(String username)  {
+        int isRoadStar = 0;
+        String sql = "select isRoadStar from customer where username = "
+                + addQuotation(username);
+        ResultSet rs = queryDatabase(sql);
+        try {
+            if (rs.next()) {
+                isRoadStar = rs.getInt("isRoadStar");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (isRoadStar == 1) {
+            return true;
+        }
+        return false;
+
     }
 
     public int getPoints(String username) {
@@ -782,7 +817,6 @@ public class UserModel {
 //            gridPane.add(new Label("--------------"), colIndex, rowIndex);
 //        }
 //        rowIndex++;
-
         int counter = 0;
         if (equipList != null && !equipList.isEmpty()) {
             for (String equipName : equipList) {
@@ -867,7 +901,7 @@ public class UserModel {
                 int pk_rent = vehicleRates.get("pk_rate") * outstandingOdometer;
                 totalCost += pk_rent;
                 gridPane.add(new Label(pk_rent + ".00"),
-                        2, rowIndex);
+                        4, rowIndex);
                 rowIndex++;
             }
         }
@@ -880,6 +914,23 @@ public class UserModel {
         rowIndex++;
         gridPane.add(new Label("total: " + totalCost / 100 + ".00"), 4, rowIndex);
         return gridPane;
+    }
+
+    public boolean checkConNumber(String ConNumber) throws SQLException {
+        String SQL = "SELECT * FROM reservation WHERE confirmation_number=" + ConNumber;
+        ResultSet rs = queryDatabase(SQL);
+        if (rs.next()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public HashMap<String, String> getReservationDetails(String ConNumber) {
+        String SQL = "select * from reservation where confirmation_number=" + ConNumber
+                + " and status = 'pending' ";
+        return getOneRowAsHashMap(SQL);
     }
 
 }

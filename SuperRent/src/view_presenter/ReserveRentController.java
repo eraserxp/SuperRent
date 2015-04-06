@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,6 +50,7 @@ import model.ClerkModel;
 import model.CustomerModel;
 import model.UserModel;
 import model.VehicleSelection;
+import util.PngConverter;
 
 /**
  * FXML Controller class
@@ -118,12 +121,23 @@ public class ReserveRentController extends AbstractController implements Initial
     @FXML
     private ComboBox<String> equip2CMB;
 
+    private ArrayList<String> equipments = new ArrayList<>();
+    private ArrayList<Integer> EquipmentQuantities = new ArrayList<>();
+
     @FXML
     private TextField phoneField;
 
     @FXML
-    private Label foundResult;
-    
+    private TextField CNoField; //Confirmation No field
+
+    private String CNo;
+
+    @FXML
+    private Label foundByPhoneResult;
+
+    @FXML
+    private Label foundByCNoResult;
+
     @FXML
     private Label branchLabel;
 
@@ -134,10 +148,16 @@ public class ReserveRentController extends AbstractController implements Initial
     private Label toTimeLabel;
 
     @FXML
-    private Button submitButton;
+    private Button byPhoneSubmitButton;
+
+    @FXML
+    private Button byCNoSubmitButton;
 
     @FXML
     private Button registerButton;
+
+    @FXML
+    private Button printButton;
 
     @FXML
     private VBox summaryVBox;
@@ -170,13 +190,7 @@ public class ReserveRentController extends AbstractController implements Initial
     private Button selectButton;
 
     @FXML
-    private Label confirmCustomerLabel;
-
-    @FXML
-    private HBox byPhoneHBox;
-
-    @FXML
-    private HBox submitHBox;
+    private AnchorPane customerInfoAP;
 
     private UserModel userModel;
 
@@ -200,10 +214,12 @@ public class ReserveRentController extends AbstractController implements Initial
         setUpToHourCMBs();
         setUpEquipLabelField();
         setupPhoneField();
+        setupCNoField();
         usernameLabel.setText("");
         vehicleTypeLabel.setText("");
         plateNoLabel.setText("");
-        foundResult.setText("");
+        foundByPhoneResult.setText("");
+        foundByCNoResult.setText("");
         branchLabel.setText("");
         fromTimeLabel.setText("");
         toTimeLabel.setText("");
@@ -219,7 +235,7 @@ public class ReserveRentController extends AbstractController implements Initial
         // do things differently for customer and employee
         String userType = AppContext.getInstance().getUserType();
         if (userType.equals("CUSTOMER")) {
-            hide(rentButton, confirmCustomerLabel, byPhoneHBox, submitHBox,
+            hide(rentButton, customerInfoAP,
                     registerButton, selectButton);
         } else {
 
@@ -299,8 +315,10 @@ public class ReserveRentController extends AbstractController implements Initial
             popUpError("location is empty!");
             return;
         }
-        String location = locationCMB.getSelectionModel().getSelectedItem();
-        branchLabel.setText(location);
+        String branch = locationCMB.getSelectionModel().getSelectedItem();
+        branchLabel.setText(branch);
+        city = branch.split(",")[1].trim();
+        location = branch.split(",")[0].trim();
         if (vehicleTypeCMB.getSelectionModel().isEmpty()) {
             popUpError("vehicle type is empty!");
             return;
@@ -313,6 +331,7 @@ public class ReserveRentController extends AbstractController implements Initial
             popUpError("From date is empty!");
             return;
         }
+        fromDateString = fromDate.toString();
 
         if (fromHourCMB.getSelectionModel().isEmpty()) {
             popUpError("From hour is empty!");
@@ -328,6 +347,7 @@ public class ReserveRentController extends AbstractController implements Initial
             popUpError("To date is empty!");
             return;
         }
+        toDateString = toDate.toString();
 
         if (toHourCMB.getSelectionModel().isEmpty()) {
             popUpError("To hour is empty!");
@@ -343,14 +363,18 @@ public class ReserveRentController extends AbstractController implements Initial
             popUpError("The 'From time' is not earlier than the 'To time'!");
             return;
         }
-        
+
         fromTimeLabel.setText(fromDate.toString() + ", " + fromHourString);
         toTimeLabel.setText(toDate.toString() + ", " + toHourString);
-//        showSearchResult();
-//        if (userModel.isVehicleTypeAvailable(city, location, vehicleType, fromDateString, toDateString)) {
-//            showSummary();
-//        }
-        showSummary();
+
+        if (userModel.isVehicleTypeAvailable(city, location, vehicleType, fromDateString, toDateString)) {
+            getDataFromSearchInput();
+            showSummary();
+        } else {
+            popUpError("No vehicle of type: " + vehicleType + " is available from "
+                    + fromDateString + " to " + toDateString + "!");
+            return;
+        }
 
     }
 
@@ -358,9 +382,26 @@ public class ReserveRentController extends AbstractController implements Initial
         phoneField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 usernameLabel.setText("");
-                foundResult.setText("");
+                foundByPhoneResult.setText("");
             }
         });
+    }
+
+    private void setupCNoField() {
+        CNoField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                unSelect(roadStarCB, redeem1000CB, redeem1500CB);
+                clearLabels(foundByCNoResult, usernameLabel, vehicleTypeLabel, plateNoLabel,
+                        fromTimeLabel, toTimeLabel, branchLabel);
+                clearSummary();
+            }
+        });
+    }
+
+    private void clearSummary() {
+        if (summaryGP != null) {
+            summaryVBox.getChildren().remove(summaryGP);
+        }
     }
 
     private void setupUsernameLabel() {
@@ -409,6 +450,7 @@ public class ReserveRentController extends AbstractController implements Initial
 
     private void setupRoadStarCB() {
         roadStarCB.selectedProperty().addListener((ov, oldv, newv) -> {
+
             showSummary();
         });
     }
@@ -473,20 +515,61 @@ public class ReserveRentController extends AbstractController implements Initial
         });
     }
 
-    public void checkPhoneField() {
+    public void handleSubmitByPhone() {
         if (!isInputPhoneNo(phoneField)) {
-            showWarning(foundResult, "Not found");
+            showWarning(foundByPhoneResult, "Not found");
+            return;
         }
         String phone = phoneField.getText().trim();
         //phone = formatPhoneNo(phone);
         String username = userModel.getCustomerByPhone(phone);
 
         if (username == null) {
-            showWarning(foundResult, "Not found");
+            showWarning(foundByPhoneResult, "Not found");
+            return;
         } else {
-            showSuccessMessage(foundResult, "Found");
+            showSuccessMessage(foundByPhoneResult, "Found");
             System.out.println("found");
             usernameLabel.setText(username);
+        }
+
+    }
+
+    public void handleSubmitByCNo() {
+        if (isInputEmpty(CNoField)) {
+            showWarning(foundByCNoResult, "Not found");
+            return;
+        }
+        String CNo = CNoField.getText().trim();
+
+        HashMap<String, String> reservationDetails;
+
+        reservationDetails = userModel.getReservationDetails(CNo);
+
+        if (reservationDetails.isEmpty()) {
+            showWarning(foundByCNoResult, "Not found");
+            return;
+        } else {
+            showSuccessMessage(foundByCNoResult, "Found");
+            System.out.println("found");
+            usernameLabel.setText(reservationDetails.get("customer_username"));
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            fromDate = LocalDate.parse(reservationDetails.get("pickup_date"), formatter);
+            toDate = LocalDate.parse(reservationDetails.get("return_date"), formatter);
+            String fromHourString = reservationDetails.get("pickup_time") + ":00";
+            String toHourString = reservationDetails.get("return_time") + ":00";
+            fromTimeLabel.setText(fromDate.toString() + ", " + fromHourString);
+            toTimeLabel.setText(toDate.toString() + ", " + toHourString);
+            city = reservationDetails.get("branch_city");
+            vehicleType = reservationDetails.get("vehicleType");
+            vehicleTypeLabel.setText(vehicleType);
+            location = reservationDetails.get("branch_location");
+            branchLabel.setText(location + ", " + city);
+            usernameLabel.setText(reservationDetails.get("customer_username"));
+            showSummary();
+            roadStarCB.setSelected(false);
+            redeem1000CB.setSelected(false);
+            redeem1500CB.setSelected(false);
         }
 
     }
@@ -533,13 +616,15 @@ public class ReserveRentController extends AbstractController implements Initial
         equip2CMB.getSelectionModel().select(0);
         // if the quantity has been changed, redo the summary part
         equip1CMB.setOnAction((ActionEvent event) -> {
-            if (vehicleTypeLabel.getText().trim() != "") {
+            if (!"".equals(vehicleTypeLabel.getText().trim())) {
+                getDataFromSearchInput();
                 showSummary();
             }
         });
 
         equip2CMB.setOnAction((ActionEvent event) -> {
-            if (vehicleTypeLabel.getText().trim() != "") {
+            if (!"".equals(vehicleTypeLabel.getText().trim())) {
+                getDataFromSearchInput();
                 showSummary();
             }
         });
@@ -560,18 +645,8 @@ public class ReserveRentController extends AbstractController implements Initial
         AppContext.getInstance().setTempData("toDate", toDateString);
     }
 
-    private void showSummary() {
-        System.out.println("show summary");
-
-        //update the plate no label so that the rent button will be enabled/disabled
-//        if (selectedVehicle.getVlicense() != null) {
-//            plateNoLabel.setText(selectedVehicle.getVlicense());
-//        } else {
-//            plateNoLabel.setText("");
-//        }
-
-        int redeemedPoints = 0;
-        int odometer = 0;
+    //get the rental information from the search input
+    private void getDataFromSearchInput() {
         fromDate = fromDatePicker.getValue();
         toDate = toDatePicker.getValue();
         fromHour = Integer.parseInt(fromHourCMB.getSelectionModel().getSelectedItem().split(":")[0]);
@@ -579,22 +654,32 @@ public class ReserveRentController extends AbstractController implements Initial
         vehicleType = vehicleTypeCMB.getSelectionModel().getSelectedItem();
 
         //get the equipments
-        ArrayList<String> equipments = new ArrayList<>();
-        ArrayList<Integer> quantities = new ArrayList<>();
-
+        equipments.clear();
+        EquipmentQuantities.clear();
         String equip1 = equip1Label.getText();
         int equp1Quantity = Integer.parseInt(equip1CMB.getSelectionModel().getSelectedItem());
         if (equp1Quantity > 0) {
             equipments.add(equip1);
-            quantities.add(equp1Quantity);
+            EquipmentQuantities.add(equp1Quantity);
         }
 
         String equip2 = equip2Label.getText();
         int equp2Quantity = Integer.parseInt(equip2CMB.getSelectionModel().getSelectedItem());
         if (equp2Quantity > 0) {
             equipments.add(equip2);
-            quantities.add(equp2Quantity);
+            EquipmentQuantities.add(equp2Quantity);
         }
+    }
+
+    //get the rental information from the reservation confirmation no
+    private void getDataFromCNo() {
+
+    }
+
+    private void showSummary() {
+        System.out.println("show summary");
+        int redeemedPoints = 0;
+        int odometer = 0;
 
         boolean isRoadStar = false;
         if (!roadStarCB.isDisabled() && roadStarCB.isSelected()) {
@@ -612,7 +697,7 @@ public class ReserveRentController extends AbstractController implements Initial
         if (summaryGP != null) {
             summaryVBox.getChildren().remove(summaryGP);
         }
-        summaryGP = userModel.calculateCost(vehicleType, equipments, quantities,
+        summaryGP = userModel.calculateCost(vehicleType, equipments, EquipmentQuantities,
                 fromDate, fromHour, toDate, toHour, isRoadStar,
                 redeemedPoints, odometer, null);
         summaryVBox.getChildren().add(summaryGP);
@@ -643,5 +728,11 @@ public class ReserveRentController extends AbstractController implements Initial
 
     public void handleRent() {
 
+    }
+
+    public void handlePrint() {
+        Stage primaryStage = AppContext.getInstance().getPrimaryStage();
+        PngConverter pngConverter = new PngConverter(primaryStage);
+        pngConverter.saveAsPng(summaryVBox);
     }
 }
