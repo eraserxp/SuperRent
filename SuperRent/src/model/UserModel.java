@@ -549,6 +549,21 @@ public class UserModel {
         return false;
     }
 
+    public boolean isRoadStar(String username) throws SQLException {
+        int isRoadStar = 0;
+        String sql = "select isRoadStar from customer where username = "
+                + addQuotation(username);
+        ResultSet rs = queryDatabase(sql);
+        if (rs.next()) {
+            isRoadStar = rs.getInt("isRoadStar");
+        }
+        if (isRoadStar == 1) {
+            return true;
+        }
+        return false;
+
+    }
+
     public int getPoints(String username) {
         int point = 0;
         String sql = "select point from customer where username = "
@@ -729,7 +744,6 @@ public class UserModel {
 //            gridPane.add(new Label("--------------"), colIndex, rowIndex);
 //        }
 //        rowIndex++;
-
         int counter = 0;
         if (equipList != null && !equipList.isEmpty()) {
             for (String equipName : equipList) {

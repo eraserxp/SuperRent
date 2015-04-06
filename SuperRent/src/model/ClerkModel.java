@@ -35,7 +35,6 @@ public class ClerkModel extends UserModel {
                 + " and VB.vlicense = VR.vlicense "
                 + " and VB.city = " + addQuotation(city)
                 + " and VB.location = " + addQuotation(location)
-                
                 + " or ( VR.vlicense = R.vlicense "
                 + " and VB.vlicense = VR.vlicense "
                 + " and vehicleType = " + addQuotation(vehicleType)
@@ -85,43 +84,99 @@ public class ClerkModel extends UserModel {
     }
 
     public ArrayList<String> getRentDetails(String VehicleNumber) throws SQLException {
-        String SQL = "select * from rent where vlicense=" + addQuotation(VehicleNumber);
-        ResultSet rs = queryDatabase(SQL);
-        ArrayList<String> reservationList = new ArrayList<>();
+        String SQL = "select *"
+                + " from rent"
+                + " where rent.vlicense = " + addQuotation(VehicleNumber)
+                + " and rent.rentid not in (select vreturn.rent_id from vreturn where vreturn.rent_id = rent.rentid and rent.vlicense = " + addQuotation(VehicleNumber) + ")";
 
-        if (rs.next()) {
-            String vlicense = rs.getString("vlicense");
-            Boolean is_reserve = rs.getBoolean("is_reserve");
-            String driver_license = rs.getString("driver_license");
-            Date pickupdate = rs.getDate("from_date");
-            Integer pickuptime = rs.getInt("from_time");
-            String pickuptimestr = String.format("%02d:00", pickuptime);
+        ResultSet rs = queryDatabase(SQL);
+        ArrayList<String> rentList = new ArrayList<>();
+
+        while (rs.next()) {
+//            String vlicense = rs.getString("vlicense");
+//            Boolean is_reserve = rs.getBoolean("is_reserve");
+//            String driver_license = rs.getString("driver_license");
+//            String pickuptimestr = String.format("%02d:00", pickuptime);
+            String customerusername = rs.getString("customer_username");
             String branchcity = rs.getString("branch_city");
             String branchlocation = rs.getString("branch_location");
-            String customerusername = rs.getString("customer_username");
-            String equipmentname = rs.getString("equip_name");
-            String equipmenttype = rs.getString("equipment_type");
-            Integer noofequipment = rs.getInt("no_of_equipment");
-            String cardnumber = rs.getString("card_no");
-            String expirydate = rs.getString("expiry_date");
+            Date pickupdate = rs.getDate("from_date");
+            Integer pickuptime = rs.getInt("from_time");
+            String rentid = rs.getString("rentid");
+//            String equipmentname = rs.getString("equip_name");
+//            String equipmenttype = rs.getString("equipment_type");
+//            Integer noofequipment = rs.getInt("no_of_equipment");
+//            String cardnumber = rs.getString("card_no");
+//            String expirydate = rs.getString("expiry_date");
 
-            reservationList.add(vlicense);
-            reservationList.add(driver_license);
-            reservationList.add(pickupdate.toString());
-            reservationList.add(pickuptimestr);
-            reservationList.add(branchcity);
-            reservationList.add(branchlocation);
-            reservationList.add(customerusername);
-            reservationList.add(equipmentname);
-            reservationList.add(noofequipment.toString());
+//            rentList.add(vlicense);
+//            rentList.add(driver_license);
+//            rentList.add(pickuptimestr);
+            rentList.add(customerusername);
+            rentList.add(branchcity);
+            rentList.add(branchlocation);
+            rentList.add(pickupdate.toString());
+            rentList.add(pickuptime.toString());
+            rentList.add(rentid);
 
-            rs.close();
-
-            return reservationList;
-        } else {
-            return null;
+//            rentList.add(equipmentname);
+//            rentList.add(noofequipment.toString());
         }
+        rs.close();
+        return rentList;
 
+    }
+
+    public ArrayList<String> getClerkDetails(String username) throws SQLException {
+        String SQL = "select branch_city,branch_location"
+                + " from clerk"
+                + " where clerk.username = " + addQuotation(username);
+
+        ResultSet rs = queryDatabase(SQL);
+        ArrayList<String> clerkbranch = new ArrayList<>();
+        while (rs.next()) {
+            String city = rs.getString("branch_city");
+            String location = rs.getString("branch_location");
+
+            clerkbranch.add(city);
+            clerkbranch.add(location);
+
+        }
+        rs.close();
+        return clerkbranch;
+
+    }
+
+    public ArrayList<String> getEquipmentDetails(String rentid) throws SQLException {
+
+        String SQL = "select equipName,quantity"
+                + " from rent_addon"
+                + " where rentid = " + addQuotation(rentid);
+
+        ResultSet rs = queryDatabase(SQL);
+        ArrayList<String> equipments = new ArrayList<>();
+        while (rs.next()) {
+            String equipName = rs.getString("equipName");
+            String quantity = rs.getString("quantity");
+
+            equipments.add(equipName);
+            equipments.add(quantity);
+
+        }
+        rs.close();
+        return equipments;
+
+    }
+
+    public String getVehicleType(String Vlicense) throws SQLException {
+
+        String SQL = "select vehicleType"
+                + " from vehicleforrent"
+                + " where vlicense = " + addQuotation(Vlicense);
+
+        ResultSet rs = queryDatabase(SQL);
+        String vehicletype = rs.getString("vehicleType");
+        return vehicletype;
     }
 
 }

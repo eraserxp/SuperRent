@@ -29,7 +29,10 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <TextField fx:id="PlateNoTextField" />
+                        <TextField fx:id="PlateNoTextField">
+                           <VBox.margin>
+                              <Insets right="20.0" />
+                           </VBox.margin></TextField>
                         <Label text="Return Date">
                            <VBox.margin>
                               <Insets top="10.0" />
@@ -52,11 +55,14 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <TextField fx:id="OdometerTextField" />
+                        <TextField fx:id="OdometerTextField">
+                           <VBox.margin>
+                              <Insets right="20.0" />
+                           </VBox.margin></TextField>
                         <HBox prefHeight="26.0" prefWidth="245.0">
                            <children>
                               <Label prefHeight="26.0" prefWidth="58.0" text="Tank Full" />
-                              <ComboBox fx:id="TankFullCombox" prefHeight="26.0" prefWidth="27.0">
+                              <ComboBox fx:id="TankFullCombox" prefHeight="26.0" prefWidth="133.0">
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
@@ -66,7 +72,7 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </HBox>
-                        <Label text="Additional equipments">
+                        <Label text="Equipments returned">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font>
@@ -76,8 +82,8 @@
                         </Label>
                         <HBox alignment="CENTER" prefHeight="32.0" prefWidth="200.0">
                            <children>
-                              <Label alignment="BASELINE_CENTER" prefHeight="16.0" prefWidth="85.0" text="equipment1" />
-                              <ComboBox fx:id="Equip1Combox" prefHeight="26.0" prefWidth="120.0" promptText="Lost or not" />
+                              <Label fx:id="Equipment1Label" alignment="BASELINE_CENTER" prefHeight="16.0" prefWidth="85.0" text="equipment1" />
+                              <ComboBox fx:id="Equip1Combox" prefHeight="26.0" prefWidth="120.0" />
                            </children>
                            <VBox.margin>
                               <Insets top="5.0" />
@@ -85,8 +91,8 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="32.0" prefWidth="200.0">
                            <children>
-                              <Label alignment="BASELINE_CENTER" prefHeight="16.0" prefWidth="85.0" text="equipment2" />
-                              <ComboBox fx:id="Equip2Combox" prefHeight="26.0" prefWidth="120.0" promptText="Lost or not" />
+                              <Label fx:id="Equipment2Label" alignment="BASELINE_CENTER" prefHeight="16.0" prefWidth="85.0" text="equipment2" />
+                              <ComboBox fx:id="Equip2Combox" prefHeight="26.0" prefWidth="120.0" />
                            </children>
                            <VBox.margin>
                               <Insets bottom="10.0" top="5.0" />
@@ -99,7 +105,7 @@
                         </Separator>
                         <Button fx:id="ConfirmButton" mnemonicParsing="false" text="Confirm">
                            <VBox.margin>
-                              <Insets left="200.0" />
+                              <Insets left="183.0" />
                            </VBox.margin>
                         </Button>
                      </children>
@@ -111,7 +117,7 @@
             </AnchorPane>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="749.0">
                <children>
-                  <VBox layoutX="77.0" prefHeight="508.0" prefWidth="660.0" AnchorPane.bottomAnchor="170.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                  <VBox fx:id="summaryVBox" layoutX="77.0" layoutY="238.0" prefHeight="290.0" prefWidth="660.0" AnchorPane.bottomAnchor="170.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                      <children>
                         <Separator prefWidth="200.0">
                            <VBox.margin>
@@ -126,64 +132,54 @@
                               <Label text="Customer:">
                                  <HBox.margin>
                                     <Insets left="80.0" />
-                                 </HBox.margin></Label>
-                              <Label fx:id="UsernameLabel" text="username">
-                                 <HBox.margin>
-                                    <Insets left="30.0" />
                                  </HBox.margin>
                                  <font>
-                                    <Font name="System Bold" size="13.0" />
+                                    <Font name="System Font Bold" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="UsernameLabel" text="username">
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="System Font Regular" size="13.0" />
                                  </font>
                               </Label>
                               <Label text="Vehicle plate No: ">
                                  <HBox.margin>
                                     <Insets left="122.0" />
                                  </HBox.margin>
+                                 <font>
+                                    <Font name="System Font Bold" size="13.0" />
+                                 </font>
                               </Label>
                               <Label fx:id="PlatenoLabel" text="plateNo">
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
                                  <font>
-                                    <Font name="System Bold" size="13.0" />
+                                    <Font name="System Font Regular" size="13.0" />
                                  </font>
                               </Label>
                            </children>
                         </HBox>
                         <HBox prefHeight="20.0" prefWidth="485.0">
                            <children>
-                              <Label text="Pickup">
+                              <Label text="Pickup:">
                                  <font>
                                     <Font name="System Bold Italic" size="13.0" />
                                  </font>
                                  <HBox.margin>
                                     <Insets left="80.0" />
                                  </HBox.margin></Label>
-                              <Label text="From:">
-                                 <HBox.margin>
-                                    <Insets left="50.0" />
-                                 </HBox.margin>
-                              </Label>
                               <Label fx:id="PickupLocationLabel" text="Location">
                                  <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
-                                 <font>
-                                    <Font name="System Bold" size="13.0" />
-                                 </font>
-                              </Label>
-                              <Label text="at">
-                                 <HBox.margin>
-                                    <Insets left="90.0" />
+                                    <Insets left="20.0" />
                                  </HBox.margin>
                               </Label>
                               <Label fx:id="PickupTimeLabel" text="Time">
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
-                                 <font>
-                                    <Font name="System Bold" size="13.0" />
-                                 </font>
                               </Label>
                            </children>
                            <VBox.margin>
@@ -192,7 +188,7 @@
                         </HBox>
                         <HBox prefHeight="20.0" prefWidth="446.0">
                            <children>
-                              <Label text="Return">
+                              <Label text="Return:">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
@@ -200,31 +196,15 @@
                                     <Insets left="80.0" />
                                  </HBox.margin>
                               </Label>
-                              <Label text="From:">
-                                 <HBox.margin>
-                                    <Insets left="50.0" />
-                                 </HBox.margin>
-                              </Label>
                               <Label fx:id="ReturnLocationLabel" text="Location">
                                  <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
-                                 <font>
-                                    <Font name="System Bold" size="13.0" />
-                                 </font>
-                              </Label>
-                              <Label text="at">
-                                 <HBox.margin>
-                                    <Insets left="90.0" />
+                                    <Insets left="20.0" />
                                  </HBox.margin>
                               </Label>
                               <Label fx:id="ReturnTimeLabel" text="Time">
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
-                                 <font>
-                                    <Font name="System Bold" size="13.0" />
-                                 </font>
                               </Label>
                            </children>
                            <VBox.margin>
@@ -233,7 +213,7 @@
                         </HBox>
                         <HBox prefHeight="26.0" prefWidth="446.0">
                            <children>
-                              <Label text="Equipment">
+                              <Label text="Rented Equipment:">
                                  <font>
                                     <Font name="System Bold Italic" size="13.0" />
                                  </font>
@@ -241,31 +221,25 @@
                                     <Insets left="80.0" />
                                  </HBox.margin>
                               </Label>
-                              <Label fx:id="Equipment1" text="Equipment1:">
+                              <Label fx:id="Equipment1" text="Equipment1">
                                  <HBox.margin>
                                     <Insets left="20.0" />
                                  </HBox.margin>
                               </Label>
                               <Label fx:id="Number1" text="Number1">
-                                 <font>
-                                    <Font name="System Bold" size="13.0" />
-                                 </font>
                                  <HBox.margin>
-                                    <Insets left="5.0" />
+                                    <Insets left="1.0" />
                                  </HBox.margin>
                               </Label>
-                              <Label fx:id="Equipment2" text="Equipment2:">
+                              <Label fx:id="Equipment2" text="Equipment2">
                                  <HBox.margin>
                                     <Insets left="43.0" />
                                  </HBox.margin>
                               </Label>
                               <Label fx:id="Number2" text="Number2">
                                  <HBox.margin>
-                                    <Insets left="5.0" />
+                                    <Insets left="1.0" />
                                  </HBox.margin>
-                                 <font>
-                                    <Font name="System Bold" size="13.0" />
-                                 </font>
                               </Label>
                            </children>
                         </HBox>
@@ -275,6 +249,25 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Label>
+                        <HBox prefHeight="29.0" prefWidth="485.0">
+                           <children>
+                              <CheckBox fx:id="RoadStar" mnemonicParsing="false" text="Road Star">
+                                 <HBox.margin>
+                                    <Insets left="80.0" />
+                                 </HBox.margin>
+                              </CheckBox>
+                              <CheckBox fx:id="Redeem1000P" mnemonicParsing="false" text="Redeem 1000 points">
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </CheckBox>
+                              <CheckBox fx:id="Redeem1500P" mnemonicParsing="false" text="Redeem 1500 points">
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </CheckBox>
+                           </children>
+                        </HBox>
                      </children>
                      <padding>
                         <Insets left="30.0" />
@@ -285,7 +278,7 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Button fx:id="CheckOutButton" layoutX="545.0" layoutY="622.0" mnemonicParsing="false" text="Check Out" />
+                  <Button fx:id="CheckOutButton" layoutX="506.0" layoutY="537.0" mnemonicParsing="false" text="Check Out" />
                </children>
             </AnchorPane>
          </items>
