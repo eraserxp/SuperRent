@@ -251,7 +251,7 @@
                      <padding>
                         <Insets left="30.0" />
                      </padding></VBox>
-                  <HBox layoutX="243.0" layoutY="545.0" prefHeight="32.0" prefWidth="258.0">
+                  <HBox layoutX="165.0" layoutY="545.0" prefHeight="32.0" prefWidth="336.0">
                      <children>
                         <Button fx:id="reserveButton" mnemonicParsing="false" text="Reserve">
                            <HBox.margin>
@@ -263,6 +263,11 @@
                            </HBox.margin>
                         </Button>
                         <Button fx:id="rentButton" mnemonicParsing="false" text="Rent">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="printButton" mnemonicParsing="false" onAction="#handlePrint" text="Print">
                            <HBox.margin>
                               <Insets left="20.0" />
                            </HBox.margin>

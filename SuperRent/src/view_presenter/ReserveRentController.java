@@ -48,6 +48,7 @@ import model.ClerkModel;
 import model.CustomerModel;
 import model.UserModel;
 import model.VehicleSelection;
+import util.PngConverter;
 
 /**
  * FXML Controller class
@@ -138,6 +139,9 @@ public class ReserveRentController extends AbstractController implements Initial
 
     @FXML
     private Button registerButton;
+    
+    @FXML
+    private Button printButton;
 
     @FXML
     private VBox summaryVBox;
@@ -643,5 +647,11 @@ public class ReserveRentController extends AbstractController implements Initial
 
     public void handleRent() {
 
+    }
+    
+    public void handlePrint() {
+        Stage primaryStage = AppContext.getInstance().getPrimaryStage();
+        PngConverter pngConverter = new PngConverter(primaryStage);
+        pngConverter.saveAsPng(summaryVBox);
     }
 }
