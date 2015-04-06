@@ -74,9 +74,8 @@ VALUES
 
 INSERT INTO vehiclesold
 VALUES 
-('PLT-4UP',5000000,'2014-02-02','economy','car','BMW','frank1',30000),
-('PLT-4U1',6000000,'2014-02-03','economy','car','BMW','frank1',60000);
-
+('PLT-4UP',100000,'2014-02-02','economy','car','BMW','frank1',30000),
+('PLT-4U1',200000,'2014-02-03','economy','car','BMW','frank1',60000);
 
 INSERT INTO vehicleforrent 
 VALUES
@@ -238,6 +237,7 @@ VALUES
 ('10','2014-04-04',3,'2014-04-06',8,24000,'Toronto','300 Regina Street','frank10','rented','boxtrucks'),
 ('11','2012-02-04',3,'2012-02-06',8,8000,'Toronto','300 Regina Street','frank7','expired','boxtrucks'),
 ('12','2012-06-04',3,'2012-06-06',8,8000,'Toronto','300 Regina Street','frank7','pending','boxtrucks');
+
 
 
 INSERT INTO rent

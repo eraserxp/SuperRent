@@ -140,7 +140,7 @@ public class UserModel {
                 col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
 
                     public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-
+                        
                         return new SimpleStringProperty(param.getValue().get(j).toString());
 
                     }
@@ -162,7 +162,12 @@ public class UserModel {
                 ObservableList<String> row = FXCollections.observableArrayList();
                 // for each row, we add every columns
                 for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-                    row.add(rs.getString(i));
+                    String value = rs.getString(i);
+                    if (!rs.wasNull()) {
+                        row.add(value);
+                    } else {
+                        row.add("NULL");
+                    }
 
                 }
 
@@ -281,6 +286,54 @@ public class UserModel {
         return " '" + s + "' ";
     }
 
+    //check whether a store has the vehicle type that is available in a certain time period
+    public boolean isVehicleTypeAvailable(String city, String location,
+            String vehicleType, String fromDate, String toDate) {
+        int vCount = 0;
+        int rCount = 0;
+        // find out the vehicle of the given type that are now in the given branch
+        String countNotRented = "select count(distinct VR.vlicense)" 
+                + " from vehicleforrent VR, vehicleinbranch VB " 
+                + " where VR.isAvailable=1 and VR.vlicense = VB.vlicense " 
+                + " and VB.city = " + addQuotation(city)
+                + " and VB.location =" +  addQuotation(location)
+                + " and VR.vehicleType " + addQuotation(vehicleType);
+        
+        // find out the number of vehicle that has been reserved in the time period
+        String countReserved = "select count(*) from reservation R " 
+                + " where R.branch_city = " + addQuotation(city)
+                + " and R.branch_location = " + addQuotation(location)
+                + " and R.vehicleType = " + addQuotation(vehicleType)
+                + " and R.status = 'pending' "
+                + " and ( " 
+                + " (R.pickup_date between " + addQuotation(fromDate) 
+                + " and "  + addQuotation(toDate) + ") or " 
+                + " (R.return_date between " + addQuotation(fromDate) 
+                + " and " + addQuotation(toDate) + ") " 
+                + " )";
+        ResultSet rs = queryDatabase(countNotRented);
+        ResultSet rs2 = queryDatabase(countReserved);
+        
+        try {
+            if (rs.next()) {
+                vCount = rs.getInt(1);
+            } else {
+                return false;
+            }
+            
+            if (rs2.next()) {
+                rCount = rs2.getInt(1);
+            } else {
+                return false;
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return (vCount-rCount)>0;
+    }
+    
+    
     public boolean addUser(String username, String passwd, String name, String type) {
         String SQL = "insert into user values (" + addQuotation(username) + ","
                 + addQuotation(passwd) + "," + addQuotation(name)
