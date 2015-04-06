@@ -213,7 +213,6 @@ vlicense varchar(10),
 branch_city varchar(20),
 branch_location varchar(20),
 customer_username varchar(20),
-status varchar(20),
 PRIMARY KEY(confirmation_number),
 index vehicle_ind (vlicense),
 FOREIGN KEY(vlicense) REFERENCES vehicleinbranch(vlicense)

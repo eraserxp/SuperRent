@@ -225,16 +225,16 @@ VALUES
 
 INSERT INTO reservation
 VALUES
-('1','2014-02-04',3,'2014-02-06',8,8000,'QMAZON','Toronto','300 Regina Street','frank7', 'rented'),
-('2','2014-04-04',3,'2014-04-06',8,8000,'QMAZON','Toronto','300 Regina Street','frank7', 'rented'),
-('3','2014-03-04',3,'2014-03-06',8,18000,'PLT-4M','Vancouver','2660 Wesbrook Mall','frank8', 'rented'),
-('4','2014-04-04',3,'2014-04-06',8,18000,'PLT-4M','Vancouver','2660 Wesbrook Mall','frank8', 'rented'),
-('5','2014-03-04',3,'2014-03-06',8,18000,'GM','Vancouver','2660 Wesbrook Mall','frank9', 'rented'),
-('6','2014-04-04',3,'2014-04-06',8,18000,'GM','Vancouver','2660 Wesbrook Mall','frank9', 'rented'),
-('7','2014-03-04',3,'2014-03-06',8,28000,'CMAZON','Toronto','300 Regina Street','customer', 'rented'),
-('8','2014-04-04',3,'2014-04-06',8,28000,'CMAZON','Toronto','300 Regina Street','customer', 'rented'),
-('9','2014-03-04',3,'2014-03-06',8,24000,'GOOGLE','Toronto','300 Regina Street','frank10', 'rented'),
-('10','2014-04-04',3,'2014-04-06',8,24000,'GOOGLE','Toronto','300 Regina Street','frank10', 'rented');
+('1','2014-02-04',3,'2014-02-06',8,8000,'QMAZON','Toronto','300 Regina Street','frank7'),
+('2','2014-04-04',3,'2014-04-06',8,8000,'QMAZON','Toronto','300 Regina Street','frank7'),
+('3','2014-03-04',3,'2014-03-06',8,18000,'PLT-4M','Vancouver','2660 Wesbrook Mall','frank8'),
+('4','2014-04-04',3,'2014-04-06',8,18000,'PLT-4M','Vancouver','2660 Wesbrook Mall','frank8'),
+('5','2014-03-04',3,'2014-03-06',8,18000,'GM','Vancouver','2660 Wesbrook Mall','frank9'),
+('6','2014-04-04',3,'2014-04-06',8,18000,'GM','Vancouver','2660 Wesbrook Mall','frank9'),
+('7','2014-03-04',3,'2014-03-06',8,28000,'CMAZON','Toronto','300 Regina Street','customer'),
+('8','2014-04-04',3,'2014-04-06',8,28000,'CMAZON','Toronto','300 Regina Street','customer'),
+('9','2014-03-04',3,'2014-03-06',8,24000,'GOOGLE','Toronto','300 Regina Street','frank10'),
+('10','2014-04-04',3,'2014-04-06',8,24000,'GOOGLE','Toronto','300 Regina Street','frank10');
 
 
 INSERT INTO rent
