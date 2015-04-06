@@ -9,8 +9,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TableView;
+import javafx.util.Callback;
 
 /**
  *
@@ -21,7 +31,6 @@ public class ManagerModel extends UserModel {
     public ManagerModel() {
         super();
     }
-  
 
     public boolean addVehicleinRentAndInbranch(String username, String plateNumber, String city, String location, LocalDate date, String category, String type, String brand) throws SQLException {
 
@@ -59,17 +68,27 @@ public class ManagerModel extends UserModel {
     }
 
     public boolean checkPlateNumber(String plateNumber) {
-        String SQL = "SELECT count(vlicense) FROM vehicleinbranch WHERE vlicense='" + plateNumber + "'";
+
+        // String SQL = "SELECT count(vlicense) FROM vehicleinbranch WHERE vlicense='" + plateNumber + "'";
+        int count = 0;
+        String SQL = "select vlicense from vehicleinbranch union select  vlicense from  vehiclesold";
+
         try (ResultSet rs = con.createStatement().executeQuery(SQL)) {
             System.out.println(SQL);
 
-            rs.next();
-            if (rs.getInt(1) > 0) {
-                System.out.print(rs.getInt(1));
+            while (rs.next()) {
+                if (rs.getString(1).equals(plateNumber)) {
+                    count++;
+                }
+
+            }
+
+            if (count > 0) {
+                System.out.print(count);
                 return true;
 
             } else {
-                System.out.print(rs.getInt(1));
+                System.out.print(count);
                 return false;
             }
 
@@ -84,16 +103,8 @@ public class ManagerModel extends UserModel {
         return true;
     }
 
-    public boolean removeFromSale(String plateNumber) throws SQLException {
+    public boolean removeFromSaleAndBranchAddtoSold(String username, String plateNumber, String type, String category, String brand, String odometer, String price) throws SQLException {
 
-        String deleteVehicle = "delete from vehicleforsale where vlicense = " + addQuotation(plateNumber);
-        System.out.println(" \n" + deleteVehicle);
-        return updateDatabase(deleteVehicle);
-
-    }
-
-    public boolean removeFromSaleAndBranchAddtoSold(String username, String plateNumber, String type, String category, String brand, String odometer) throws SQLException {
-        
         String manager = getManagerName(username);
 
         String deleteVehicleSale = "delete from vehicleforsale where vlicense = " + addQuotation(plateNumber);
@@ -103,7 +114,7 @@ public class ManagerModel extends UserModel {
         System.out.println(" \n" + deleteVehicleBranch);
 
         String addSoldVehicle = "insert into vehiclesold values (" + addQuotation(plateNumber)
-                + "," + addQuotation(LocalDate.now().toString()) + "," + addQuotation(type) + ","
+                + "," + addQuotation(price) + "," + addQuotation(LocalDate.now().toString()) + "," + addQuotation(type) + ","
                 + addQuotation(category) + "," + addQuotation(brand) + "," + addQuotation(manager) + ","
                 + addQuotation(odometer) + ")";
         System.out.println(" \n " + addSoldVehicle);
@@ -145,9 +156,9 @@ public class ManagerModel extends UserModel {
 
     }
 
-      public ArrayList<String> getVehicleType() {
+    public ArrayList<String> getVehicleType() {
         String SQL = "select distinct typeName from vehicletype VT"
-                  + " order by typeName";
+                + " order by typeName";
         ResultSet rs = queryDatabase(SQL);
         System.out.println(SQL);
         ArrayList<String> typeList = new ArrayList<>();
@@ -163,7 +174,65 @@ public class ManagerModel extends UserModel {
         }
         return typeList;
     }
-    
-    
-    
+
+    public TableView getVehicles(String location,
+            String category, String year) {
+        TableView tableview;
+
+        String SQL = "select vehicleinbranch.vlicense,vehicleinbranch.location,vehicleforrent.category,vehicleforrent.starting_date from"
+                + " vehicleinbranch, vehicleforrent where  vehicleinbranch.vlicense=vehicleforrent.vlicense";
+
+        if (!location.equals("")) {
+
+            SQL = SQL + " and vehicleinbranch.location=" + addQuotation(location);
+        }
+
+        if (!category.equals("")) {
+            SQL = SQL + " and vehicleforrent.category =" + addQuotation(category);
+
+        }
+        if (!year.equals("")) {
+            SQL = SQL + " and DATEDIFF(CURDATE(),vehicleforrent.starting_date) >" + addQuotation(year) + "*365 ";
+
+        }
+
+        SQL = SQL + " order by vehicleforrent.starting_date ;";
+
+        System.out.println(SQL);
+        /*" select distinct BV.vlicense,BV.city,RV.category,RV.starting_date"
+         + " from vehicleinbranch BV, vehicleforrent RV"
+         + " where BV.vlicense=RV.vlicense"
+         + " and BV.city=" + addQuotation("tronto")
+         + " and BV.location=" + addQuotation("300 Regina Street")
+         + " and RV.category=" + addQuotation("truck");
+         */
+
+        tableview = getTableViewForSQL(SQL);
+
+        return tableview;
+
+    }
+
+    //TABLE VIEW AND DATA
+    private ObservableList<ObservableList> data;
+    private TableView tableview;
+
+    //MAIN EXECUTOR
+    //CONNECTION DATABASE
+    public void buildData() {
+        List<String> list = new ArrayList<String>();
+
+        ObservableList<String> observableList = FXCollections.observableList(list);
+        observableList.addListener(new ListChangeListener() {
+            @Override
+            public void onChanged(ListChangeListener.Change change) {
+                System.out.println("change!");
+            }
+        });
+        observableList.add("item one");
+        list.add("item two");
+        System.out.println("Size: " + observableList.size());
+
+    }
+
 }
