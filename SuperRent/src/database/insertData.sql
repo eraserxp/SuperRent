@@ -41,11 +41,11 @@ VALUES
 
 INSERT INTO customer
 VALUES 
-('frank7','5197816707','94 Mcdonald Road',1,0,0,0,NULL),
-('frank8','5197816708','94 Mcdonald Road',0,0,0,0,NULL),
-('frank9','5197816709','94 Mcdonald Road',0,1,500,1,'2014-12-04'),
-('customer','5197816787','94 Mcdonald Road',0,1,1000,0,'2014-02-04'),
-('frank10','5197816700','94 Mcdonald Road',1,1,2300,0,'2014-03-04');
+('frank7','519-781-6707','94 Mcdonald Road',1,0,0,0,NULL),
+('frank8','519-781-6708','94 Mcdonald Road',0,0,0,0,NULL),
+('frank9','519-781-6709','94 Mcdonald Road',0,1,500,1,'2014-12-04'),
+('customer','519-781-6787','94 Mcdonald Road',0,1,1000,0,'2014-02-04'),
+('frank10','519-781-6700','94 Mcdonald Road',1,1,2300,0,'2014-03-04');
 
 INSERT INTO clerk
 VALUES 
@@ -226,18 +226,18 @@ VALUES
 
 INSERT INTO reservation
 VALUES
-('1','2014-02-04',3,'2014-02-06',8,8000,'Toronto','300 Regina Street','frank7','expired','economy'),
-('2','2014-04-04',3,'2014-04-06',8,8000,'Toronto','300 Regina Street','frank7','rented','economy'),
-('3','2014-03-04',3,'2014-03-06',8,18000,'Vancouver','2660 Wesbrook Mall','frank8','expired','economy'),
-('4','2014-04-04',3,'2014-04-06',8,18000,'Vancouver','2660 Wesbrook Mall','frank8','rented','economy'),
-('5','2014-03-04',3,'2014-03-06',8,18000,'Vancouver','2660 Wesbrook Mall','frank9','expired','economy'),
-('6','2014-04-04',3,'2014-04-06',8,18000,'Vancouver','2660 Wesbrook Mall','frank9','rented','economy'),
-('7','2014-03-04',3,'2014-03-06',8,28000,'Toronto','300 Regina Street','customer','expired','foot24'),
-('8','2014-04-04',3,'2014-04-06',8,28000,'Toronto','300 Regina Street','customer','rented','foot24'),
-('9','2014-03-04',3,'2014-03-06',8,24000,'Toronto','300 Regina Street','frank10','expired','boxtrucks'),
-('10','2014-04-04',3,'2014-04-06',8,24000,'Toronto','300 Regina Street','frank10','rented','boxtrucks'),
-('11','2012-02-04',3,'2012-02-06',8,8000,'Toronto','300 Regina Street','frank7','expired','boxtrucks'),
-('12','2012-06-04',3,'2012-06-06',8,8000,'Toronto','300 Regina Street','frank7','pending','boxtrucks');
+(1,'2014-02-04',3,'2014-02-06',8,8000,'Toronto','300 Regina Street','frank7','expired','economy'),
+(2,'2014-04-04',3,'2014-04-06',8,8000,'Toronto','300 Regina Street','frank7','rented','economy'),
+(3,'2014-03-04',3,'2014-03-06',8,18000,'Vancouver','2660 Wesbrook Mall','frank8','expired','economy'),
+(4,'2014-04-04',3,'2014-04-06',8,18000,'Vancouver','2660 Wesbrook Mall','frank8','rented','economy'),
+(5,'2014-03-04',3,'2014-03-06',8,18000,'Vancouver','2660 Wesbrook Mall','frank9','expired','economy'),
+(6,'2014-04-04',3,'2014-04-06',8,18000,'Vancouver','2660 Wesbrook Mall','frank9','rented','economy'),
+(7,'2014-03-04',3,'2014-03-06',8,28000,'Toronto','300 Regina Street','customer','expired','foot24'),
+(8,'2014-04-04',3,'2014-04-06',8,28000,'Toronto','300 Regina Street','customer','rented','foot24'),
+(9,'2014-03-04',3,'2014-03-06',8,24000,'Toronto','300 Regina Street','frank10','expired','boxtrucks'),
+(10,'2014-04-04',3,'2014-04-06',8,24000,'Toronto','300 Regina Street','frank10','rented','boxtrucks'),
+(11,'2012-02-04',3,'2012-02-06',8,8000,'Toronto','300 Regina Street','frank7','expired','boxtrucks'),
+(12,'2012-06-04',3,'2012-06-06',8,8000,'Toronto','300 Regina Street','frank7','pending','boxtrucks');
 
 
 INSERT INTO rent
@@ -271,24 +271,24 @@ VALUES
 
 INSERT INTO reserve_addon
 VALUES
-('1',1,'ski_rack'),
-('2',1,'child_safety_seat'),
-('3',1,'ski_rack'),
-('4',1,'child_safety_seat'),
-('7',2,'lift_gate'),
-('8',1,'car_towing'),
-('9',2,'lift_gate'),
-('10',1,'car_towing');
+(1,1,'ski_rack'),
+(2,1,'child_safety_seat'),
+(3,1,'ski_rack'),
+(4,1,'child_safety_seat'),
+(7,2,'lift_gate'),
+(8,1,'car_towing'),
+(9,2,'lift_gate'),
+(10,1,'car_towing');
 
 INSERT INTO rent_addon
 VALUES
-('1',1,'ski_rack'),
-('1',1,'child_safety_seat'),
-('2',1,'child_safety_seat'),
-('2',1,'ski_rack'),
-('3',1,'ski_rack'),
-('4',1,'child_safety_seat'),
-('5',1,'child_safety_seat'),
-('7',2,'lift_gate'),
-('9',2,'lift_gate'),
-('10',1,'car_towing');
+(1,1,'ski_rack'),
+(1,1,'child_safety_seat'),
+(2,1,'child_safety_seat'),
+(2,1,'ski_rack'),
+(3,1,'ski_rack'),
+(4,1,'child_safety_seat'),
+(5,1,'child_safety_seat'),
+(7,2,'lift_gate'),
+(9,2,'lift_gate'),
+(10,1,'car_towing');

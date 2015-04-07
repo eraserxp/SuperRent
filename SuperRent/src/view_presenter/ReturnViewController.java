@@ -3,6 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+//things to do
+//penalty for lost equipments
+//roadstar
+//add 1000 point
+//add 1500 point
+
+
+
 package view_presenter;
 
 import java.io.IOException;

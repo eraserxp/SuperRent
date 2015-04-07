@@ -201,7 +201,7 @@ ENGINE = InnoDB;
 
 
 create table reservation
-(confirmation_number varchar(20) not null,
+(confirmation_number integer not null auto_increment,
 pickup_date date,
 pickup_time integer,
 return_date date,
@@ -306,7 +306,7 @@ ENGINE = InnoDB;
 
 
 create table reserve_addon
-(confirmNo varchar(20) not null,
+(confirmNo integer not null,
 quantity integer,
 equipName varchar(20) not null,
 PRIMARY KEY(confirmNo,equipName),
