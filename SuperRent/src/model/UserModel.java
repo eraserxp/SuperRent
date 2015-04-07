@@ -680,7 +680,7 @@ public class UserModel {
             ArrayList<Integer> equipQuantityList,
             LocalDate fromDate, int fromHour,
             LocalDate toDate, int toHour, boolean isRoadStar, int redeemedPoints,
-            int odometer, String vlicense)  {
+            int odometer, String vlicense, boolean isForReturn) {
         GridPane gridPane = new GridPane();
         Integer totalCost = 0;
 
@@ -926,37 +926,42 @@ public class UserModel {
                 rowIndex++;
             }
         }
+        rowIndex++;
+
+// the following should be included in a conditional block
+        //only do the following if the calculation is for return
+        if (isForReturn) {
+            //lost equipments fees
+            //overdue fees     
+            ArrayList<String> rentList = new ArrayList<>();
+            rentList = getExpDates(vlicense);
+            String ExpectedDate = rentList.get(0);
+            String ExpectedTime = rentList.get(1);
+            LocalDate expdate = LocalDate.parse(ExpectedDate.trim());
+            Integer exptime = Integer.parseInt(ExpectedTime.split(":")[0]);
+            int over_days = total_day - (int) ChronoUnit.DAYS.between(fromDate, expdate);
+            int over_hours = exptime - fromHour;
+            if (over_hours < 0) {
+                over_hours += 24;
+                over_days -= 1;
+                //but no overdue fees applied
+            }
+
+            for (int colIndex = 0; colIndex < cols; colIndex++) {
+                gridPane.add(new Label("--------------"), colIndex, rowIndex - 1);
+            }
+            if (over_days > 0) {
+                gridPane.add(new Label("Overdue penalty"), 0, rowIndex);
+                gridPane.add(new Label(over_days + " overdue day(s)"), 1, rowIndex);
+                gridPane.add(new Label(over_days + " x " + vehicleRates.get("d_rate") / 100 + ".00" + " x 10%"),
+                        2, rowIndex);
+                int over_rent = vehicleRates.get("d_rate") * over_days / 10;
+                totalCost += over_rent;
+
+                gridPane.add(new Label((over_rent) / 100 + ".00"),
+                        4, rowIndex);
                 rowIndex++;
-        //lost equipments fees
-        //overdue fees     
-        ArrayList<String> rentList = new ArrayList<>();
-        rentList = getExpDates(vlicense);
-        String ExpectedDate = rentList.get(0);
-        String ExpectedTime = rentList.get(1);
-        LocalDate expdate = LocalDate.parse(ExpectedDate.trim());
-        Integer exptime = Integer.parseInt(ExpectedTime.split(":")[0]);
-        int over_days = total_day - (int) ChronoUnit.DAYS.between(fromDate, expdate);
-        int over_hours = exptime - fromHour;
-        if (over_hours < 0) {
-            over_hours += 24;
-            over_days -= 1;
-            //but no overdue fees applied
-        }
-
-        for (int colIndex = 0; colIndex < cols; colIndex++) {
-            gridPane.add(new Label("--------------"), colIndex, rowIndex-1);
-        }
-        if (over_days > 0) {
-            gridPane.add(new Label("Overdue penalty"), 0, rowIndex);            
-            gridPane.add(new Label(over_days + " overdue day(s)"), 1, rowIndex);
-            gridPane.add(new Label(over_days + " x " + vehicleRates.get("d_rate") / 100 + ".00" + " x 10%"),
-                    2, rowIndex);
-            int over_rent = vehicleRates.get("d_rate") * over_days / 10;
-            totalCost += over_rent;
-
-            gridPane.add(new Label((over_rent) / 100 + ".00"),
-                    4, rowIndex);
-            rowIndex++;
+            }
         }
         
         AppContext.getInstance().setTempData("amount", totalCost.toString());
@@ -1023,7 +1028,7 @@ public class UserModel {
 
     // return the auto incremented id, return -1 if something went wrong
     public int createReservation(LocalDate pickup_date, int pickup_time,
-            LocalDate return_date, int return_time, int estimation_cost,
+            LocalDate return_date, int return_time, 
             String branch_city, String branch_location, String customer_username,
             String status, String vehicleType) {
 //pickup_date date,
@@ -1038,14 +1043,13 @@ public class UserModel {
 //vehicleType varchar(20),
         int confirmNo = -1;
         String sql = "insert into reservation "
-                + " (pickup_date, pickup_time, return_date, return_time, estimation_cost, "
+                + " (pickup_date, pickup_time, return_date, return_time,  "
                 + " branch_city, branch_location, customer_username, status, vehicleType)"
                 + " values ( "
                 + addQuotation(pickup_date.toString()) + ", "
                 + pickup_time + ", "
                 + addQuotation(return_date.toString()) + ", "
                 + return_time + ", "
-                + estimation_cost + ", "
                 + addQuotation(branch_city) + ", "
                 + addQuotation(branch_location) + ", "
                 + addQuotation(customer_username) + ", "
@@ -1103,7 +1107,8 @@ public class UserModel {
             String vlicense, String branch_city, String branch_location,
             String customer_username, String card_type, String card_no,
             String expiry_date, LocalDate from_date, int from_time,
-            LocalDate expected_return_date, int expected_return_time) {
+            LocalDate expected_return_date, int expected_return_time,
+            int reservationConfirmNo) {
 //(rentid integer not null auto_increment,
 //is_reserve boolean,
 //driver_license varchar(20),
@@ -1170,6 +1175,11 @@ public class UserModel {
             }
         }
 
+        if (is_reserve == 1) {
+            String updateReservation = "update reservation set status = 'rented'"
+                    + " where confirmation_number = " + reservationConfirmNo;
+            updateDatabase(updateReservation);
+        }
         return confirmNo;
     }
 
@@ -1185,7 +1195,8 @@ public class UserModel {
             updateDatabase(sql);
         }
     }
-    public ArrayList<String> getExpDates(String VehicleNumber)  {
+
+    public ArrayList<String> getExpDates(String VehicleNumber) {
         String SQL = "select *"
                 + " from rent"
                 + " where rent.vlicense = " + addQuotation(VehicleNumber)
@@ -1202,7 +1213,7 @@ public class UserModel {
                 rentList.add(toTime);
                 rs.close();
                 return rentList;
-                
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);

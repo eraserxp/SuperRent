@@ -122,6 +122,8 @@ public class ReserveRentController extends AbstractController implements Initial
 
     private int cost;
 
+    private int reservationConfirmNo;
+
     @FXML
     private ComboBox<String> equip2CMB;
 
@@ -198,6 +200,8 @@ public class ReserveRentController extends AbstractController implements Initial
 
     @FXML
     private AnchorPane customerInfoAP;
+
+    private String username;
 
     @FXML
     private Label showLicenseLabel;
@@ -416,7 +420,7 @@ public class ReserveRentController extends AbstractController implements Initial
                 enableNodes(reserveButton);
                 unSelect(roadStarCB, redeem1000CB, redeem1500CB);
                 clearLabels(foundByCNoResult, usernameLabel, phoneLabel, vehicleTypeLabel, plateNoLabel,
-                        fromTimeLabel, toTimeLabel, branchLabel,licenseLabel);
+                        fromTimeLabel, toTimeLabel, branchLabel, licenseLabel);
                 clearSummary();
             }
         });
@@ -573,10 +577,13 @@ public class ReserveRentController extends AbstractController implements Initial
         }
 
         getDataFromCNo();
-        showSummary();
+        if (foundByCNoResult.getText().trim().equals("Found")) {
+            showSummary();
+        }
         roadStarCB.setSelected(false);
         redeem1000CB.setSelected(false);
         redeem1500CB.setSelected(false);
+
     }
 
     private void prepareData() {
@@ -713,8 +720,11 @@ public class ReserveRentController extends AbstractController implements Initial
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             fromDate = LocalDate.parse(reservationDetails.get("pickup_date"), formatter);
             toDate = LocalDate.parse(reservationDetails.get("return_date"), formatter);
-            String fromHourString = reservationDetails.get("pickup_time") + ":00";
-            String toHourString = reservationDetails.get("return_time") + ":00";
+
+            fromHour = Integer.parseInt(reservationDetails.get("pickup_time"));
+            toHour = Integer.parseInt(reservationDetails.get("return_time"));
+            String fromHourString = fromHour + ":00";
+            String toHourString = toHour + ":00";
             fromTimeLabel.setText(fromDate.toString() + ", " + fromHourString);
             toTimeLabel.setText(toDate.toString() + ", " + toHourString);
             city = reservationDetails.get("branch_city");
@@ -758,9 +768,10 @@ public class ReserveRentController extends AbstractController implements Initial
         if (summaryGP != null) {
             summaryVBox.getChildren().remove(summaryGP);
         }
+        boolean isForReturn = false;
         summaryGP = userModel.calculateCost(vehicleType, equipments, EquipmentQuantities,
                 fromDate, fromHour, toDate, toHour, isRoadStar,
-                redeemedPoints, odometer, null);
+                redeemedPoints, odometer, null, false);
         summaryVBox.getChildren().add(summaryGP);
 
     }
@@ -783,12 +794,31 @@ public class ReserveRentController extends AbstractController implements Initial
         setupNextPage(this, "Register.fxml", "Register customer");
     }
 
+    private void prepareDataForReserve() {
+        fromDate = stringToLocalDate(fromTimeLabel.getText().split(",")[0]);
+        String fromHourString = fromTimeLabel.getText().split(",")[1];
+        fromHourString = fromHourString.trim().split(":")[0];
+        fromHour = Integer.parseInt(fromHourString);
+
+        toDate = stringToLocalDate(toTimeLabel.getText().split(",")[0]);
+        String toHourString = toTimeLabel.getText().split(",")[1];
+        toHourString = toHourString.trim().split(":")[0];
+        toHour = Integer.parseInt(toHourString);
+        
+        city = branchLabel.getText().split(",")[1].trim();
+        location = branchLabel.getText().split(",")[0].trim();
+        
+        username = usernameLabel.getText().trim();
+        vehicleType = vehicleTypeLabel.getText().trim();
+        
+    }
+
     public void handleReserve() {
-        prepareData();
+        prepareDataForReserve();
         cost = 0;
         int confirmNo = userModel.createReservation(fromDate, fromHour,
-                toDate, toHour, cost, city, location,
-                usernameLabel.getText(), "pending", vehicleType);
+                toDate, toHour, city, location,
+                username, "pending", vehicleType);
         if (confirmNo == -1) {
             popUpError("Failed to make reservation!");
         } else {
@@ -817,12 +847,13 @@ public class ReserveRentController extends AbstractController implements Initial
         int is_reserve = 0;
         if (!CNoField.getText().trim().equals("")) {
             is_reserve = 1;
+            reservationConfirmNo = Integer.parseInt(CNoField.getText().trim());
         }
         int rent_id = userModel.createRent(is_reserve, driver_license,
                 vlicense, city, location,
                 username, card_type, card_no,
                 expiry_date, fromDate, fromHour,
-                toDate, toHour);
+                toDate, toHour, reservationConfirmNo);
         if (rent_id == -1) {
             popUpError("Failed to make the rent!");
         } else {
@@ -834,7 +865,7 @@ public class ReserveRentController extends AbstractController implements Initial
             clearLabels(foundByCNoResult, usernameLabel, phoneLabel, vehicleTypeLabel, plateNoLabel,
                     fromTimeLabel, toTimeLabel, branchLabel, licenseLabel);
             clearSummary();
-            
+
         }
     }
 
