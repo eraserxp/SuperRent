@@ -97,12 +97,13 @@ public class ClerkModel extends UserModel {
             String rentid = rs.getString("rentid");
             String toDate = rs.getString("expected_return_date");
             String toTime = rs.getString("expected_return_time");
+            String fromDate = rs.getString("from_date");
+
 //            String equipmentname = rs.getString("equip_name");
 //            String equipmenttype = rs.getString("equipment_type");
 //            Integer noofequipment = rs.getInt("no_of_equipment");
 //            String cardnumber = rs.getString("card_no");
 //            String expirydate = rs.getString("expiry_date");
-
 //            rentList.add(vlicense);
 //            rentList.add(driver_license);
 //            rentList.add(pickuptimestr);
@@ -114,6 +115,7 @@ public class ClerkModel extends UserModel {
             rentList.add(rentid);
             rentList.add(toDate);
             rentList.add(toTime);
+            rentList.add(fromDate);
             rs.close();
             return rentList;
 //            rentList.add(equipmentname);

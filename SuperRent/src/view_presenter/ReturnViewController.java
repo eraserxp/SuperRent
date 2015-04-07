@@ -121,6 +121,7 @@ public class ReturnViewController extends AbstractController implements Initiali
     ArrayList<String> equipmentslist = new ArrayList<>();
     ArrayList<String> equipments = new ArrayList<>();
     ArrayList<Integer> quantities = new ArrayList<>();
+    LocalDate fromDate, toDate;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -153,6 +154,7 @@ public class ReturnViewController extends AbstractController implements Initiali
 
         String PlateNumString = PlateNoTextField.getText();
         LocalDate returnDate = ReturnDatePicker.getValue();
+        toDate = returnDate;
         String returnTimeString = ReturnTimeCombox.getSelectionModel().getSelectedItem().toString();
         Integer returnTimeInt = Integer.parseInt(returnTimeString.split(":")[0]);
         //Integer returnTime = Integer.parseInt(returnTimeString.split(":")[0]);
@@ -220,6 +222,8 @@ public class ReturnViewController extends AbstractController implements Initiali
             show(Equipment1, Number1, Equipment2, Number2);
         } else {
             System.out.println("No equipments");
+            Equipment1.setText("No equipments rented");
+            show(Equipment1);
             equipments = null;
             quantities = null;
         }
@@ -417,6 +421,13 @@ public class ReturnViewController extends AbstractController implements Initiali
                     Redeem1000P.setSelected(false);
                     return;
                 }
+
+                if (daysBetween(fromDate, toDate) < 1) {
+                    popUpError("Time duration must be larger than 1 day to redeem!");
+                    Redeem1000P.setSelected(false);
+                    return;
+                }
+
                 String PlateNumString = PlateNoTextField.getText();
                 String vehicleType;
                 try {
@@ -455,6 +466,13 @@ public class ReturnViewController extends AbstractController implements Initiali
                     Redeem1500P.setSelected(false);
                     return;
                 }
+
+                if (daysBetween(fromDate, toDate) < 1) {
+                    popUpError("Time duration must be larger than 1 day to redeem!");
+                    Redeem1500P.setSelected(false);
+                    return;
+                }
+
                 String PlateNumString = PlateNoTextField.getText();
                 String vehicleType;
                 try {
@@ -495,6 +513,8 @@ public class ReturnViewController extends AbstractController implements Initiali
 
                 if (rentList != null) {
                     String rentid = rentList.get(5);
+                    fromDate = LocalDate.parse(rentList.get(8).trim());
+
                     equipmentslist = new ArrayList<>();
                     try {
                         equipmentslist = clerkModel.getEquipmentDetails(rentid);
@@ -525,8 +545,8 @@ public class ReturnViewController extends AbstractController implements Initiali
                         show(ReturnedEquipment1Label, ReturnedEquipment2Label);
                     } else {
                         System.out.println("No equipments");
-                        hide(ReturnedEquipment1Label);
-                        hide(ReturnedEquipment2Label);
+                        ReturnedEquipment1Label.setText("No equipment!");
+                        show(ReturnedEquipment1Label);
                         Equip1Combox.setVisible(false);
                         Equip2Combox.setVisible(false);
                         equipments = null;
