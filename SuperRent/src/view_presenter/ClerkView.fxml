@@ -13,7 +13,7 @@
    <children>
       <TabPane layoutX="69.0" layoutY="72.0" prefHeight="528.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="72.0">
          <tabs>
-            <Tab fx:id="SearchRentTab" text="Search&amp;Rent">
+            <Tab fx:id="SearchRentTab" text="Reserve&amp;Rent">
                <content>
                   <BorderPane fx:id="SearchRentContents" prefHeight="200.0" prefWidth="200.0" />
                </content></Tab>

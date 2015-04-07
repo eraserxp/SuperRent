@@ -391,14 +391,9 @@ public class ReturnViewController extends AbstractController implements Initiali
         RoadStar.selectedProperty().addListener((ov, oldv, newv) -> {
             if (newv) {
                 String username = UsernameLabel.getText().trim();
-                try {
-                    if (!userModel.isRoadStar(username)) {
-                        popUpError(username + " is not a road star!");
-                        RoadStar.setSelected(false);
-                        return;
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+                if (!userModel.isRoadStar(username)) {
+                    popUpError(username + " is not a road star!");
+                    RoadStar.setSelected(false);
                 }
 
             }
