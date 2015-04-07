@@ -18,6 +18,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -65,6 +66,11 @@ public class FindOldVehicleController extends AbstractController implements Init
     private RadioButton truckRadioButton;
 
     @FXML
+    private CheckBox sortByCategoryCB;
+    @FXML
+    private CheckBox sortByLocationCB;
+
+    @FXML
     private ComboBox<String> locationCMB;
 
     private String vehicleCategory;
@@ -81,6 +87,8 @@ public class FindOldVehicleController extends AbstractController implements Init
     boolean locationSelected = false;
     boolean yearSelected = false;
     boolean vehicleSelected = false;
+    boolean locationCBSlected = false;
+    boolean categoryCBSelected = false;
 
     /**
      * Initializes the controller class.
@@ -117,7 +125,30 @@ public class FindOldVehicleController extends AbstractController implements Init
             }
         });
 
-    
+        sortByCategoryCB.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            public void changed(ObservableValue<? extends Boolean> ov,
+                    Boolean old_val, Boolean new_val) {
+                if (sortByCategoryCB.isSelected()) {
+                    categoryCBSelected = true;
+                } else {
+                    categoryCBSelected = false;
+                }
+
+            }
+        });
+
+        sortByLocationCB.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            public void changed(ObservableValue<? extends Boolean> ov,
+                    Boolean old_val, Boolean new_val) {
+
+                if (sortByLocationCB.isSelected()) {
+                    locationCBSlected = true;
+                } else {
+                    locationCBSlected = false;
+                }
+
+            }
+        });
 
     }
 
@@ -142,9 +173,9 @@ public class FindOldVehicleController extends AbstractController implements Init
             oldVehicleVbox.getChildren().remove(tableContent);
         }
 
-        tableContent = managerModel.getVehicles(location, vehicleCategory, yearTextField.getText());
+        tableContent = managerModel.getVehicles(location, vehicleCategory, yearTextField.getText(), locationCBSlected, categoryCBSelected);
         oldVehicleVbox.getChildren().add(tableContent);
-
+     refreshBoxes();
         tableContent.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -169,10 +200,13 @@ public class FindOldVehicleController extends AbstractController implements Init
 
         configureComboBox(locationCMB, userModel.getAllBranches());
         locationCMB.setOnAction((ActionEvent event) -> {
+            if(locationCMB.getSelectionModel().getSelectedItem()!=null){
             String branch = locationCMB.getSelectionModel().getSelectedItem();
             location = branch.split(",")[0].trim();
             city = branch.split(",")[1].trim();
 
+            sortByLocationCB.setDisable(true);
+            }
         });
     }
 
@@ -191,6 +225,7 @@ public class FindOldVehicleController extends AbstractController implements Init
 
                     vehicleCategory = vehicleCategory.toLowerCase();
                     categorySelected = true;
+                    sortByCategoryCB.setDisable(true);
 
                 }
             }
@@ -262,11 +297,21 @@ public class FindOldVehicleController extends AbstractController implements Init
         carRadioButton.setSelected(false);
         truckRadioButton.setSelected(false);
         vehicleCategory = "";
-        //.getSelectionModel().clearSelection();
-        //  locationCMB.valueProperty().set(null);
+        locationCMB.getSelectionModel().clearSelection();
+        locationCMB.valueProperty().set(null);
         location = "";
         city = "";
         yearTextField.setText("");
+        sortByCategoryCB.setSelected(false);
+        sortByLocationCB.setSelected(false);
+        categorySelected = false;
+        locationSelected=false;
+        sortByCategoryCB.setDisable(false);
+        sortByLocationCB.setDisable(false);
+        
+        
+        
+        
 
     }
 
