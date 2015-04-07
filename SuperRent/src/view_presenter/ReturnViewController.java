@@ -459,7 +459,7 @@ public class ReturnViewController extends AbstractController implements Initiali
                 String vehicleType;
                 try {
                     vehicleType = clerkModel.getVehicleType(PlateNumString);
-                    if (!userModel.isLowRankVehicle(vehicleType)) {
+                    if (!userModel.isHighRankVehicle(vehicleType)) {
                         popUpError("You can't redeem 1500 points with type: " + vehicleType);
                         Redeem1500P.setSelected(false);
                         return;
