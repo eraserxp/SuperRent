@@ -131,36 +131,25 @@ public class ManageVehicleController extends AbstractController implements Initi
 
             }
         });
-        
-        
-           // Listen for plateNumber text changes
+
+        // Listen for plateNumber text changes
         plateNumTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable,
                     String oldValue, String newValue) {
 
-            if (isInputEmpty(plateNumTextField)) {
-            showWarning(addingValidator, "Plate Number is empty!");
-            addingValidator.setTextFill(Color.RED);
-            plateNumTextField.requestFocus();
-            return;
-        } else {
+                if (isInputEmpty(plateNumTextField)) {
+                    showWarning(addingValidator, "Plate Number is empty!");
+                    addingValidator.setTextFill(Color.RED);
+                    plateNumTextField.requestFocus();
+                    return;
+                } else {
 
-            showWarning(addingValidator, "");
+                    showWarning(addingValidator, "");
 
-        }
+                }
 
-        plateNumber = plateNumTextField.getText();
-        if (managerModel.checkPlateNumber(plateNumber)) {
-            showWarning(addingValidator, "Plate Number Exist!");
-            addingValidator.setTextFill(Color.RED);
-            plateNumTextField.requestFocus();
-            return;
-        } else {
-
-            showWarning(addingValidator, "");
-
-        }
+             
 
             }
         });
@@ -171,7 +160,6 @@ public class ManageVehicleController extends AbstractController implements Initi
         startingDateDateBoxSetUp();
         setUpLocationCMB();
         setUpCarTruckRB();
-        
 
     }
 
@@ -200,9 +188,6 @@ public class ManageVehicleController extends AbstractController implements Initi
 
     public void handleAddButton() throws SQLException {
 
-        
-        
-        
         if (locationCMB.getSelectionModel().isEmpty()) {
             showWarning(addingValidator, "Location is empty!");
             addingValidator.setTextFill(Color.RED);
@@ -233,26 +218,31 @@ public class ManageVehicleController extends AbstractController implements Initi
             showWarning(addingValidator, "");
 
         }
-        
-         if (isInputEmpty(brandTextField)) {
-                    showWarning(addingValidator, "Brand is empty!");
-                    addingValidator.setTextFill(Color.RED);
-                    brandTextField.requestFocus();
-                    return;
-                }
-        
-         if (isInputEmpty(plateNumTextField)) {
+
+        if (isInputEmpty(brandTextField)) {
+            showWarning(addingValidator, "Brand is empty!");
+            addingValidator.setTextFill(Color.RED);
+            brandTextField.requestFocus();
+            return;
+        }
+
+        if (isInputEmpty(plateNumTextField)) {
             showWarning(addingValidator, "Plate Number is empty!");
             addingValidator.setTextFill(Color.RED);
             plateNumTextField.requestFocus();
             return;
         }
-         
-        
-        
-        
+           plateNumber = plateNumTextField.getText();
+                if (managerModel.checkPlateNumber(plateNumber)) {
+                    showWarning(addingValidator, "Plate Number Exist!");
+                    addingValidator.setTextFill(Color.RED);
+                    plateNumTextField.requestFocus();
+                    return;
+                } else {
 
-        
+                    showWarning(addingValidator, "");
+
+                }
 
         //========================================================================
         boolean addRentAndBranch = false;
