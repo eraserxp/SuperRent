@@ -176,7 +176,8 @@ public class PaymentCCViewController extends AbstractController implements Initi
         cashRB.setToggleGroup(group);
         creditcardRB.setSelected(true);
         disableNodes(amountlabel, AmountTF, amountvalidator);
-        enableNodes(cardtypelabel, cardnumberlabel, cardnumberTF, cardnumbervalidator, cardtypeCMB, cardtypevalidator,
+        enableNodes(cardtypelabel, cardnumberlabel, cardnumberTF, cardnumbervalidator, 
+                cardtypeCMB, cardtypevalidator,
                 expirydateTF, expirydatelabel, expirydatevalidator);
 
         group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
@@ -186,7 +187,7 @@ public class PaymentCCViewController extends AbstractController implements Initi
 
                     RadioButton rb = (RadioButton) new_toggle.getToggleGroup().getSelectedToggle();
                     radiobutton = rb.getText();
-
+                    System.out.println(radiobutton + " has been selected");
                     if (radiobutton.equals("By Credit Card")) {
                         disableNodes(amountlabel, AmountTF, amountvalidator);
                         hide(amountvalidator);
@@ -210,14 +211,14 @@ public class PaymentCCViewController extends AbstractController implements Initi
             // when user enter some text and leave the password field, check the password
             if (!newValue) {
                 if (isInputEmpty(cardnumberTF)) {
-                    showWarning(cardnumbervalidator, "Card Number can't be empty!");
+                    showWarning(cardnumbervalidator, "Can't be empty!");
                     cardnumberOK = false;
                 } else {
                     if (isCardNo(cardnumberTF, cardtype)) {
                         cardnumberOK = true;
                     } else {
 
-                        showWarning(cardnumbervalidator, "Card Number Format is incorrect!");
+                        showWarning(cardnumbervalidator, "Incorrect format!");
                         cardnumberOK = false;
                     }
 
@@ -238,13 +239,13 @@ public class PaymentCCViewController extends AbstractController implements Initi
             // when user enter some text and leave the password field, check the password
             if (!newValue) {
                 if (isInputEmpty(expirydateTF)) {
-                    showWarning(expirydatevalidator, "Expiry Date can't be empty!");
+                    showWarning(expirydatevalidator, "Can't be empty!");
                     expirydateOK = false;
                 } else {
                     if (isExpiryDateNo(expirydateTF)) {
                         expirydateOK = true;
                     } else {
-                        showWarning(expirydatevalidator, "Expiry Date Format is incorrect!");
+                        showWarning(expirydatevalidator, "Incorrect format!");
                         expirydateOK = false;
                     }
 
@@ -264,7 +265,7 @@ public class PaymentCCViewController extends AbstractController implements Initi
             // when user enter some text and leave the password field, check the password
             if (!newValue) {
                 if (isInputEmpty(AmountTF)) {
-                    showWarning(amountvalidator, "Amount can't be empty!");
+                    showWarning(amountvalidator, "Can't be empty!");
                     amountOK = false;
                 } else {
                     amountOK = true;

@@ -7,6 +7,7 @@ package view_presenter;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -392,5 +393,10 @@ public abstract class AbstractController {
         }
     }
 
+    protected LocalDate stringToLocalDate(String dateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(dateString, formatter);
+        return date;
+    }
 
 }

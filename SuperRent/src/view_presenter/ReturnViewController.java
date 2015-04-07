@@ -247,7 +247,7 @@ public class ReturnViewController extends AbstractController implements Initiali
 
         summaryGP = userModel.calculateCost(vehicleType, equipments, quantities,
                 pickupDate, pickuptimeint, returnDate, returnTimeInt, isRoadStar,
-                redeemedPoints, odometer, PlateNumString);
+                redeemedPoints, odometer, PlateNumString,true );
         summaryVBox.getChildren().add(summaryGP);
         System.out.println(equipmentslist);
         //[child_safety_seat, 1, ski_rack, 1]
