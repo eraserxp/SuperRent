@@ -169,58 +169,57 @@ public class ManagerModel extends UserModel {
 
     }
 
-    public boolean updateVehivleRates(String vehicleType, String weeklyRate, String dailylyRate, String hourlylyRate, String PkRate, String weeklyInsurance, String dailyInsurance, String hourlyInsurance,String mileLimit) throws SQLException {
+    public boolean updateVehivleRates(String vehicleType, String weeklyRate, String dailylyRate, String hourlylyRate, String PkRate, String weeklyInsurance, String dailyInsurance, String hourlyInsurance, String mileLimit) throws SQLException {
 
         String updateStatement = "update vehicletype set ";
 
         if (!weeklyRate.equals("")) {
 
-            updateStatement = updateStatement + " vehicletype.w_rate = " + addQuotation(weeklyRate) +",";
+            updateStatement = updateStatement + " vehicletype.w_rate = " + addQuotation(weeklyRate) + ",";
         }
 
         if (!dailylyRate.equals("")) {
 
-            updateStatement = updateStatement + " vehicletype.d_rate =" + addQuotation(dailylyRate)+" ,";
+            updateStatement = updateStatement + " vehicletype.d_rate =" + addQuotation(dailylyRate) + " ,";
 
         }
         if (!hourlylyRate.equals("")) {
 
-            updateStatement = updateStatement + " vehicletype.h_rate =" + addQuotation(hourlylyRate)+" ,";
+            updateStatement = updateStatement + " vehicletype.h_rate =" + addQuotation(hourlylyRate) + " ,";
 
         }
         if (!PkRate.equals("")) {
 
-            updateStatement = updateStatement + " vehicletype.pk_rate =" + addQuotation(PkRate)+" ,";
+            updateStatement = updateStatement + " vehicletype.pk_rate =" + addQuotation(PkRate) + " ,";
 
         }
         if (!weeklyInsurance.equals("")) {
 
-            updateStatement = updateStatement + " vehicletype.w_insurance =" + addQuotation(weeklyInsurance)+" ,";
+            updateStatement = updateStatement + " vehicletype.w_insurance =" + addQuotation(weeklyInsurance) + " ,";
 
         }
         if (!dailyInsurance.equals("")) {
 
-            updateStatement = updateStatement + " vehicletype.h_insurance =" + addQuotation(dailyInsurance)+" ,";
+            updateStatement = updateStatement + " vehicletype.h_insurance =" + addQuotation(dailyInsurance) + " ,";
 
         }
 
         if (!hourlyInsurance.equals("")) {
 
-            updateStatement = updateStatement + "vehicletype.d_insurance =" + addQuotation(hourlyInsurance)+" ,";
+            updateStatement = updateStatement + "vehicletype.d_insurance =" + addQuotation(hourlyInsurance) + " ,";
 
         }
         if (!mileLimit.equals("")) {
 
-            updateStatement = updateStatement + "vehicletype.milelimit =" + addQuotation(mileLimit)+" ,";
+            updateStatement = updateStatement + "vehicletype.milelimit =" + addQuotation(mileLimit) + " ,";
 
         }
 
-        updateStatement = updateStatement.substring(0, updateStatement.length()-1) + " where vehicletype.typeName= " + addQuotation(vehicleType) + " ;";
+        updateStatement = updateStatement.substring(0, updateStatement.length() - 1) + " where vehicletype.typeName= " + addQuotation(vehicleType) + " ;";
 
         System.out.println(" \n " + updateStatement);
 
         return updateDatabase(updateStatement);
-        
 
     }
 
