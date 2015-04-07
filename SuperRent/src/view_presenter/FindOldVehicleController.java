@@ -117,28 +117,7 @@ public class FindOldVehicleController extends AbstractController implements Init
             }
         });
 
-        // Listen for brandTextFiled text changes
-        priceTextField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable,
-                    String oldValue, String newValue) {
-
-                if (isInputEmpty(priceTextField)) {
-                    showWarning(priceValidationLabel, "Please Input The Price!");
-                    priceValidationLabel.setTextFill(Color.RED);
-                    priceTextField.requestFocus();
-                    return;
-                } else if (!isInputInteger(priceTextField)) {
-                    showWarning(priceValidationLabel, "The Price is Wrong!");
-                    priceValidationLabel.setTextFill(Color.RED);
-                    priceTextField.requestFocus();
-                    return;
-                } else {
-                    showWarning(priceValidationLabel, "");
-                }
-
-            }
-        });
+    
 
     }
 
