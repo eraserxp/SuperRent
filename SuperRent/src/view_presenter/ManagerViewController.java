@@ -134,6 +134,173 @@ public class ManagerViewController extends AbstractController implements Initial
 
         setUpTypeCM();
 
+        // Listen for brandTextFiled text changes
+        weeklyRateTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue) {
+                if (!isInputEmpty(weeklyRateTextField)) {
+                    if (!isInputInteger(weeklyRateTextField)) {
+                        showWarning(validationLabel, "The Weekly Rate is Wrong!");
+                        validationLabel.setTextFill(Color.RED);
+                        weeklyRateTextField.requestFocus();
+                        return;
+                    } else {
+                        showWarning(validationLabel, "");
+                    }
+                }
+            }
+        });
+
+        // Listen for brandTextFiled text changes
+        dailyRateTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue) {
+                if (!isInputEmpty(dailyRateTextField)) {
+                    if (!isInputInteger(dailyRateTextField)) {
+                        showWarning(validationLabel, "The Daily Rate is Wrong!");
+                        validationLabel.setTextFill(Color.RED);
+                        dailyRateTextField.requestFocus();
+                        return;
+                    } else {
+                        showWarning(validationLabel, "");
+
+                    }
+                }
+            }
+        });
+
+        // Listen for brandTextFiled text changes
+        hourlyRateTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue) {
+                if (!isInputEmpty(hourlyRateTextField)) {
+                    if (!isInputInteger(hourlyRateTextField)) {
+                        showWarning(validationLabel, "The Hourly Rate is Wrong!");
+                        validationLabel.setTextFill(Color.RED);
+                        hourlyRateTextField.requestFocus();
+                        return;
+                    } else {
+                        showWarning(validationLabel, "");
+
+                    }
+                }
+            }
+        });
+        
+           // Listen for brandTextFiled text changes
+        PkRateTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue) {
+               
+           if (!isInputEmpty(PkRateTextField)) {
+            if (!isInputInteger(PkRateTextField)) {
+                showWarning(validationLabel, "The PK Rate is Wrong!");
+                validationLabel.setTextFill(Color.RED);
+                PkRateTextField.requestFocus();
+                return;
+            } else {
+                showWarning(validationLabel, "");
+
+            }
+        }
+        }
+        });
+        
+        
+        
+            // Listen for brandTextFiled text changes
+        weeklyInsuranceTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue) {
+               
+         
+          if (!isInputEmpty(weeklyInsuranceTextField)) {
+            if (!isInputInteger(weeklyInsuranceTextField)) {
+                showWarning(validationLabel, "The Weekly Insurance Rate is Wrong!");
+                validationLabel.setTextFill(Color.RED);
+                weeklyInsuranceTextField.requestFocus();
+                return;
+            } else {
+                showWarning(validationLabel, "");
+
+                    }
+                }
+            }
+        });
+        
+        
+            // Listen for brandTextFiled text changes
+        dailyInsuranceTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue) {
+           if (!isInputEmpty(dailyInsuranceTextField)) {
+            if (!isInputInteger(dailyInsuranceTextField)) {
+                showWarning(validationLabel, "The Daily Insurance Rate is Wrong!");
+                validationLabel.setTextFill(Color.RED);
+                dailyInsuranceTextField.requestFocus();
+                return;
+            } else {
+                showWarning(validationLabel, "");
+
+            }
+        }
+            }
+        });
+            // Listen for brandTextFiled text changes
+        hourlyInsuranceTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue) {
+           if (!isInputEmpty(hourlyInsuranceTextField)) {
+            if (!isInputInteger(hourlyInsuranceTextField)) {
+                showWarning(validationLabel, "The Hourly Insurance Rate is Wrong!");
+                validationLabel.setTextFill(Color.RED);
+                hourlyInsuranceTextField.requestFocus();
+                return;
+            } else {
+                showWarning(validationLabel, "");
+
+            }
+        }
+            }
+        });
+           // Listen for brandTextFiled text changes
+        mileLimitTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue) {
+           if (!isInputEmpty(mileLimitTextField)) {
+            if (!isInputInteger(mileLimitTextField)) {
+                showWarning(validationLabel, "The Mile Limit is Wrong!");
+                validationLabel.setTextFill(Color.RED);
+                mileLimitTextField.requestFocus();
+                return;
+            } else {
+                showWarning(validationLabel, "");
+
+            }
+        }
+            }
+        });
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+       
+
     }
 
     private void setUpTypeCM() {
@@ -269,24 +436,19 @@ public class ManagerViewController extends AbstractController implements Initial
 
             }
         }
-        
-        if (isInputEmpty(mileLimitTextField)&&isInputEmpty(hourlyInsuranceTextField)&&isInputEmpty(dailyInsuranceTextField)&&isInputEmpty(weeklyInsuranceTextField)&&isInputEmpty(PkRateTextField)&&isInputEmpty(hourlyRateTextField)&&isInputEmpty(dailyRateTextField)&&isInputEmpty(weeklyRateTextField)) {
-           
+
+        if (isInputEmpty(mileLimitTextField) && isInputEmpty(hourlyInsuranceTextField) && isInputEmpty(dailyInsuranceTextField) && isInputEmpty(weeklyInsuranceTextField) && isInputEmpty(PkRateTextField) && isInputEmpty(hourlyRateTextField) && isInputEmpty(dailyRateTextField) && isInputEmpty(weeklyRateTextField)) {
+
             showWarning(validationLabel, "Please Enter The Amount!");
-                validationLabel.setTextFill(Color.RED);
-             
-                 return;
-                 
-            
+            validationLabel.setTextFill(Color.RED);
+
+            return;
+
+        } else {
+            showWarning(validationLabel, "");
+
         }
-          else {
-                showWarning(validationLabel, "");
 
-            }
-
-        
-        
-        
         String vehicleType = typeCombobox.getSelectionModel().getSelectedItem();
         String weeklyRate = weeklyRateTextField.getText();
         String dailylyRate = dailyRateTextField.getText();
