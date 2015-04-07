@@ -61,7 +61,7 @@ public class PaymentCCViewController extends AbstractController implements Initi
 
     @FXML
     private RadioButton creditcardRB;
-    
+
     @FXML
     private RadioButton cashRB;
 
@@ -69,75 +69,71 @@ public class PaymentCCViewController extends AbstractController implements Initi
 
     @FXML
     private ComboBox<String> cardtypeCMB;
-    
+
     @FXML
     private TextField cardnumberTF;
-    
+
     @FXML
     private TextField expirydateTF;
-    
+
     private UserModel userModel;
-    
+
     @FXML
     private TextField AmountTF;
-    
+
     @FXML
     private Label cardtypelabel;
-    
+
     @FXML
     private Label cardnumberlabel;
-    
+
     @FXML
     private Label expirydatelabel;
-    
+
     @FXML
     private Label amountlabel;
-    
+
     @FXML
     private Label cardnumbervalidator;
-    
+
     @FXML
     private Label expirydatevalidator;
-        
+
     @FXML
     private Label amountvalidator;
-    
+
     @FXML
     private Label cardtypevalidator;
-    
+
     @FXML
     private Label amountvaluelabel; //infoLabel
 
     @FXML
     private Label sucesslabel;
-    
+
     @FXML
     private Separator sep;
-    
+
     ArrayList cardtypes = new ArrayList();
-    
+
     @FXML
     private Button Proceed_button;
-    
+
     @FXML
     private Button GoBack_button;
-    
-    
-    private String radiobutton,cardtype,user_type,user_name;
-    
-    boolean cardnumberOK,expirydateOK,amountOK;
-    
-    
-     
+
+    private String radiobutton, cardtype, user_type, user_name;
+
+    boolean cardnumberOK, expirydateOK, amountOK;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
-        hide(cardnumbervalidator,expirydatevalidator,amountvalidator);
-        user_type=AppContext.getInstance().getUserType();
-        user_name=AppContext.getInstance().getUsername();
-        
+
+        hide(cardnumbervalidator, expirydatevalidator, amountvalidator);
+        user_type = AppContext.getInstance().getUserType();
+        user_name = AppContext.getInstance().getUsername();
+
         switch (user_type) {
             case "CUSTOMER":
                 userModel = new CustomerModel();
@@ -147,15 +143,14 @@ public class PaymentCCViewController extends AbstractController implements Initi
                 break;
         }
 
-            
         // do things differently for customer and employee
        /* String userType = AppContext.getInstance().getUserType();
-        if (userType.equals("CUSTOMER")) {
-            hide(creditcardRB,cashRB,amountlabel,AmountTF,amountvalidator);
-        } else {
-                setUpPaymentRB();
-        }
-        */
+         if (userType.equals("CUSTOMER")) {
+         hide(creditcardRB,cashRB,amountlabel,AmountTF,amountvalidator);
+         } else {
+         setUpPaymentRB();
+         }
+         */
         setUpCardTypeCMB();
         setUpPaymentRB();
         setUpCardNumber();
@@ -164,15 +159,15 @@ public class PaymentCCViewController extends AbstractController implements Initi
     }
 
     private void setUpCardTypeCMB() {
-         
-         cardtypes.add("MasterCard");
-         cardtypes.add("Visa");
-         cardtypes.add("American Express");
+
+        cardtypes.add("MasterCard");
+        cardtypes.add("Visa");
+        cardtypes.add("American Express");
         configureComboBox(cardtypeCMB, cardtypes);
         cardtypeCMB.getSelectionModel().selectFirst();
         cardtypeCMB.setOnAction((ActionEvent event) -> {
-             cardtype = cardtypeCMB.getSelectionModel().getSelectedItem().toString();
-             
+            cardtype = cardtypeCMB.getSelectionModel().getSelectedItem().toString();
+
         });
     }
 
@@ -180,60 +175,52 @@ public class PaymentCCViewController extends AbstractController implements Initi
         creditcardRB.setToggleGroup(group);
         cashRB.setToggleGroup(group);
         creditcardRB.setSelected(true);
-        disableNodes(amountlabel,AmountTF,amountvalidator);
-        enableNodes(cardtypelabel,cardnumberlabel,cardnumberTF,cardnumbervalidator,cardtypeCMB,cardtypevalidator,
-                                        expirydateTF,expirydatelabel,expirydatevalidator);
-        
+        disableNodes(amountlabel, AmountTF, amountvalidator);
+        enableNodes(cardtypelabel, cardnumberlabel, cardnumberTF, cardnumbervalidator, cardtypeCMB, cardtypevalidator,
+                expirydateTF, expirydatelabel, expirydatevalidator);
+
         group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-        public void changed(ObservableValue<? extends Toggle> ov,
+            public void changed(ObservableValue<? extends Toggle> ov,
                     Toggle old_toggle, Toggle new_toggle) {
-        if (group.getSelectedToggle() != null) {
-                
+                if (group.getSelectedToggle() != null) {
+
                     RadioButton rb = (RadioButton) new_toggle.getToggleGroup().getSelectedToggle();
                     radiobutton = rb.getText();
-                    
-                    if(radiobutton.equals("By Credit Card"))
-                    {
-                                disableNodes(amountlabel,AmountTF,amountvalidator);
-                                hide(amountvalidator);
-                                enableNodes(cardtypelabel,cardnumberlabel,cardnumberTF,cardnumbervalidator,cardtypeCMB,cardtypevalidator,
-                                        expirydateTF,expirydatelabel,expirydatevalidator);
+
+                    if (radiobutton.equals("By Credit Card")) {
+                        disableNodes(amountlabel, AmountTF, amountvalidator);
+                        hide(amountvalidator);
+                        enableNodes(cardtypelabel, cardnumberlabel, cardnumberTF, cardnumbervalidator, cardtypeCMB, cardtypevalidator,
+                                expirydateTF, expirydatelabel, expirydatevalidator);
+                    } else if (radiobutton.equals("By Cash")) {
+                        disableNodes(cardtypelabel, cardnumberlabel, cardnumberTF, cardnumbervalidator, cardtypeCMB, cardtypevalidator,
+                                expirydateTF, expirydatelabel, expirydatevalidator);
+                        hide(cardnumbervalidator, expirydatevalidator, cardtypevalidator);
+                        enableNodes(amountlabel, AmountTF, amountvalidator);
                     }
-                    
-                    else if(radiobutton.equals("By Cash"))
-                    {
-                                disableNodes(cardtypelabel,cardnumberlabel,cardnumberTF,cardnumbervalidator,cardtypeCMB,cardtypevalidator,
-                                        expirydateTF,expirydatelabel,expirydatevalidator);
-                                hide(cardnumbervalidator,expirydatevalidator,cardtypevalidator);
-                                enableNodes(amountlabel,AmountTF,amountvalidator);
-                    }
-                            
-                            
-        }
+
+                }
+            }
+        });
     }
-});
-}
 
     private void setUpCardNumber() {
-        
-         cardnumberTF.focusedProperty().addListener((observable, oldValue, newValue) -> {
+
+        cardnumberTF.focusedProperty().addListener((observable, oldValue, newValue) -> {
             // when user enter some text and leave the password field, check the password
             if (!newValue) {
                 if (isInputEmpty(cardnumberTF)) {
                     showWarning(cardnumbervalidator, "Card Number can't be empty!");
                     cardnumberOK = false;
                 } else {
-                    if(isCardNo(cardnumberTF,cardtype))
-                    {
+                    if (isCardNo(cardnumberTF, cardtype)) {
                         cardnumberOK = true;
+                    } else {
+
+                        showWarning(cardnumbervalidator, "Card Number Format is incorrect!");
+                        cardnumberOK = false;
                     }
-                    else 
-                    {
-                      
-                      showWarning(cardnumbervalidator, "Card Number Format is incorrect!");
-                      cardnumberOK=false;  
-                    }
-                    
+
                 }
             }
 
@@ -242,31 +229,25 @@ public class PaymentCCViewController extends AbstractController implements Initi
                 hide(cardnumbervalidator);
             }
         });
-        
-        
-        
+
     }
 
-    
     private void setUpExpiryDate() {
-        
-         expirydateTF.focusedProperty().addListener((observable, oldValue, newValue) -> {
+
+        expirydateTF.focusedProperty().addListener((observable, oldValue, newValue) -> {
             // when user enter some text and leave the password field, check the password
             if (!newValue) {
                 if (isInputEmpty(expirydateTF)) {
                     showWarning(expirydatevalidator, "Expiry Date can't be empty!");
                     expirydateOK = false;
                 } else {
-                    if(isExpiryDateNo(expirydateTF))
-                    {
+                    if (isExpiryDateNo(expirydateTF)) {
                         expirydateOK = true;
+                    } else {
+                        showWarning(expirydatevalidator, "Expiry Date Format is incorrect!");
+                        expirydateOK = false;
                     }
-                    else 
-                    {
-                      showWarning(expirydatevalidator, "Expiry Date Format is incorrect!");
-                      expirydateOK=false;  
-                    }
-                    
+
                 }
             }
 
@@ -275,11 +256,9 @@ public class PaymentCCViewController extends AbstractController implements Initi
                 hide(expirydatevalidator);
             }
         });
-        
-        
-        
+
     }
-    
+
     private void setUpAmountField() {
         AmountTF.focusedProperty().addListener((observable, oldValue, newValue) -> {
             // when user enter some text and leave the password field, check the password
@@ -292,65 +271,65 @@ public class PaymentCCViewController extends AbstractController implements Initi
                 }
             }
 
-            
             if (newValue) {
                 hide(amountvalidator);
             }
         });
     }
-    
+
     @FXML
     private void handleProceedButtonAction(ActionEvent event) throws IOException {
-        
-          
-        boolean check=false;
-       //System.out.print(user_type);
-        
-        
-        
-        if(user_type.equals("CUSTOMER"))
-        {
-            check=cardnumberOK&&expirydateOK;
-           // showSuccessMessage(sucesslabel,"creditcardcustomer");
-            
+
+        boolean check = false;
+        //System.out.print(user_type);
+
+        if (user_type.equals("CUSTOMER")) {
+            check = cardnumberOK && expirydateOK;
+            // showSuccessMessage(sucesslabel,"creditcardcustomer");
+
             cardnumberTF.requestFocus();
             expirydateTF.requestFocus();
             Proceed_button.requestFocus();
+        } else if (user_type.equals("CLERK")) {
+            if (radiobutton.equals("By Credit Card")) {
+                check = cardnumberOK && expirydateOK;
+                // showSuccessMessage(sucesslabel,"creditcardclerk");
+                cardnumberTF.requestFocus();
+                expirydateTF.requestFocus();
+                Proceed_button.requestFocus();
+            } else if (radiobutton.equals("By Cash")) {
+                check = amountOK;
+                //showSuccessMessage(sucesslabel,"cashclerk");
+                AmountTF.requestFocus();
+                Proceed_button.requestFocus();
+            }
         }
-        else if(user_type.equals("CLERK"))
-        {
-            if(radiobutton.equals("By Credit Card"))
-                    {
-                             check=cardnumberOK&&expirydateOK;
-                            // showSuccessMessage(sucesslabel,"creditcardclerk");
-                             cardnumberTF.requestFocus();
-                             expirydateTF.requestFocus();
-                             Proceed_button.requestFocus();
-                    }
-                    
-                    else if(radiobutton.equals("By Cash"))
-                    {
-                            check=amountOK;  
-                            //showSuccessMessage(sucesslabel,"cashclerk");
-                            AmountTF.requestFocus();
-                            Proceed_button.requestFocus();
-                    }
+
+        if (check == true ) {
+            AppContext.getInstance().setTempData("card_type", cardtype);
+            AppContext.getInstance().setTempData("card_no", cardnumberTF.getText().trim());
+            AppContext.getInstance().setTempData("expiry_date", expirydateTF.getText().trim());
+            showSuccessMessage(sucesslabel, "Payment Successful");
+            // AppContext.getInstance().setUserType("success");  /*To know the payment was successfull*/
         }
-        
-        if(check==true)
-        {
-            showSuccessMessage(sucesslabel,"Payment Successful");
-           // AppContext.getInstance().setUserType("success");  /*To know the payment was successfull*/
-        }
-        
+
+//        if (check == true && radiobutton.equals("By Cash")) {
+//            AppContext.getInstance().setTempData("card_type", "null");
+//            AppContext.getInstance().setTempData("card_no", "null");
+//            AppContext.getInstance().setTempData("expiry_date", "null");
+//            showSuccessMessage(sucesslabel, "Payment Successful");
+//            // AppContext.getInstance().setUserType("success");  /*To know the payment was successfull*/
+//        }
+
     }
-     @FXML
+
+    @FXML
     private void handleGoBackButtonAction(ActionEvent event) throws IOException {
-     Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-     app_stage.hide();
-     Parent next_page_parent = null;
-     AppContext.getInstance().setUsername(user_name);
-     AppContext.getInstance().setUserType(user_type);
-     next_page_parent = FXMLLoader.load(getClass().getResource("CustomerView.fxml"));
+        Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        app_stage.hide();
+        Parent next_page_parent = null;
+        AppContext.getInstance().setUsername(user_name);
+        AppContext.getInstance().setUserType(user_type);
+        next_page_parent = FXMLLoader.load(getClass().getResource("CustomerView.fxml"));
     }
 }

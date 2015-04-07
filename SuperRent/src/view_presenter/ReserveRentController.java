@@ -119,7 +119,7 @@ public class ReserveRentController extends AbstractController implements Initial
 
     @FXML
     private Label equip2Label;
-    
+
     private int cost;
 
     @FXML
@@ -199,6 +199,12 @@ public class ReserveRentController extends AbstractController implements Initial
     @FXML
     private AnchorPane customerInfoAP;
 
+    @FXML
+    private Label showLicenseLabel;
+
+    @FXML
+    private Label licenseLabel;
+
     private UserModel userModel;
 
     private VehicleSelection selectedVehicle = new VehicleSelection();
@@ -226,6 +232,7 @@ public class ReserveRentController extends AbstractController implements Initial
         vehicleTypeLabel.setText("");
         plateNoLabel.setText("");
         phoneLabel.setText("");
+        licenseLabel.setText("");
         foundByPhoneResult.setText("");
         foundByCNoResult.setText("");
         branchLabel.setText("");
@@ -244,7 +251,7 @@ public class ReserveRentController extends AbstractController implements Initial
         String userType = AppContext.getInstance().getUserType();
         if (userType.equals("CUSTOMER")) {
             hide(rentButton, customerInfoAP,
-                    registerButton, selectButton);
+                    registerButton, selectButton, showLicenseLabel);
         } else {
 
         }
@@ -409,7 +416,7 @@ public class ReserveRentController extends AbstractController implements Initial
                 enableNodes(reserveButton);
                 unSelect(roadStarCB, redeem1000CB, redeem1500CB);
                 clearLabels(foundByCNoResult, usernameLabel, phoneLabel, vehicleTypeLabel, plateNoLabel,
-                        fromTimeLabel, toTimeLabel, branchLabel);
+                        fromTimeLabel, toTimeLabel, branchLabel,licenseLabel);
                 clearSummary();
             }
         });
@@ -551,7 +558,7 @@ public class ReserveRentController extends AbstractController implements Initial
             phoneLabel.setText(phone);
             showReservation(phone);
             String CNo = AppContext.getInstance().getTempData("confirmNo");
-            if (CNo!=null && !CNo.equals("None")) {
+            if (CNo != null && !CNo.equals("None")) {
                 CNoField.setText(CNo);
                 handleSubmitByCNo();
             }
@@ -597,6 +604,9 @@ public class ReserveRentController extends AbstractController implements Initial
         if (AppContext.getInstance().getTempData("vehicleSelected").equals("true")) {
             //update plate no
             plateNoLabel.setText(selectedVehicle.getVlicense());
+            if (AppContext.getInstance().getTempData("driver-license") != null) {
+                licenseLabel.setText(AppContext.getInstance().getTempData("driver-license"));
+            }
             AppContext.getInstance().emptyTempData();
             //enable rent button
             rentButton.setDisable(false);
@@ -776,25 +786,56 @@ public class ReserveRentController extends AbstractController implements Initial
     public void handleReserve() {
         prepareData();
         cost = 0;
-        int confirmNo = userModel.createReservation(fromDate, fromHour, 
-                toDate, toHour, cost, city, location, 
+        int confirmNo = userModel.createReservation(fromDate, fromHour,
+                toDate, toHour, cost, city, location,
                 usernameLabel.getText(), "pending", vehicleType);
-        if (confirmNo==-1) {
+        if (confirmNo == -1) {
             popUpError("Failed to make reservation!");
         } else {
             userModel.createEquipReservation(confirmNo, equipments, EquipmentQuantities);
-            popUpMessage("Reservation is successful! The confirmation number is " 
-                    + confirmNo  + ". Please make a note of it!");
+            popUpMessage("Reservation is successful! The confirmation number is "
+                    + confirmNo + ". Please make a note of it!");
             unSelect(roadStarCB, redeem1000CB, redeem1500CB);
             disableNodes(roadStarCB, redeem1000CB, redeem1500CB);
             clearLabels(foundByCNoResult, usernameLabel, phoneLabel, vehicleTypeLabel, plateNoLabel,
-                    fromTimeLabel, toTimeLabel, branchLabel);
+                    fromTimeLabel, toTimeLabel, branchLabel, licenseLabel);
             clearSummary();
         }
     }
 
     public void handleRent() {
+        prepareData();
+        setupNextPage(this, "PaymentCCView.fxml", "Payment");
+        //get data from the popup page
+        String driver_license = licenseLabel.getText();
+        String vlicense = plateNoLabel.getText().trim();
+        String card_type = AppContext.getInstance().getTempData("card_type");
+        String card_no = AppContext.getInstance().getTempData("card_no");
+        String expiry_date = AppContext.getInstance().getTempData("expiry_date");
 
+        String username = usernameLabel.getText().trim();
+        int is_reserve = 0;
+        if (!CNoField.getText().trim().equals("")) {
+            is_reserve = 1;
+        }
+        int rent_id = userModel.createRent(is_reserve, driver_license,
+                vlicense, city, location,
+                username, card_type, card_no,
+                expiry_date, fromDate, fromHour,
+                toDate, toHour);
+        if (rent_id == -1) {
+            popUpError("Failed to make the rent!");
+        } else {
+            userModel.createEquipRent(rent_id, equipments, EquipmentQuantities);
+            popUpMessage("Rent is successful! The rent id is "
+                    + rent_id + ". Please make a note of it!");
+            unSelect(roadStarCB, redeem1000CB, redeem1500CB);
+            disableNodes(roadStarCB, redeem1000CB, redeem1500CB, rentButton);
+            clearLabels(foundByCNoResult, usernameLabel, phoneLabel, vehicleTypeLabel, plateNoLabel,
+                    fromTimeLabel, toTimeLabel, branchLabel, licenseLabel);
+            clearSummary();
+            
+        }
     }
 
     public void handlePrint() {
