@@ -7,16 +7,17 @@ package view_presenter;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -24,9 +25,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.util.Callback;
 import model.AdminModel;
 import model.AppContext;
 import model.ManagerModel;
@@ -41,31 +42,33 @@ public class ManageVehicleController extends AbstractController implements Initi
 
     @FXML
     private ComboBox<String> typeCombobox;
-    
+    @FXML
+    private ComboBox<String> testCombobox;
+
     @FXML
     private TextField plateNumTextField;
-    
+
     @FXML
     private TextField brandTextField;
-    
+
     @FXML
     private RadioButton carRadioButton;
-    
+
     @FXML
     private RadioButton truckRadioButton;
-    
+
     @FXML
     private DatePicker startingDateDateBox;
-    
+
     @FXML
     private Button addButton;
-    
+
     @FXML
     private Button showButton;
-    
+
     @FXML
     private Button soldButton;
-    
+
     @FXML
     private TextField handleAddButtonAction;
 
@@ -76,32 +79,81 @@ public class ManageVehicleController extends AbstractController implements Initi
     private Label addingValidator;
 
     @FXML
+    private Label soldLabel;
+
+    @FXML
     private VBox vehicleForSaleVbox; // in show table tab
     private TableView tableContent = null;
     private AdminModel adminModel = new AdminModel();
-    private ManagerModel managerModel = new ManagerModel();
-    private UserModel userModel = new UserModel();
+    private ManagerModel managerModel;
+    private UserModel userModel;
+
+    private String soldVehicle;
 
     //=========
-    
-    private String vehicleCategory;
-    private String vehicleType;
+    private String vehicleCategory = "";
+    private String vehicleType = "";
     private boolean vehicleTypeIsOk = false;
-    private String plateNumber;
+    private String plateNumber = "";
     private boolean plateIsOk = false;
-    private String brand;
+    private String brand = "";
     private boolean brandIsOk = false;
     final private ToggleGroup group = new ToggleGroup();
-    private String city, location;
-    private String username;
+    private String city = "";
+    private String location = "";
+    private String username = "";
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        username=AppContext.getInstance().getUsername();
-        
+        username = AppContext.getInstance().getUsername();
+        userModel = new UserModel();
+        managerModel = new ManagerModel();
+
+        // Listen for brandTextFiled text changes
+        brandTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue) {
+
+                if (isInputEmpty(brandTextField)) {
+                    showWarning(addingValidator, "Brand is empty!");
+                    addingValidator.setTextFill(Color.RED);
+                    brandTextField.requestFocus();
+                    return;
+                } else {
+                    brand = brandTextField.getText();
+                    showWarning(addingValidator, "");
+
+                }
+
+            }
+        });
+
+        // Listen for plateNumber text changes
+        plateNumTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue) {
+
+                if (isInputEmpty(plateNumTextField)) {
+                    showWarning(addingValidator, "Plate Number is empty!");
+                    addingValidator.setTextFill(Color.RED);
+                    plateNumTextField.requestFocus();
+                    return;
+                } else {
+
+                    showWarning(addingValidator, "");
+
+                }
+
+             
+
+            }
+        });
+
         System.out.print(username);
         setUpCarTruckRB();
         setUpLocationCMB();
@@ -112,49 +164,66 @@ public class ManageVehicleController extends AbstractController implements Initi
     }
 
     @FXML
-    private void handleShowButtonAction(ActionEvent event) throws IOException {
+    private void handleShowButtonAction() throws IOException {
         if (tableContent != null) {
             vehicleForSaleVbox.getChildren().remove(tableContent);
         }
-        adminModel.refeshDatabaseConnection();
+
         tableContent = adminModel.getTable("vehicleforsale");
         vehicleForSaleVbox.getChildren().add(tableContent);
+
+        tableContent.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.isPrimaryButtonDown() && event.getClickCount() == 1) {
+                    soldLabel.setVisible(false);
+                    soldVehicle = tableContent.getSelectionModel().getSelectedItem().toString();
+                    System.out.print(soldVehicle);
+                    soldButton.setVisible(true);
+                }
+            }
+        });
+
     }
 
-    public void handleAddButton() {
+    public void handleAddButton() throws SQLException {
+
         if (locationCMB.getSelectionModel().isEmpty()) {
             showWarning(addingValidator, "Location is empty!");
             addingValidator.setTextFill(Color.RED);
             return;
+        } else {
+
+            showWarning(addingValidator, "");
+
         }
-        
 
         if (typeCombobox.getSelectionModel().isEmpty()) {
             showWarning(addingValidator, "Vehicle type is empty!");
             addingValidator.setTextFill(Color.RED);
             return;
+        } else {
+
+            showWarning(addingValidator, "");
+
         }
-        
+
         LocalDate startDate = startingDateDateBox.getValue();
         if (startDate == null) {
             showWarning(addingValidator, "Date is empty!");
             addingValidator.setTextFill(Color.RED);
             return;
+        } else {
+
+            showWarning(addingValidator, "");
+
         }
-       
 
         if (isInputEmpty(brandTextField)) {
             showWarning(addingValidator, "Brand is empty!");
             addingValidator.setTextFill(Color.RED);
             brandTextField.requestFocus();
             return;
-        }
-        else
-        {
-            brand=brandTextField.getText();
-            brandIsOk=true;
-          
-        
         }
 
         if (isInputEmpty(plateNumTextField)) {
@@ -163,31 +232,23 @@ public class ManageVehicleController extends AbstractController implements Initi
             plateNumTextField.requestFocus();
             return;
         }
-        
-       plateNumber=plateNumTextField.getText();
-//       if( managerModel.checkPlateNumber(plateNumber))
-//        { showWarning(addingValidator, "Plate Number Exist!");
-//            addingValidator.setTextFill(Color.RED);
-//            plateNumTextField.requestFocus();
-//            return;
-//        }  
-//            
-//         else{ 
-//            
-//           
-//        plateIsOk=true;
-//        
-//        
-//        }
+           plateNumber = plateNumTextField.getText();
+                if (managerModel.checkPlateNumber(plateNumber)) {
+                    showWarning(addingValidator, "Plate Number Exist!");
+                    addingValidator.setTextFill(Color.RED);
+                    plateNumTextField.requestFocus();
+                    return;
+                } else {
+
+                    showWarning(addingValidator, "");
+
+                }
 
         //========================================================================
-        boolean addOK = false;
+        boolean addRentAndBranch = false;
 
-//        addOK = managerModel.addVehicle(username,plateNumber, startingDateDateBox.getValue(),
-//                vehicleCategory, vehicleType, brand);
-
-        
-        if (addOK == true) {
+        addRentAndBranch = managerModel.addVehicleinRentAndInbranch(username, plateNumber, city, location, startingDateDateBox.getValue(), vehicleCategory, vehicleType, brand);
+        if (addRentAndBranch) {
             showSuccessMessage(addingValidator, "Vehicle Added!");
             addingValidator.setTextFill(Color.GREEN);
         } else {
@@ -210,7 +271,7 @@ public class ManageVehicleController extends AbstractController implements Initi
 //                    vehicleCategory = group.getSelectedToggle().getUserData().toString();
                     RadioButton rb = (RadioButton) new_toggle.getToggleGroup().getSelectedToggle();
                     vehicleCategory = rb.getText();
-                    //System.out.println(vehicleCategory);
+                    showWarning(addingValidator, "");
                     vehicleCategory = vehicleCategory.toLowerCase();
 
                     //if location has been selected, reconfigure vehicleType combobox
@@ -220,9 +281,11 @@ public class ManageVehicleController extends AbstractController implements Initi
                         city = branch.split(",")[1].trim();
                         //enable vehicleTypeCMB
                         typeCombobox.setDisable(false);
+
                         //configure the vehicleType Combobox
                         configureComboBox(typeCombobox,
-                                userModel.getVehicleTypeAtBranch(city, location, vehicleCategory));
+                                managerModel.getVehicleTypeAtBranch(city, location, vehicleCategory));
+
                     }
 
                 }
@@ -233,56 +296,62 @@ public class ManageVehicleController extends AbstractController implements Initi
 
     public void startingDateDateBoxSetUp() {
         startingDateDateBox.setDisable(false);
-        /*
-        final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
-            public DateCell call(final DatePicker datePicker) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        //System.out.println("pickUpUstartingDateDateBoxpdate");
-                        super.updateItem(item, empty);
-                        if (item.compareTo(LocalDate.now()) < 0) {
-                            setDisable(true);
-                        }
-                    }
-                };
-            }
-        };
-    */
+
         //actionHandler
         startingDateDateBox.setOnAction((ActionEvent event) -> {
             addButton.setDisable(false);
-            // returnDate.setValue(null);
+            showWarning(addingValidator, "");
 
         });
 
-       // startingDateDateBox.setDayCellFactory(dayCellFactory);
-
     }
-    
-    
-    private void handleVehicleType(){
-         typeCombobox.setOnAction((ActionEvent event) -> {
-           vehicleType= typeCombobox.getSelectionModel().getSelectedItem();
-            
-                      
-                  });
-                 }
+
+    private void handleVehicleType() {
+        typeCombobox.setOnAction((ActionEvent event) -> {
+            showWarning(addingValidator, "");
+            vehicleType = typeCombobox.getSelectionModel().getSelectedItem();
+
+        });
+    }
 
     private void setUpLocationCMB() {
 
         configureComboBox(locationCMB, userModel.getAllBranches());
         locationCMB.setOnAction((ActionEvent event) -> {
+            showWarning(addingValidator, "");
             String branch = locationCMB.getSelectionModel().getSelectedItem();
             location = branch.split(",")[0].trim();
             city = branch.split(",")[1].trim();
+
             configureComboBox(typeCombobox,
-                    userModel.getVehicleTypeAtBranch(city, location, vehicleCategory));
+                    managerModel.getVehicleTypeAtBranch(city, location, vehicleCategory));
+
             handleVehicleType();
         });
     }
-    
-    
-    
+
+    @FXML
+    private void handleSoldButtonAction() throws IOException, SQLException {
+
+        String plateNumber = soldVehicle.split(",")[0].substring(1);
+
+        String price = soldVehicle.split(",")[1].trim();
+        String category = soldVehicle.split(",")[3].trim();
+        String type = soldVehicle.split(",")[5].trim();
+        String brand = soldVehicle.split(",")[4].trim();
+        String odometer = soldVehicle.split(",")[6].split("]")[0].trim();
+
+        if (managerModel.removeFromSaleAndBranchAddtoSold(username, plateNumber, type, category, brand, odometer, price)) {
+            showWarning(soldLabel, "Vehicle has been removed!");
+            soldLabel.setTextFill(Color.GREEN);
+            handleShowButtonAction();
+        } else {
+
+            showWarning(soldLabel, "Vehicle not removed!");
+            soldLabel.setTextFill(Color.RED);
+
+        }
+
+    }
 
 }
