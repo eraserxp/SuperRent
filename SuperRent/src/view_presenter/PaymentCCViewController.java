@@ -349,6 +349,7 @@ public class PaymentCCViewController extends AbstractController implements Initi
      Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
      app_stage.hide();
      Parent next_page_parent = null;
+     
      AppContext.getInstance().setUsername(user_name);
      AppContext.getInstance().setUserType(user_type);
      next_page_parent = FXMLLoader.load(getClass().getResource("CustomerView.fxml"));
