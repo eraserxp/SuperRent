@@ -782,8 +782,14 @@ public class ReserveRentController extends AbstractController implements Initial
         if (confirmNo==-1) {
             popUpError("Failed to make reservation!");
         } else {
-            popUpMessage("The confirmation number is " + confirmNo 
-                    + " for the current reservation. Please make a note of it!");
+            userModel.createEquipReservation(confirmNo, equipments, EquipmentQuantities);
+            popUpMessage("Reservation is successful! The confirmation number is " 
+                    + confirmNo  + ". Please make a note of it!");
+            unSelect(roadStarCB, redeem1000CB, redeem1500CB);
+            disableNodes(roadStarCB, redeem1000CB, redeem1500CB);
+            clearLabels(foundByCNoResult, usernameLabel, phoneLabel, vehicleTypeLabel, plateNoLabel,
+                    fromTimeLabel, toTimeLabel, branchLabel);
+            clearSummary();
         }
     }
 
