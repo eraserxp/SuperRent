@@ -80,6 +80,7 @@ public class FindOldVehicleController extends AbstractController implements Init
     boolean categorySelected = false;
     boolean locationSelected = false;
     boolean yearSelected = false;
+    boolean vehicleSelected = false;
 
     /**
      * Initializes the controller class.
@@ -92,13 +93,71 @@ public class FindOldVehicleController extends AbstractController implements Init
         managerModel = new ManagerModel();
         setUpCarTruckRB();
         setUpLocationCMB();
+
+        // Listen for brandTextFiled text changes
+        yearTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue) {
+
+                if (!isInputEmpty(yearTextField)) {
+
+                    if (!isInputInteger(yearTextField)) {
+                        showWarning(validationLabel, "Incorrect Year Format!");
+                        validationLabel.setTextFill(Color.RED);
+                        yearTextField.requestFocus();
+
+                        return;
+                    } else {
+                        showWarning(validationLabel, "");
+                    }
+
+                }
+
+            }
+        });
+
+        // Listen for brandTextFiled text changes
+        priceTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                    String oldValue, String newValue) {
+
+                if (isInputEmpty(priceTextField)) {
+                    showWarning(priceValidationLabel, "Please Input The Price!");
+                    priceValidationLabel.setTextFill(Color.RED);
+                    priceTextField.requestFocus();
+                    return;
+                } else if (!isInputInteger(priceTextField)) {
+                    showWarning(priceValidationLabel, "The Price is Wrong!");
+                    priceValidationLabel.setTextFill(Color.RED);
+                    priceTextField.requestFocus();
+                    return;
+                } else {
+                    showWarning(priceValidationLabel, "");
+                }
+
+            }
+        });
+
     }
 
     @FXML
     private void handleShowButtonAction() throws IOException {
-        /*
-   
-         */
+
+        if (!isInputEmpty(yearTextField)) {
+
+            if (!isInputInteger(yearTextField)) {
+                showWarning(validationLabel, "Incorrect Year Format!");
+                validationLabel.setTextFill(Color.RED);
+                yearTextField.requestFocus();
+
+                return;
+            } else {
+                showWarning(validationLabel, "");
+            }
+
+        }
 
         if (tableContent != null) {
             oldVehicleVbox.getChildren().remove(tableContent);
@@ -116,6 +175,8 @@ public class FindOldVehicleController extends AbstractController implements Init
                     vehicleForRent = tableContent.getSelectionModel().getSelectedItem().toString();
                     System.out.print("\n" + vehicleForRent);
                     removeButton.setDisable(false);
+                    vehicleSelected = true;
+                    priceValidationLabel.setText("");
 
                 }
             }
@@ -148,7 +209,7 @@ public class FindOldVehicleController extends AbstractController implements Init
                 if (group.getSelectedToggle() != null) {
                     RadioButton rb = (RadioButton) new_toggle.getToggleGroup().getSelectedToggle();
                     vehicleCategory = rb.getText();
-               
+
                     vehicleCategory = vehicleCategory.toLowerCase();
                     categorySelected = true;
 
@@ -163,8 +224,21 @@ public class FindOldVehicleController extends AbstractController implements Init
         boolean addOk = false;
         boolean removeOk = false;
 
+        if (!vehicleSelected) {
+            showWarning(priceValidationLabel, "Please Select The Vehicle!");
+            priceValidationLabel.setTextFill(Color.RED);
+            priceTextField.requestFocus();
+            return;
+
+        }
+
         if (isInputEmpty(priceTextField)) {
-            showWarning(priceValidationLabel, "Please input the price!");
+            showWarning(priceValidationLabel, "Please Input The Price!");
+            priceValidationLabel.setTextFill(Color.RED);
+            priceTextField.requestFocus();
+            return;
+        } else if (!isInputInteger(priceTextField)) {
+            showWarning(priceValidationLabel, "The Price is Wrong!");
             priceValidationLabel.setTextFill(Color.RED);
             priceTextField.requestFocus();
             return;
@@ -174,18 +248,11 @@ public class FindOldVehicleController extends AbstractController implements Init
 
         String plateNumber = vehicleForRent.split(",")[0].substring(1);
         String price = priceTextField.getText();
-        String date = vehicleForRent.split(",")[2].trim();
-        String category = vehicleForRent.split(",")[3].trim();
-        String type = vehicleForRent.split(",")[4].trim();
-        String brand = vehicleForRent.split(",")[5].trim();
-        String odometer = vehicleForRent.split(",")[7].split("]")[0].trim();
 
-        //remove from rent tabel
+        addOk = managerModel.addVehicleForSale(plateNumber, price);
         removeOk = managerModel.removeFromRent(plateNumber);
 
         //add to sale tabel
-        addOk = managerModel.addVehicleForSale(plateNumber, price, date, category, brand, type, odometer);
-
         if (addOk && removeOk) {
             showWarning(priceValidationLabel, "Vehicle Removed!");
             priceValidationLabel.setTextFill(Color.GREEN);
@@ -193,6 +260,7 @@ public class FindOldVehicleController extends AbstractController implements Init
             handleShowButtonAction();
             //refreshVehicleForRentTable();
             priceTextField.setText("");
+            vehicleSelected = false;
 
         } else {
             showWarning(priceValidationLabel, "Vehicle Not Removed!");
@@ -215,7 +283,7 @@ public class FindOldVehicleController extends AbstractController implements Init
         carRadioButton.setSelected(false);
         truckRadioButton.setSelected(false);
         vehicleCategory = "";
-          //.getSelectionModel().clearSelection();
+        //.getSelectionModel().clearSelection();
         //  locationCMB.valueProperty().set(null);
         location = "";
         city = "";
