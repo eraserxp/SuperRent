@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +45,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import model.AppContext;
 import model.ClerkModel;
@@ -117,6 +119,8 @@ public class ReserveRentController extends AbstractController implements Initial
 
     @FXML
     private Label equip2Label;
+    
+    private int cost;
 
     @FXML
     private ComboBox<String> equip2CMB;
@@ -126,6 +130,9 @@ public class ReserveRentController extends AbstractController implements Initial
 
     @FXML
     private TextField phoneField;
+
+    @FXML
+    private Label phoneLabel;
 
     @FXML
     private TextField CNoField; //Confirmation No field
@@ -218,6 +225,7 @@ public class ReserveRentController extends AbstractController implements Initial
         usernameLabel.setText("");
         vehicleTypeLabel.setText("");
         plateNoLabel.setText("");
+        phoneLabel.setText("");
         foundByPhoneResult.setText("");
         foundByCNoResult.setText("");
         branchLabel.setText("");
@@ -369,6 +377,8 @@ public class ReserveRentController extends AbstractController implements Initial
 
         if (userModel.isVehicleTypeAvailable(city, location, vehicleType, fromDateString, toDateString)) {
             getDataFromSearchInput();
+            phoneField.setText("");
+            CNoField.setText("");
             showSummary();
         } else {
             popUpError("No vehicle of type: " + vehicleType + " is available from "
@@ -382,7 +392,12 @@ public class ReserveRentController extends AbstractController implements Initial
         phoneField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 usernameLabel.setText("");
+                phoneLabel.setText("");
                 foundByPhoneResult.setText("");
+//                unSelect(roadStarCB, redeem1000CB, redeem1500CB);
+//                clearLabels(foundByCNoResult, usernameLabel, phoneLabel, vehicleTypeLabel, plateNoLabel,
+//                        fromTimeLabel, toTimeLabel, branchLabel);
+//                clearSummary();
             }
         });
     }
@@ -390,8 +405,10 @@ public class ReserveRentController extends AbstractController implements Initial
     private void setupCNoField() {
         CNoField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
+                //enable the reserve button
+                enableNodes(reserveButton);
                 unSelect(roadStarCB, redeem1000CB, redeem1500CB);
-                clearLabels(foundByCNoResult, usernameLabel, vehicleTypeLabel, plateNoLabel,
+                clearLabels(foundByCNoResult, usernameLabel, phoneLabel, vehicleTypeLabel, plateNoLabel,
                         fromTimeLabel, toTimeLabel, branchLabel);
                 clearSummary();
             }
@@ -531,6 +548,13 @@ public class ReserveRentController extends AbstractController implements Initial
             showSuccessMessage(foundByPhoneResult, "Found");
             System.out.println("found");
             usernameLabel.setText(username);
+            phoneLabel.setText(phone);
+            showReservation(phone);
+            String CNo = AppContext.getInstance().getTempData("confirmNo");
+            if (CNo!=null && !CNo.equals("None")) {
+                CNoField.setText(CNo);
+                handleSubmitByCNo();
+            }
         }
 
     }
@@ -540,41 +564,24 @@ public class ReserveRentController extends AbstractController implements Initial
             showWarning(foundByCNoResult, "Not found");
             return;
         }
-        String CNo = CNoField.getText().trim();
 
-        HashMap<String, String> reservationDetails;
+        getDataFromCNo();
+        showSummary();
+        roadStarCB.setSelected(false);
+        redeem1000CB.setSelected(false);
+        redeem1500CB.setSelected(false);
+    }
 
-        reservationDetails = userModel.getReservationDetails(CNo);
-
-        if (reservationDetails.isEmpty()) {
-            showWarning(foundByCNoResult, "Not found");
-            return;
+    private void prepareData() {
+        if (!foundByCNoResult.getText().equals("")) {
+            getDataFromCNo();
         } else {
-            showSuccessMessage(foundByCNoResult, "Found");
-            System.out.println("found");
-            usernameLabel.setText(reservationDetails.get("customer_username"));
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            fromDate = LocalDate.parse(reservationDetails.get("pickup_date"), formatter);
-            toDate = LocalDate.parse(reservationDetails.get("return_date"), formatter);
-            String fromHourString = reservationDetails.get("pickup_time") + ":00";
-            String toHourString = reservationDetails.get("return_time") + ":00";
-            fromTimeLabel.setText(fromDate.toString() + ", " + fromHourString);
-            toTimeLabel.setText(toDate.toString() + ", " + toHourString);
-            city = reservationDetails.get("branch_city");
-            vehicleType = reservationDetails.get("vehicleType");
-            vehicleTypeLabel.setText(vehicleType);
-            location = reservationDetails.get("branch_location");
-            branchLabel.setText(location + ", " + city);
-            usernameLabel.setText(reservationDetails.get("customer_username"));
-            showSummary();
-            roadStarCB.setSelected(false);
-            redeem1000CB.setSelected(false);
-            redeem1500CB.setSelected(false);
+            getDataFromSearchInput();
         }
-
     }
 
     private void showSearchResult() {
+        prepareData();
         passDataToNext();
         setupNextPage(this, "ShowSearchResultView.fxml", "Search results");
 
@@ -631,12 +638,12 @@ public class ReserveRentController extends AbstractController implements Initial
     }
 
     private void passDataToNext() {
-        String branch = locationCMB.getSelectionModel().getSelectedItem();
-        location = branch.split(",")[0].trim();
-        city = branch.split(",")[1].trim();
-        vehicleType = vehicleTypeCMB.getSelectionModel().getSelectedItem();
-        fromDateString = fromDatePicker.getValue().toString();
-        toDateString = toDatePicker.getValue().toString();
+//        String branch = locationCMB.getSelectionModel().getSelectedItem();
+//        location = branch.split(",")[0].trim();
+//        city = branch.split(",")[1].trim();
+//        vehicleType = vehicleTypeCMB.getSelectionModel().getSelectedItem();
+//        fromDateString = fromDatePicker.getValue().toString();
+//        toDateString = toDatePicker.getValue().toString();
 
         AppContext.getInstance().setTempData("city", city);
         AppContext.getInstance().setTempData("location", location);
@@ -673,7 +680,51 @@ public class ReserveRentController extends AbstractController implements Initial
 
     //get the rental information from the reservation confirmation no
     private void getDataFromCNo() {
+        String CNo = CNoField.getText().trim();
 
+        HashMap<String, String> reservationDetails;
+
+        reservationDetails = userModel.getReservationDetails(CNo);
+
+        HashMap<String, String> reservedEquipments;
+        reservedEquipments = userModel.getEquipmentsByCNo(CNo);
+
+        if (reservationDetails.isEmpty()) {
+            showWarning(foundByCNoResult, "Not found");
+            return;
+        } else {
+            //disable the reserve button
+            disableNodes(reserveButton);
+            showSuccessMessage(foundByCNoResult, "Found");
+            System.out.println("found");
+            usernameLabel.setText(reservationDetails.get("customer_username"));
+            phoneLabel.setText(userModel.getPhone(usernameLabel.getText()));
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            fromDate = LocalDate.parse(reservationDetails.get("pickup_date"), formatter);
+            toDate = LocalDate.parse(reservationDetails.get("return_date"), formatter);
+            String fromHourString = reservationDetails.get("pickup_time") + ":00";
+            String toHourString = reservationDetails.get("return_time") + ":00";
+            fromTimeLabel.setText(fromDate.toString() + ", " + fromHourString);
+            toTimeLabel.setText(toDate.toString() + ", " + toHourString);
+            city = reservationDetails.get("branch_city");
+            vehicleType = reservationDetails.get("vehicleType");
+            vehicleTypeLabel.setText(vehicleType);
+            location = reservationDetails.get("branch_location");
+            branchLabel.setText(location + ", " + city);
+            usernameLabel.setText(reservationDetails.get("customer_username"));
+            // fill in the reserved equipments information
+            equipments.clear();
+            EquipmentQuantities.clear();
+            //iterate over the hashmap
+            for (Map.Entry<String, String> entry : reservedEquipments.entrySet()) {
+                String equipName = entry.getKey();
+                String quantity = entry.getValue();
+                equipments.add(equipName);
+                EquipmentQuantities.add(Integer.parseInt(quantity));
+            }
+
+        }
     }
 
     private void showSummary() {
@@ -723,7 +774,17 @@ public class ReserveRentController extends AbstractController implements Initial
     }
 
     public void handleReserve() {
-
+        prepareData();
+        cost = 0;
+        int confirmNo = userModel.createReservation(fromDate, fromHour, 
+                toDate, toHour, cost, city, location, 
+                usernameLabel.getText(), "pending", vehicleType);
+        if (confirmNo==-1) {
+            popUpError("Failed to make reservation!");
+        } else {
+            popUpMessage("The confirmation number is " + confirmNo 
+                    + " for the current reservation. Please make a note of it!");
+        }
     }
 
     public void handleRent() {
@@ -734,5 +795,16 @@ public class ReserveRentController extends AbstractController implements Initial
         Stage primaryStage = AppContext.getInstance().getPrimaryStage();
         PngConverter pngConverter = new PngConverter(primaryStage);
         pngConverter.saveAsPng(summaryVBox);
+    }
+
+    private void showReservation(String phone) {
+//        final Popup popup = new Popup();
+//        popup.setX(400);
+//        popup.setY(300);
+//        TableView reservationTable = userModel.getReservationsByPhone(phone, city, location);
+//        popup.getContent().addAll(reservationTable);
+//        popup.show(AppContext.getInstance().getPrimaryStage());
+        AppContext.getInstance().setTempData("phone", phone);
+        setupNextPage(this, "ShowReservation.fxml", "Show Reservations");
     }
 }
