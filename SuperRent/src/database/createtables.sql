@@ -1,5 +1,3 @@
-
-
 create table vehicletype
 (typeName varchar(20) not null,
 w_rate integer,
@@ -45,7 +43,6 @@ address varchar(20),
 isRoadStar boolean,
 isClubMember boolean,
 point integer,
-isAnnualPaid boolean,
 payment_date date,
 PRIMARY KEY(username),
 index cust_ind (username),
@@ -209,20 +206,22 @@ pickup_time integer,
 return_date date,
 return_time integer,
 estimation_cost integer,
-vlicense varchar(10),
 branch_city varchar(20),
 branch_location varchar(20),
 customer_username varchar(20),
+status varchar(20),
+vehicleType varchar(20),
+CONSTRAINT check_status CHECK (status in ('rented','expired','pending')),
 PRIMARY KEY(confirmation_number),
-index vehicle_ind (vlicense),
-FOREIGN KEY(vlicense) REFERENCES vehicleinbranch(vlicense)
-ON DELETE CASCADE ON UPDATE CASCADE,
 index branch_ind (branch_city),
 index location_ind (branch_location),
 FOREIGN KEY(branch_city,branch_location) REFERENCES branch(city,location)
 ON DELETE CASCADE ON UPDATE CASCADE,
 index customer_ind (customer_username),
 FOREIGN KEY(customer_username) REFERENCES customer(username)
+ON DELETE CASCADE ON UPDATE CASCADE,
+index type_ind (customer_username),
+FOREIGN KEY(vehicleType) REFERENCES vehicletype(typeName)
 ON DELETE CASCADE ON UPDATE CASCADE
 )
 ENGINE = InnoDB;

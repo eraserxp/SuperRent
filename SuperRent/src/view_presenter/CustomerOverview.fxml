@@ -24,22 +24,19 @@
             <TabPane fx:id="tabPane" prefHeight="775.0" prefWidth="1138.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
                 <Tab fx:id="makeReseravtion_tab" text="Make Reservation">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <BorderPane fx:id="searchVehiclePane" layoutX="-9.0" layoutY="-5.0" prefHeight="542.0" prefWidth="667.0" />
-                           </children>
-                        </AnchorPane>
-                  </content>
+                     <content>
+                        <BorderPane fx:id="makeReservationPane" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
                 </Tab>
-                <Tab fx:id="changePassword_tab" text="Change Password">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <BorderPane prefHeight="484.0" prefWidth="639.0" />
-                           </children>
-                        </AnchorPane>
-                  </content>
+                  <Tab fx:id="membership_tab" text="Membership">
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+                <Tab fx:id="updateProfile_tab" text="Update Profile">
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0" />
+                     </content>
                 </Tab>
               </tabs>
             </TabPane>

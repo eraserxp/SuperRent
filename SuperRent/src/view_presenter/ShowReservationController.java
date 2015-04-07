@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableView.TableViewSelectionModel;
@@ -28,7 +29,7 @@ import model.VehicleSelection;
  *
  * @author eraserxp
  */
-public class ShowSearchResultViewController extends AbstractController implements Initializable {
+public class ShowReservationController extends AbstractController implements Initializable {
 
 //    private Stage searchResultStage;
     @FXML
@@ -39,9 +40,7 @@ public class ShowSearchResultViewController extends AbstractController implement
 
     private ClerkModel clerkModel = new ClerkModel();
 
-    private VehicleSelection selectedVehicle; // = new VehicleSelection();
-
-    private TableView<VehicleSelection> searchResult;
+    private TableView searchResult;
 
     /**
      * Initializes the controller class.
@@ -49,30 +48,34 @@ public class ShowSearchResultViewController extends AbstractController implement
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        String city = AppContext.getInstance().getTempData("city");
-        String location = AppContext.getInstance().getTempData("location");
-        String vehicleType = AppContext.getInstance().getTempData("vehicleType");
-        String fromDate = AppContext.getInstance().getTempData("fromDate");
-        String toDate = AppContext.getInstance().getTempData("toDate");
+//        String city = AppContext.getInstance().getTempData("city");
+//        String location = AppContext.getInstance().getTempData("location");
+        String phone = AppContext.getInstance().getTempData("phone");
         //once get the data, clear them immediately
         AppContext.getInstance().emptyTempData();
-        
-        AppContext.getInstance().setTempData("vehicleSelected", "false");
-        searchResult = clerkModel.getAvailableVehicles(city, location, vehicleType,
-                fromDate, toDate);
+
+        searchResult = clerkModel.getReservationsByPhone(phone);
         borderPane.setCenter(searchResult);
+        Label info = new Label();
+        info.setText("Reservation list");
+        borderPane.setTop(info);
     }
 
 //    public void setStage(Stage stage) {
 //        searchResultStage = stage;
 //    }
     public void handleSelect() {
-        
+
         if (!searchResult.getSelectionModel().isEmpty()) {
-            VehicleSelection vs = searchResult.getSelectionModel().getSelectedItem();
-            // tell the previous page that a vehicle has been selected
-            AppContext.getInstance().setTempData("vehicleSelected", "true");
-            getPreviousController().update(vs);
+            String reservation = searchResult.getSelectionModel().getSelectedItem().toString();
+            //get confirmNo from the above list
+            System.out.println(reservation);
+            String confirmNo = reservation.split(",")[0];
+            confirmNo = confirmNo.replace('[', ' ').trim();
+            // tell the previous page that a reservation has been selected
+            AppContext.getInstance().setTempData("confirmNo", confirmNo);
+        } else {
+            AppContext.getInstance().setTempData("confirmNo", "None");
         }
         getStage().close();
     }

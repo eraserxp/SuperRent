@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.PaymentCCViewController">
+   <children>
+      <GridPane prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="amountlabel" text="Amount  Paid" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <TextField fx:id="AmountTF" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+            <Separator fx:id="sep" prefHeight="0.0" prefWidth="658.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="7" />
+            <Label prefHeight="19.0" prefWidth="134.0" text="Payment Information" GridPane.halignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <Label fx:id="cardtypelabel" text="Card type" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="cardnumberlabel" text="Card number" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label fx:id="expirydatelabel" text="Expiry time (MM/YYYY)" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField fx:id="cardnumberTF" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <TextField fx:id="expirydateTF" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <RadioButton fx:id="creditcardRB" accessibleText="Credit" mnemonicParsing="false" text="By Credit Card" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <toggleGroup>
+                  <ToggleGroup fx:id="group" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="cashRB" mnemonicParsing="false" text="By Cash" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <toggleGroup>
+                  <ToggleGroup fx:id="paymentgroup" />
+               </toggleGroup>
+            </RadioButton>
+            <Button fx:id="Proceed_button" mnemonicParsing="false" onAction="#handleProceedButtonAction" text="CheckOut" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+            <ComboBox fx:id="cardtypeCMB" prefWidth="150.0" promptText="Card Type " GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label fx:id="cardnumbervalidator" prefHeight="17.0" prefWidth="179.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+            <Label fx:id="expirydatevalidator" prefHeight="17.0" prefWidth="181.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+            <Label fx:id="amountvalidator" prefHeight="17.0" prefWidth="177.0" GridPane.columnIndex="3" GridPane.rowIndex="9" />
+            <Label fx:id="amountvaluelabel" prefHeight="17.0" prefWidth="144.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Label prefHeight="17.0" prefWidth="174.0" text="Amount " GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="cardtypevalidator" prefHeight="17.0" prefWidth="176.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <Label fx:id="sucesslabel" prefHeight="17.0" prefWidth="228.0" GridPane.rowIndex="1" />
+            <Button fx:id="GoBack_button" mnemonicParsing="false" onAction="#handleGoBackButtonAction" text="GoBack" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+         </children>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+      </GridPane>
+   </children>
+</AnchorPane>
