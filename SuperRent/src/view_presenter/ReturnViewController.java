@@ -3,15 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 //things to do
 //penalty for lost equipments
 //roadstar
 //add 1000 point
 //add 1500 point
-
-
-
 package view_presenter;
 
 import java.io.IOException;
@@ -344,7 +340,7 @@ public class ReturnViewController extends AbstractController implements Initiali
     }
 
     public void showPaymentDialog() throws IOException {
-        AnchorPane loader = (AnchorPane) FXMLLoader.load(ReturnDialogViewController.class.getResource("PaymentView.fxml"));
+        AnchorPane loader = (AnchorPane) FXMLLoader.load(ReturnDialogViewController.class.getResource("PaymentCCView.fxml"));
 
         Stage dialogStage = new Stage();
         dialogStage.setTitle("Payment");
@@ -394,6 +390,12 @@ public class ReturnViewController extends AbstractController implements Initiali
                 if (!userModel.isRoadStar(username)) {
                     popUpError(username + " is not a road star!");
                     RoadStar.setSelected(false);
+                } else {
+                    try {
+                        showSummary();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
 
             }
@@ -427,12 +429,12 @@ public class ReturnViewController extends AbstractController implements Initiali
                 } catch (SQLException ex) {
                     Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                try {
+                    showSummary();
+                } catch (SQLException ex) {
+                    Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-            }
-            try {
-                showSummary();
-            } catch (SQLException ex) {
-                Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         });
@@ -465,11 +467,12 @@ public class ReturnViewController extends AbstractController implements Initiali
                 } catch (SQLException ex) {
                     Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
-            try {
-                showSummary();
-            } catch (SQLException ex) {
-                Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+                    showSummary();
+                } catch (SQLException ex) {
+                    Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             }
 
         });
