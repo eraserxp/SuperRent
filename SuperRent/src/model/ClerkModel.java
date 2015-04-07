@@ -95,6 +95,8 @@ public class ClerkModel extends UserModel {
             Date pickupdate = rs.getDate("from_date");
             Integer pickuptime = rs.getInt("from_time");
             String rentid = rs.getString("rentid");
+            String toDate = rs.getString("expected_return_date");
+            String toTime = rs.getString("expected_return_time");
 //            String equipmentname = rs.getString("equip_name");
 //            String equipmenttype = rs.getString("equipment_type");
 //            Integer noofequipment = rs.getInt("no_of_equipment");
@@ -110,6 +112,8 @@ public class ClerkModel extends UserModel {
             rentList.add(pickupdate.toString());
             rentList.add(pickuptime.toString());
             rentList.add(rentid);
+            rentList.add(toDate);
+            rentList.add(toTime);
             rs.close();
             return rentList;
 //            rentList.add(equipmentname);
