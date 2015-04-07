@@ -12,10 +12,10 @@
       <TextField fx:id="priceTextField" layoutX="519.0" layoutY="436.0" prefHeight="26.0" prefWidth="144.0" />
       <Label alignment="CENTER_RIGHT" layoutX="449.0" layoutY="441.0" text="Set Price:" />
       <VBox fx:id="oldVehicleVbox" layoutX="255.0" layoutY="14.0" prefHeight="390.0" prefWidth="491.0" />
-      <Button fx:id="showButton" layoutX="164.0" layoutY="173.0" mnemonicParsing="false" onAction="#handleShowButtonAction" prefHeight="26.0" prefWidth="67.0" text="Show" />
-      <TextField fx:id="yearTextField" layoutX="134.0" layoutY="125.0" prefHeight="26.0" prefWidth="46.0" />
-      <Label layoutX="192.0" layoutY="130.0" text="years" />
-      <Label alignment="CENTER_RIGHT" layoutX="8.0" layoutY="130.0" prefHeight="16.0" prefWidth="114.0" text="Vehicles older than" />
+      <Button fx:id="showButton" layoutX="164.0" layoutY="268.0" mnemonicParsing="false" onAction="#handleShowButtonAction" prefHeight="26.0" prefWidth="67.0" text="Show" />
+      <TextField fx:id="yearTextField" layoutX="135.0" layoutY="209.0" prefHeight="26.0" prefWidth="46.0" />
+      <Label layoutX="193.0" layoutY="214.0" text="years" />
+      <Label alignment="CENTER_RIGHT" layoutX="9.0" layoutY="214.0" prefHeight="16.0" prefWidth="114.0" text="Vehicles older than" />
       <Separator layoutX="243.0" orientation="VERTICAL" prefHeight="492.0" prefWidth="4.0" />
       <Label fx:id="validationLabel" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="178.0" prefHeight="16.0" prefWidth="144.0" text="validationLabel" visible="false" />
       <Label fx:id="priceValidationLabel" alignment="BOTTOM_CENTER" layoutX="425.0" layoutY="470.0" prefHeight="16.0" prefWidth="321.0" text="Price Validation" visible="false" />
@@ -23,5 +23,7 @@
       <Label layoutX="9.0" layoutY="77.0" text="Location:" />
       <RadioButton fx:id="truckRadioButton" layoutX="139.0" layoutY="36.0" mnemonicParsing="false" text="Truck" />
       <RadioButton fx:id="carRadioButton" layoutX="81.0" layoutY="37.0" mnemonicParsing="false" text="Car" />
+      <CheckBox fx:id="sortByLocationCB" layoutX="71.0" layoutY="124.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="128.0" text="Sort By Location" />
+      <CheckBox fx:id="sortByCategoryCB" layoutX="71.0" layoutY="160.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="128.0" text="Sort By Category" />
    </children>
 </AnchorPane>
