@@ -247,6 +247,7 @@ public class ReturnViewController extends AbstractController implements Initiali
             summaryVBox.getChildren().remove(summaryGP);
         }
 
+//        passDataToNext();
         String vehicleType = clerkModel.getVehicleType(PlateNumString);
 
         summaryGP = userModel.calculateCost(vehicleType, equipments, quantities,
@@ -565,5 +566,19 @@ public class ReturnViewController extends AbstractController implements Initiali
         });
 
     }
+
+//    private void passDataToNext() {
+//        String equipment1 = null, equipment2 = null;
+//        if (Equip1Combox.getValue() != null) {
+//            equipment1 = Equip1Combox.getValue().toString();
+//        }
+//        if (Equip2Combox.getValue() != null) {
+//            equipment2 = Equip2Combox.getValue().toString();
+//        }
+//        AppContext.getInstance().setTempData("equipment1", equipment1);
+//        AppContext.getInstance().setTempData("equipment2", equipment2);
+//
+//    }
+
 
 }
