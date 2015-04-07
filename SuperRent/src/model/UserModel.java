@@ -679,11 +679,12 @@ public class UserModel {
             ArrayList<Integer> equipQuantityList,
             LocalDate fromDate, int fromHour,
             LocalDate toDate, int toHour, boolean isRoadStar, int redeemedPoints,
-            int odometer, String vlicense) {
+            int odometer, String vlicense) throws SQLException {
         GridPane gridPane = new GridPane();
         int totalCost = 0;
 
         int all_days = (int) ChronoUnit.DAYS.between(fromDate, toDate);
+        int total_day = all_days;
         int hours = toHour - fromHour;
         if (hours < 0) {
             hours += 24;
@@ -924,6 +925,38 @@ public class UserModel {
                 rowIndex++;
             }
         }
+                rowIndex++;
+        //lost equipments fees
+        //overdue fees     
+        ArrayList<String> rentList = new ArrayList<>();
+        rentList = getExpDates(vlicense);
+        String ExpectedDate = rentList.get(0);
+        String ExpectedTime = rentList.get(1);
+        LocalDate expdate = LocalDate.parse(ExpectedDate.trim());
+        Integer exptime = Integer.parseInt(ExpectedTime.split(":")[0]);
+        int over_days = total_day - (int) ChronoUnit.DAYS.between(fromDate, expdate);
+        int over_hours = exptime - fromHour;
+        if (over_hours < 0) {
+            over_hours += 24;
+            over_days -= 1;
+            //but no overdue fees applied
+        }
+
+        for (int colIndex = 0; colIndex < cols; colIndex++) {
+            gridPane.add(new Label("--------------"), colIndex, rowIndex-1);
+        }
+        if (over_days > 0) {
+            gridPane.add(new Label("Overdue penalty"), 0, rowIndex);            
+            gridPane.add(new Label(over_days + " overdue day(s)"), 1, rowIndex);
+            gridPane.add(new Label(over_days + " x " + vehicleRates.get("d_rate") / 100 + ".00" + " x 10%"),
+                    2, rowIndex);
+            int over_rent = vehicleRates.get("d_rate") * over_days / 10;
+            totalCost += over_rent;
+
+            gridPane.add(new Label((over_rent) / 100 + ".00"),
+                    4, rowIndex);
+            rowIndex++;
+        }
 
         //add the total sum
         rowIndex++;
@@ -1045,7 +1078,30 @@ public class UserModel {
                 }
             }
         }
-        
+
         return confirmNo;
     }
+
+    public ArrayList<String> getExpDates(String VehicleNumber) throws SQLException {
+        String SQL = "select *"
+                + " from rent"
+                + " where rent.vlicense = " + addQuotation(VehicleNumber)
+                + " and rent.rentid not in (select vreturn.rent_id from vreturn where vreturn.rent_id = rent.rentid and rent.vlicense = " + addQuotation(VehicleNumber) + ")";
+
+        ResultSet rs = queryDatabase(SQL);
+        ArrayList<String> rentList = new ArrayList<>();
+
+        while (rs.next()) {
+            String toDate = rs.getString("expected_return_date");
+            String toTime = rs.getString("expected_return_time");
+            rentList.add(toDate);
+            rentList.add(toTime);
+            rs.close();
+            return rentList;
+
+        }
+        return null;
+
+    }
+
 }
