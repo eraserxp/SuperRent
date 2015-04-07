@@ -243,7 +243,7 @@ public class ManagerModel extends UserModel {
     }
 
     public TableView getVehicles(String location,
-            String category, String year) {
+            String category, String year,boolean locationCBSlected,boolean categoryCBSelected) {
         TableView tableview;
 
         String SQL = "select vehicleinbranch.vlicense,vehicleinbranch.location,vehicleforrent.category,vehicleforrent.starting_date from"
@@ -263,7 +263,27 @@ public class ManagerModel extends UserModel {
 
         }
 
-        SQL = SQL + " order by vehicleforrent.starting_date ;";
+        if(locationCBSlected && categoryCBSelected){
+        SQL = SQL + " order by vehicleinbranch.location,vehicleforrent.category ;";
+        }
+        else if(locationCBSlected && !categoryCBSelected)
+        {
+             SQL = SQL + " order by vehicleinbranch.location ;";
+        
+        }
+         else if(!locationCBSlected && categoryCBSelected)
+        {
+             SQL = SQL + " order by vehicleforrent.category ;";
+        
+        }
+         else if(!locationCBSlected && !categoryCBSelected)
+        {
+             SQL = SQL + " order by vehicleforrent.starting_date ;";
+        
+        }
+        
+        
+        
 
         System.out.println(SQL);
         /*" select distinct BV.vlicense,BV.city,RV.category,RV.starting_date"
