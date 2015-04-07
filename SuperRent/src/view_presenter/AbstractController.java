@@ -365,14 +365,13 @@ public abstract class AbstractController {
             n.setDisable(true);
         }
     }
-    
-    
+
     //check for the input if its integer
     protected boolean isInputInteger(TextField t) {
         System.out.print("injaa");
-        
-          return  t.getText().trim().matches("^[0-9]+$");
-      
+
+        return t.getText().trim().matches("^[0-9]+$");
+
     }
 
     protected void enableNodes(Node... nodes) {
@@ -392,4 +391,6 @@ public abstract class AbstractController {
             cb.setSelected(false);
         }
     }
+
+
 }
