@@ -145,9 +145,12 @@ public class LoginModel extends UserModel{
         String isRoadStar = "0";
         String isClubMember = "0";
         Integer point = 0;
+        String isAnnualPaid = "0";
+        String payment_date = "null";
         String addCustomer = "insert into customer values ( " + addQuotation(username) + ","
                 + addQuotation(phone) + "," + addQuotation(address) + ", " 
-                + isRoadStar + ", " + isClubMember + ", " + point.toString() + ")";
+                + isRoadStar + ", " + isClubMember + ", " + point.toString() + ", "
+                + isAnnualPaid + ", " + payment_date + ")";
 
         return updateDatabaseBatch(addUser, addCustomer);
     }
