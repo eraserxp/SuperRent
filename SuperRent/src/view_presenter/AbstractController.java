@@ -7,6 +7,7 @@ package view_presenter;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,11 +39,10 @@ import model.ValidationResult;
  *
  */
 public abstract class AbstractController {
-    
+
     private Stage attachedStage;
 
     private AbstractController previousPageController;
-    
 
     public void setPreviousController(AbstractController controller) {
         previousPageController = controller;
@@ -59,13 +59,11 @@ public abstract class AbstractController {
 
     /**
      * pass an object and use previous controller to update previous view
-     * 
-     * For this to work, you need to cast the object o to a specific object
-     * that the previousPageController can recognize and make use of. So the
-     * current page and the next page must both know the actual type of the
-     * object.
+     *
+     * For this to work, you need to cast the object o to a specific object that
+     * the previousPageController can recognize and make use of. So the current
+     * page and the next page must both know the actual type of the object.
      */
-     
     public void updatePreviousPage(Object o) {
         previousPageController.update(o);
     }
@@ -73,11 +71,11 @@ public abstract class AbstractController {
     protected void setStage(Stage stage) {
         attachedStage = stage;
     }
-    
+
     protected Stage getStage() {
         return attachedStage;
     }
-    
+
     //create next stage based on the given fxml
     protected void setupNextPage(AbstractController currentController, String fxml, String title) {
         FXMLLoader loader = new FXMLLoader();
@@ -140,60 +138,60 @@ public abstract class AbstractController {
         Matcher matcher = pattern.matcher(t.getText().trim());
         return matcher.matches();
     }
-    
+
     protected String formatPhoneNo(String validPhoneNo) {
         String regex = "^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(validPhoneNo);
         return matcher.replaceFirst("$1-$2-$3");
     }
-    
-    protected boolean isCardNo(TextField t,String cardtype) {
-        
-        boolean valid=false;
-        
-        if(cardtype=="MasterCard")
-            valid=isMasterCardNo(t);
-        else if(cardtype=="Visa")
-            valid=isVisaCardNo(t);
-         else if(cardtype=="American Express")
-            valid=isAmericanCardNo(t);
-        
+
+    protected boolean isCardNo(TextField t, String cardtype) {
+
+        boolean valid = false;
+
+        if (cardtype == "MasterCard") {
+            valid = isMasterCardNo(t);
+        } else if (cardtype == "Visa") {
+            valid = isVisaCardNo(t);
+        } else if (cardtype == "American Express") {
+            valid = isAmericanCardNo(t);
+        }
+
         return valid;
     }
-    
 
     protected boolean isVisaCardNo(TextField t) {
         String regex_visa = "^4[0-9]{12}(?:[0-9]{3})?$";
         Pattern pattern = Pattern.compile(regex_visa);
         Matcher matcher = pattern.matcher(t.getText().trim());
         return matcher.matches();
-        
+
     }
 
     protected boolean isMasterCardNo(TextField t) {
-        String regex_master="^5[1-5][0-9]{14}$";
+        String regex_master = "^5[1-5][0-9]{14}$";
         Pattern pattern = Pattern.compile(regex_master);
         Matcher matcher = pattern.matcher(t.getText().trim());
         return matcher.matches();
-        
+
     }
-    
+
     protected boolean isAmericanCardNo(TextField t) {
-        String regex_america="^3[47][0-9]{13}$";
+        String regex_america = "^3[47][0-9]{13}$";
         Pattern pattern = Pattern.compile(regex_america);
         Matcher matcher = pattern.matcher(t.getText().trim());
         return matcher.matches();
-        
+
     }
-    
+
     protected boolean isExpiryDateNo(TextField t) {
         String regex = "^(0[1-9]|1[012])[- /.](20)\\d\\d$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(t.getText().trim());
         return matcher.matches();
     }
-    
+
     /**
      * Use the infoLabel to show the warning message s
      *
@@ -321,7 +319,16 @@ public abstract class AbstractController {
 
         alert.showAndWait();
     }
-    
+
+    protected void popUpMessage(String infoMessage) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        //alert.setTitle("");
+//        alert.setHeaderText("Look, an Error Dialog");
+        alert.setContentText(infoMessage);
+
+        alert.showAndWait();
+    }
+
     protected int daysBetween(LocalDate fromDate, LocalDate toDate) {
         return (int) ChronoUnit.DAYS.between(fromDate, toDate);
     }
@@ -359,7 +366,15 @@ public abstract class AbstractController {
             n.setDisable(true);
         }
     }
-    
+
+    //check for the input if its integer
+    protected boolean isInputInteger(TextField t) {
+        System.out.print("injaa");
+
+        return t.getText().trim().matches("^[0-9]+$");
+
+    }
+
     protected void enableNodes(Node... nodes) {
         for (Node n : nodes) {
             n.setDisable(false);
@@ -367,14 +382,21 @@ public abstract class AbstractController {
     }
 
     protected void clearLabels(Label... labels) {
-        for (Label l: labels) {
+        for (Label l : labels) {
             l.setText("");
         }
     }
-    
+
     protected void unSelect(CheckBox... cbs) {
-        for (CheckBox cb: cbs) {
+        for (CheckBox cb : cbs) {
             cb.setSelected(false);
         }
     }
+
+    protected LocalDate stringToLocalDate(String dateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(dateString, formatter);
+        return date;
+    }
+
 }

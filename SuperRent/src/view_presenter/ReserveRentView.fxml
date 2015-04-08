@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.ReserveRentController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.ReserveRentController">
    <children>
       <SplitPane dividerPositions="0.32456140350877194" layoutX="62.0" layoutY="14.0" prefHeight="339.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
@@ -168,83 +168,91 @@
                <children>
                   <VBox fx:id="summaryVBox" layoutX="30.0" prefHeight="505.0" prefWidth="476.0" AnchorPane.bottomAnchor="93.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                      <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="476.0">
+                        <GridPane>
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
                            <children>
-                              <Label text="Customer:" />
-                              <Label fx:id="usernameLabel" text="username">
-                                 <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
+                              <Label text="Customer:" GridPane.halignment="LEFT" />
+                              <Label fx:id="usernameLabel" text="username" GridPane.columnIndex="1" GridPane.halignment="LEFT">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label text="Vehicle type:" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+                              <Label fx:id="vehicleTypeLabel" text="type" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label text="Plate No: " GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+                              <Label fx:id="plateNoLabel" text="plateNo" GridPane.columnIndex="4" GridPane.halignment="LEFT" GridPane.rowIndex="1">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <Label text="Vehicle type: ">
-                                 <HBox.margin>
-                                    <Insets left="25.0" />
-                                 </HBox.margin>
-                              </Label>
-                              <Label fx:id="vehicleTypeLabel" text="type">
+                              <Label text="Pickup:" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
+                              <Label fx:id="branchLabel" text="branch" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.rowIndex="3">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
-                                 <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
                               </Label>
-                              <Label text="Plate No: ">
-                                 <HBox.margin>
-                                    <Insets left="25.0" />
-                                 </HBox.margin>
+                              <Label text="From:" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+                              <Label fx:id="fromTimeLabel" text="fromTime" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
                               </Label>
-                              <Label fx:id="plateNoLabel" text="plateNo">
-                                 <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
+                              <Label text="To:" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+                              <Label fx:id="toTimeLabel" text="toTime" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label text="Phone:" GridPane.columnIndex="3" GridPane.halignment="LEFT" />
+                              <Label fx:id="phoneLabel" text="phone" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.halignment="LEFT">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="showLicenseLabel" text="Driver license" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                              <Label fx:id="licenseLabel" text="license:" GridPane.columnIndex="4" GridPane.rowIndex="3">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
                            </children>
-                        </HBox>
-                        <HBox prefHeight="26.0" prefWidth="446.0">
-                           <children>
-                              <Label text="Pickup:" />
-                              <Label fx:id="branchLabel" text="branch">
-                                 <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
-                                 <font>
-                                    <Font name="System Bold" size="13.0" />
-                                 </font>
-                              </Label>
-                              <Label text="From: ">
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin></Label>
-                              <Label fx:id="fromTimeLabel" text="fromTime">
-                                 <font>
-                                    <Font name="System Bold" size="13.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
-                              </Label>
-                              <Label text="To: ">
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                              </Label>
-                              <Label fx:id="toTimeLabel" text="toTime">
-                                 <HBox.margin>
-                                    <Insets left="5.0" />
-                                 </HBox.margin>
-                                 <font>
-                                    <Font name="System Bold" size="13.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </HBox>
+                        </GridPane>
                         <Separator prefWidth="200.0">
                            <VBox.margin>
                               <Insets bottom="10.0" />
@@ -270,7 +278,7 @@
                      </padding></VBox>
                   <HBox layoutX="165.0" layoutY="545.0" prefHeight="32.0" prefWidth="336.0">
                      <children>
-                        <Button fx:id="reserveButton" mnemonicParsing="false" text="Reserve">
+                        <Button fx:id="reserveButton" mnemonicParsing="false" onAction="#handleReserve" text="Reserve">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin></Button>
@@ -279,7 +287,7 @@
                               <Insets left="20.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="rentButton" mnemonicParsing="false" text="Rent">
+                        <Button fx:id="rentButton" mnemonicParsing="false" onAction="#handleRent" text="Rent">
                            <HBox.margin>
                               <Insets left="20.0" />
                            </HBox.margin>

@@ -7,6 +7,7 @@ package view_presenter;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.AdminModel;
 import model.AppContext;
+import model.PaymentModel;
 import model.ValidationResult;
 
 /**
@@ -52,10 +54,22 @@ public class MembershipController extends AbstractController implements Initiali
     
     @FXML
     private Button applyButton;
-
-    private AdminModel adminModel = new AdminModel();
     
-    String user_type,username,amount;
+    @FXML
+    private Label namelabel;
+    
+    @FXML
+    private Label addresslabel;
+    
+    @FXML
+    private Label annuallabel;
+    
+    @FXML
+    private Label annualrate;
+
+    private PaymentModel payModel = new PaymentModel();
+    
+    String user_name,user_type,amount;
 
     /**
      * Initializes the controller class.
@@ -63,17 +77,41 @@ public class MembershipController extends AbstractController implements Initiali
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
+        
+        user_type=AppContext.getInstance().getUserType();
+        user_name=AppContext.getInstance().getUsername();
         setUp();
         
-         user_type=AppContext.getInstance().getUserType();
-         username=AppContext.getInstance().getUsername();
+        
     }
 
     private void setUp() {
         hide(NameValidator,addressValidator);
         
         setUpNameField();
+        setUpAddressField();
+        setUpMember();
 
+    }
+    
+    private void setUpMember() 
+    {
+    
+        boolean isMember=false;
+        Date current_date;
+        
+        System.out.print("IsMember username"+user_name);
+        isMember=payModel.isMembership(user_name);
+        current_date=payModel.GetCurrentDate();
+        System.out.print("IsMember"+isMember);
+        System.out.print("Current_Date"+current_date);
+        if(isMember==true)
+            hide(applyButton,NameField,AddressField,makepaymentButton,namelabel,addresslabel,annuallabel,annualrate);
+        else
+        {
+            
+        }
     }
 
     private void setUpNameField() {
@@ -117,10 +155,32 @@ public class MembershipController extends AbstractController implements Initiali
     
     public void handleMakePaymentButton(ActionEvent event)throws IOException {
         
-        Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+               
+        NameField.requestFocus();
+        AddressField.requestFocus();
+        makepaymentButton.requestFocus();        
+
+        boolean readyToChange = NameOK&&AddOK;
         
-        Parent next_page_parent = null;
+        System.out.print("readytochange"+readyToChange);
         
+        boolean changeOK = false;
+        if (readyToChange) 
+        {
+            // AppContext.getInstance().setUsername(username);
+             //AppContext.getInstance().setUserType(user_type);
+             //AppContext.getInstance().setTempData("amount",amount);
+            setupNextPage(this, "PaymentCCView.fxml", "Make Payment");
+            
+       }
+
+        
+    }
+    
+    
+    /*public void handleApplyMembershipButton(ActionEvent event)throws IOException {
+        
+          
         NameField.requestFocus();
         AddressField.requestFocus();
         makepaymentButton.requestFocus();        
@@ -132,11 +192,13 @@ public class MembershipController extends AbstractController implements Initiali
         {
              AppContext.getInstance().setUsername(username);
              AppContext.getInstance().setUserType(user_type);
-             AppContext.getInstance().setUserType(amount);
-             next_page_parent = FXMLLoader.load(getClass().getResource("PaymentCCView.fxml"));
+             AppContext.getInstance().setTempData("amount",amount);
+             
             
         }
 
         
     }
+    */
+    
 }

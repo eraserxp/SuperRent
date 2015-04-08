@@ -30,6 +30,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import static javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
@@ -618,7 +619,7 @@ public class UserModel {
         return false;
     }
 
-    public boolean isRoadStar(String username)  {
+    public boolean isRoadStar(String username) {
         int isRoadStar = 0;
         String sql = "select isRoadStar from customer where username = "
                 + addQuotation(username);
@@ -652,6 +653,25 @@ public class UserModel {
         return point;
     }
 
+    public HashMap<String, String> getEquipmentsByCNo(String CNo) {
+        HashMap<String, String> result = new HashMap<>();
+        String sql = "select equipName, quantity from reserve_addon "
+                + "where confirmNo = " + CNo;
+        ResultSet rs = queryDatabase(sql);
+        try {
+            while (rs.next()) {
+                for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
+                    String equipName = rs.getString("equipName");
+                    String quantity = rs.getString("quantity");
+                    result.put(equipName, quantity);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
     /**
      *
      * calculate the cost for a given return, rent or reservation
@@ -660,11 +680,12 @@ public class UserModel {
             ArrayList<Integer> equipQuantityList,
             LocalDate fromDate, int fromHour,
             LocalDate toDate, int toHour, boolean isRoadStar, int redeemedPoints,
-            int odometer, String vlicense) {
+            int odometer, String vlicense, boolean isForReturn) {
         GridPane gridPane = new GridPane();
         int totalCost = 0;
 
         int all_days = (int) ChronoUnit.DAYS.between(fromDate, toDate);
+        int total_day = all_days;
         int hours = toHour - fromHour;
         if (hours < 0) {
             hours += 24;
@@ -905,6 +926,43 @@ public class UserModel {
                 rowIndex++;
             }
         }
+        rowIndex++;
+
+// the following should be included in a conditional block
+        //only do the following if the calculation is for return
+        if (isForReturn) {
+            //lost equipments fees
+            //overdue fees     
+            ArrayList<String> rentList = new ArrayList<>();
+            rentList = getExpDates(vlicense);
+            String ExpectedDate = rentList.get(0);
+            String ExpectedTime = rentList.get(1);
+            LocalDate expdate = LocalDate.parse(ExpectedDate.trim());
+            Integer exptime = Integer.parseInt(ExpectedTime.split(":")[0]);
+            int over_days = total_day - (int) ChronoUnit.DAYS.between(fromDate, expdate);
+            int over_hours = exptime - fromHour;
+            if (over_hours < 0) {
+                over_hours += 24;
+                over_days -= 1;
+                //but no overdue fees applied
+            }
+
+            for (int colIndex = 0; colIndex < cols; colIndex++) {
+                gridPane.add(new Label("--------------"), colIndex, rowIndex - 1);
+            }
+            if (over_days > 0) {
+                gridPane.add(new Label("Overdue penalty"), 0, rowIndex);
+                gridPane.add(new Label(over_days + " overdue day(s)"), 1, rowIndex);
+                gridPane.add(new Label(over_days + " x " + vehicleRates.get("d_rate") / 100 + ".00" + " x 10%"),
+                        2, rowIndex);
+                int over_rent = vehicleRates.get("d_rate") * over_days / 10;
+                totalCost += over_rent;
+
+                gridPane.add(new Label((over_rent) / 100 + ".00"),
+                        4, rowIndex);
+                rowIndex++;
+            }
+        }
 
         //add the total sum
         rowIndex++;
@@ -931,6 +989,235 @@ public class UserModel {
         String SQL = "select * from reservation where confirmation_number=" + ConNumber
                 + " and status = 'pending' ";
         return getOneRowAsHashMap(SQL);
+    }
+
+    public TableView getReservationsByPhone(String phone) {
+        String SQL = "select R.confirmation_number as 'Confirmation No.', "
+                + " C.username as 'Customer', "
+                + "R.pickup_date as 'Pickup date', "
+                + " R.pickup_time as 'Pickup hour', "
+                + " R.branch_city as City, R.branch_location as Location"
+                + " from customer C, reservation R "
+                + " where C.username = R.customer_username "
+                //+ " and R.branch_city = " + addQuotation(city)
+                //+ " and R.branch_location = " + addQuotation(location)
+                + " and C.phone = " + addQuotation(phone)
+                + " and R.status = 'pending' ";
+        System.out.println(SQL);
+        return getTableViewForSQL(SQL);
+
+    }
+
+    public String getPhone(String username) {
+        String SQL = "select phone from customer "
+                + " where username = " + addQuotation(username);
+        System.out.println(SQL);
+        ResultSet rs = queryDatabase(SQL);
+        String phone = null;
+        try {
+            if (rs.next()) {
+                phone = rs.getString("phone");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return phone;
+    }
+
+    // return the auto incremented id, return -1 if something went wrong
+    public int createReservation(LocalDate pickup_date, int pickup_time,
+            LocalDate return_date, int return_time, 
+            String branch_city, String branch_location, String customer_username,
+            String status, String vehicleType) {
+//pickup_date date,
+//pickup_time integer,
+//return_date date,
+//return_time integer,
+//estimation_cost integer,
+//branch_city varchar(20),
+//branch_location varchar(20),
+//customer_username varchar(20),
+//status varchar(20),
+//vehicleType varchar(20),
+        int confirmNo = -1;
+        String sql = "insert into reservation "
+                + " (pickup_date, pickup_time, return_date, return_time,  "
+                + " branch_city, branch_location, customer_username, status, vehicleType)"
+                + " values ( "
+                + addQuotation(pickup_date.toString()) + ", "
+                + pickup_time + ", "
+                + addQuotation(return_date.toString()) + ", "
+                + return_time + ", "
+                + addQuotation(branch_city) + ", "
+                + addQuotation(branch_location) + ", "
+                + addQuotation(customer_username) + ", "
+                + " 'pending' " + ", "
+                + addQuotation(vehicleType) + " )";
+        System.out.println(sql);
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = con.createStatement();
+            stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                confirmNo = rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    // ignore
+                }
+            }
+
+            if (stmt != null) {
+                try {
+                    con.commit();
+                    stmt.close();
+                } catch (SQLException ex) {
+                    // ignore
+                }
+            }
+        }
+
+        return confirmNo;
+    }
+
+    public void createEquipReservation(int confirmNo, ArrayList<String> equipments,
+            ArrayList<Integer> equipmentQuantities) {
+        for (int i = 0; i < equipments.size(); ++i) {
+            String equipName = equipments.get(i);
+            int quantity = equipmentQuantities.get(i);
+            String sql = "insert into reserve_addon values ( "
+                    + confirmNo + ", "
+                    + quantity + ", "
+                    + addQuotation(equipName) + ") ";
+            updateDatabase(sql);
+        }
+    }
+
+    public int createRent(int is_reserve, String driver_license,
+            String vlicense, String branch_city, String branch_location,
+            String customer_username, String card_type, String card_no,
+            String expiry_date, LocalDate from_date, int from_time,
+            LocalDate expected_return_date, int expected_return_time,
+            int reservationConfirmNo) {
+//(rentid integer not null auto_increment,
+//is_reserve boolean,
+//driver_license varchar(20),
+//vlicense varchar(10),
+//branch_city varchar(20),
+//branch_location varchar(20),
+//customer_username varchar(20),
+//card_type varchar(40),
+//card_no varchar(40),
+//expiry_date date,
+//from_date date,
+//from_time integer,
+//expected_return_date date,
+//expected_return_time integer,
+        int confirmNo = -1;
+        String sql = "insert into rent "
+                + " (is_reserve, driver_license, vlicense, branch_city, branch_location, "
+                + " customer_username, card_type, card_no, expiry_date, from_date,"
+                + " from_time, expected_return_date, expected_return_time )"
+                + " values ( "
+                + is_reserve + ", "
+                + addQuotation(driver_license) + ", "
+                + addQuotation(vlicense) + ", "
+                + addQuotation(branch_city) + ", "
+                + addQuotation(branch_location) + ", "
+                + addQuotation(customer_username) + ", "
+                + addQuotation(card_type) + ", "
+                + addQuotation(card_no) + ", "
+                + addQuotation(expiry_date) + ", "
+                + addQuotation(from_date.toString()) + ", "
+                + from_time + ", "
+                + addQuotation(expected_return_date.toString()) + ", "
+                + expected_return_time
+                + " )";
+        System.out.println(sql);
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = con.createStatement();
+            stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                confirmNo = rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    // ignore
+                }
+            }
+
+            if (stmt != null) {
+                try {
+                    con.commit();
+                    stmt.close();
+                } catch (SQLException ex) {
+                    // ignore
+                }
+            }
+        }
+
+        if (is_reserve == 1) {
+            String updateReservation = "update reservation set status = 'rented'"
+                    + " where confirmation_number = " + reservationConfirmNo;
+            updateDatabase(updateReservation);
+        }
+        return confirmNo;
+    }
+
+    public void createEquipRent(int rent_id, ArrayList<String> equipments,
+            ArrayList<Integer> equipmentQuantities) {
+        for (int i = 0; i < equipments.size(); ++i) {
+            String equipName = equipments.get(i);
+            int quantity = equipmentQuantities.get(i);
+            String sql = "insert into rent_addon values ( "
+                    + rent_id + ", "
+                    + quantity + ", "
+                    + addQuotation(equipName) + ") ";
+            updateDatabase(sql);
+        }
+    }
+
+    public ArrayList<String> getExpDates(String VehicleNumber) {
+        String SQL = "select *"
+                + " from rent"
+                + " where rent.vlicense = " + addQuotation(VehicleNumber)
+                + " and rent.rentid not in (select vreturn.rent_id from vreturn where vreturn.rent_id = rent.rentid and rent.vlicense = " + addQuotation(VehicleNumber) + ")";
+
+        ResultSet rs = queryDatabase(SQL);
+        ArrayList<String> rentList = new ArrayList<>();
+
+        try {
+            while (rs.next()) {
+                String toDate = rs.getString("expected_return_date");
+                String toTime = rs.getString("expected_return_time");
+                rentList.add(toDate);
+                rentList.add(toTime);
+                rs.close();
+                return rentList;
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+
     }
 
 }

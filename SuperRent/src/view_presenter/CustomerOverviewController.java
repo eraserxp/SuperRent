@@ -70,51 +70,7 @@ public class CustomerOverviewController  extends AbstractController implements I
    
    String user_type,user_name;
     
-/*
-    @FXML
-private ComboBox<String> LocationCombobox;
-ObservableList<String> LocationList=FXCollections.observableArrayList (
-        "Location-1","Location-2","Location-3");
 
-
-@FXML
-private ComboBox<String> VehicleTypeCombobox;
-ObservableList<String> VehicleList=FXCollections.observableArrayList (
-        "Car","Truck");
-
-
-@FXML
-private ComboBox<String> VehicleModelCombobox;
-ObservableList<String> CarModelList=FXCollections.observableArrayList (
-        "CarModel-1","CarModel-2");
-ObservableList<String> TruckModelList=FXCollections.observableArrayList (
-        "TruckModel-1","TruckModel-2");
-
-
-@FXML
-private ComboBox<String> PickUpTimeCombobox;
-@FXML
-private ComboBox<String> ReturnTimeCombobox;
-ObservableList<String> TimeList=FXCollections.observableArrayList (
-        "1:00","2:00","3:00","4:00","5:00","6:00","7:00","8:00","9:00","10:00","11:00","12:00");
-
-
-@FXML
-private ComboBox<String> TimeCombobox1;
-@FXML
-private ComboBox<String> TimeCombobox2;
-ObservableList<String> List=FXCollections.observableArrayList (
-        "AM","PM");
-
-*/
-
-
-
-    /**
-     * Initializes the controller class.
-     * @param url
-     * @param rb
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
@@ -125,6 +81,9 @@ ObservableList<String> List=FXCollections.observableArrayList (
         
         user_type=AppContext.getInstance().getUserType();
         user_name=AppContext.getInstance().getUsername();
+        
+       
+        
            
         tabPane.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Tab>() {
@@ -136,11 +95,12 @@ ObservableList<String> List=FXCollections.observableArrayList (
                                 Parent root;
                                 try {
                                     if (newTab == makeReseravtiontab ) {
-                                        root = FXMLLoader.load(getClass().getResource("AddRemoveUserView.fxml"));
+                                        root = FXMLLoader.load(getClass().getResource("ReserveRentView.fxml"));
                                         makeReservationPane.setCenter(root);
                                     } else if (newTab == membershiptab) {
-                                         AppContext.getInstance().setUserType(user_type);
                                          AppContext.getInstance().setUsername(user_name);
+                                         AppContext.getInstance().setUserType(user_type);;
+                                         //System.out.println("Username in customer"+user_name);
                                         root = FXMLLoader.load(getClass().getResource("MembershipView.fxml"));
                                         membershipPane.setCenter(root);
                                     } else if (newTab == updateProfiletab) {
@@ -148,7 +108,7 @@ ObservableList<String> List=FXCollections.observableArrayList (
                                         updateProfilePane.setCenter(root);
                                     }
                                 } catch (IOException ex) {
-                                    Logger.getLogger(AdminOverviewController.class.getName()).log(Level.SEVERE, null, ex);
+                                    Logger.getLogger(CustomerOverviewController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
                 });

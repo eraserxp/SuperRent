@@ -8,6 +8,11 @@ package model;
 import database.MysqlConnection;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -24,7 +29,7 @@ import javafx.util.Callback;
 public class PaymentModel extends UserModel{
 
     
-     public boolean isMember(String username,String usertype) 
+     public boolean isMember(String username) 
     { 
         boolean valid=false;
           
@@ -53,22 +58,30 @@ public class PaymentModel extends UserModel{
         return valid;
     }
     
-    public String isMemberPaid(String username,String usertype) 
+    public String MemberPayDate(String username,String usertype) throws ParseException 
     {
-        String payment_date="";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date payment_date=sdf.parse("2010-01-01");
+        boolean isCMember;
+        String date_return="";
                 
         try {
 
             //select everything from the given table
             //String SQL = "SELECT type from user where username="+username+"and password="+password;
 
-            String SQL = "SELECT payment_date FROM user WHERE username='"+username+"'";
+            String SQL = "SELECT isClubMember,payment_date FROM user WHERE username='"+username+"'";
             //execute the sql statement and obtain the result
             ResultSet rs = con.createStatement().executeQuery(SQL);
 
-            while(rs.next()){
-             
-            //System.out.println("TYPE "+type);
+            while(rs.next())
+            {
+            isCMember=rs.getBoolean("isClubMember");
+            payment_date=rs.getDate("payment_date");
+            
+            if(isCMember==true)
+                return payment_date.toString();
+            
             }
             rs.close();
 
@@ -82,33 +95,46 @@ public class PaymentModel extends UserModel{
 
         }
 
-        return payment_date;
+        return payment_date.toString();
     }
     
-    public boolean isUserExist(String username) 
+    public String isMemberPayDate(String username,String usertype) throws ParseException 
     {
-       int count=0;
         
-          
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date payment_date=dateFormat.parse("2009-12-31");
+        boolean isCMember;
+        Date date_return;
+        Date current_date;
+        
+        Calendar cal = Calendar.getInstance();
+	cal.setTime(payment_date);
+        cal.add(Calendar.YEAR,1);
+        date_return=cal.getTime();
+        current_date=GetCurrentDate();
+                
         try {
 
             //select everything from the given table
             //String SQL = "SELECT type from user where username="+username+"and password="+password;
 
-            String SQL = "SELECT type FROM user WHERE username='"+username+"'";
+            String SQL = "SELECT isClubMember,payment_date FROM user WHERE username='"+username+"'";
             //execute the sql statement and obtain the result
             ResultSet rs = con.createStatement().executeQuery(SQL);
 
-            while(rs.next()){
-            count++;
+            while(rs.next())
+            {
+            isCMember=rs.getBoolean("isClubMember");
+            payment_date=rs.getDate("payment_date");
+            
+            if(isCMember==true)
+            {
+                
+                return payment_date.toString();
+            
             }
-            
+            }
             rs.close();
-            if(count==0)
-                return false;
-            else 
-                return true;
-            
 
         } 
        
@@ -119,10 +145,10 @@ public class PaymentModel extends UserModel{
             System.out.println("Error on Building Data");
 
         }
-     
-     return true;     
-    }
 
+        return payment_date.toString();
+    }
+    
 
     public boolean addCustomer(String username, String passwd, String name, String type,
             String phone, String address) {
@@ -140,6 +166,16 @@ public class PaymentModel extends UserModel{
         return updateDatabaseBatch(addUser, addCustomer);
     }
 
-    
-
+   public Date GetCurrentDate() 
+   {
+  
+	   DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	   //get current date time with Date()
+	   Date date = new Date();
+	   System.out.println((date));
+ 
+	   return date;   
+ 
+  }
+   
 }

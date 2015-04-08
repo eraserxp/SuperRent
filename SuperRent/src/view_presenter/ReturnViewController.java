@@ -3,6 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+//things to do
+//penalty for lost equipments
+//roadstar
+//add 1000 point
+//add 1500 point
 package view_presenter;
 
 import java.io.IOException;
@@ -116,6 +121,7 @@ public class ReturnViewController extends AbstractController implements Initiali
     ArrayList<String> equipmentslist = new ArrayList<>();
     ArrayList<String> equipments = new ArrayList<>();
     ArrayList<Integer> quantities = new ArrayList<>();
+    LocalDate fromDate, toDate;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -148,6 +154,7 @@ public class ReturnViewController extends AbstractController implements Initiali
 
         String PlateNumString = PlateNoTextField.getText();
         LocalDate returnDate = ReturnDatePicker.getValue();
+        toDate = returnDate;
         String returnTimeString = ReturnTimeCombox.getSelectionModel().getSelectedItem().toString();
         Integer returnTimeInt = Integer.parseInt(returnTimeString.split(":")[0]);
         //Integer returnTime = Integer.parseInt(returnTimeString.split(":")[0]);
@@ -215,6 +222,8 @@ public class ReturnViewController extends AbstractController implements Initiali
             show(Equipment1, Number1, Equipment2, Number2);
         } else {
             System.out.println("No equipments");
+            Equipment1.setText("No equipments rented");
+            show(Equipment1);
             equipments = null;
             quantities = null;
         }
@@ -242,7 +251,7 @@ public class ReturnViewController extends AbstractController implements Initiali
 
         summaryGP = userModel.calculateCost(vehicleType, equipments, quantities,
                 pickupDate, pickuptimeint, returnDate, returnTimeInt, isRoadStar,
-                redeemedPoints, odometer, PlateNumString);
+                redeemedPoints, odometer, PlateNumString,true );
         summaryVBox.getChildren().add(summaryGP);
         System.out.println(equipmentslist);
         //[child_safety_seat, 1, ski_rack, 1]
@@ -335,7 +344,7 @@ public class ReturnViewController extends AbstractController implements Initiali
     }
 
     public void showPaymentDialog() throws IOException {
-        AnchorPane loader = (AnchorPane) FXMLLoader.load(ReturnDialogViewController.class.getResource("PaymentView.fxml"));
+        AnchorPane loader = (AnchorPane) FXMLLoader.load(ReturnDialogViewController.class.getResource("PaymentCCView.fxml"));
 
         Stage dialogStage = new Stage();
         dialogStage.setTitle("Payment");
@@ -385,6 +394,12 @@ public class ReturnViewController extends AbstractController implements Initiali
                 if (!userModel.isRoadStar(username)) {
                     popUpError(username + " is not a road star!");
                     RoadStar.setSelected(false);
+                } else {
+                    try {
+                        showSummary();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
 
             }
@@ -406,6 +421,13 @@ public class ReturnViewController extends AbstractController implements Initiali
                     Redeem1000P.setSelected(false);
                     return;
                 }
+
+                if (daysBetween(fromDate, toDate) < 1) {
+                    popUpError("Time duration must be larger than 1 day to redeem!");
+                    Redeem1000P.setSelected(false);
+                    return;
+                }
+
                 String PlateNumString = PlateNoTextField.getText();
                 String vehicleType;
                 try {
@@ -418,12 +440,12 @@ public class ReturnViewController extends AbstractController implements Initiali
                 } catch (SQLException ex) {
                     Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                try {
+                    showSummary();
+                } catch (SQLException ex) {
+                    Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-            }
-            try {
-                showSummary();
-            } catch (SQLException ex) {
-                Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         });
@@ -444,11 +466,18 @@ public class ReturnViewController extends AbstractController implements Initiali
                     Redeem1500P.setSelected(false);
                     return;
                 }
+
+                if (daysBetween(fromDate, toDate) < 1) {
+                    popUpError("Time duration must be larger than 1 day to redeem!");
+                    Redeem1500P.setSelected(false);
+                    return;
+                }
+
                 String PlateNumString = PlateNoTextField.getText();
                 String vehicleType;
                 try {
                     vehicleType = clerkModel.getVehicleType(PlateNumString);
-                    if (!userModel.isLowRankVehicle(vehicleType)) {
+                    if (!userModel.isHighRankVehicle(vehicleType)) {
                         popUpError("You can't redeem 1500 points with type: " + vehicleType);
                         Redeem1500P.setSelected(false);
                         return;
@@ -456,11 +485,12 @@ public class ReturnViewController extends AbstractController implements Initiali
                 } catch (SQLException ex) {
                     Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
-            try {
-                showSummary();
-            } catch (SQLException ex) {
-                Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+                    showSummary();
+                } catch (SQLException ex) {
+                    Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             }
 
         });
@@ -483,6 +513,8 @@ public class ReturnViewController extends AbstractController implements Initiali
 
                 if (rentList != null) {
                     String rentid = rentList.get(5);
+                    fromDate = LocalDate.parse(rentList.get(8).trim());
+
                     equipmentslist = new ArrayList<>();
                     try {
                         equipmentslist = clerkModel.getEquipmentDetails(rentid);
@@ -513,8 +545,8 @@ public class ReturnViewController extends AbstractController implements Initiali
                         show(ReturnedEquipment1Label, ReturnedEquipment2Label);
                     } else {
                         System.out.println("No equipments");
-                        hide(ReturnedEquipment1Label);
-                        hide(ReturnedEquipment2Label);
+                        ReturnedEquipment1Label.setText("No equipment!");
+                        show(ReturnedEquipment1Label);
                         Equip1Combox.setVisible(false);
                         Equip2Combox.setVisible(false);
                         equipments = null;
