@@ -559,6 +559,8 @@ public class ReserveRentController extends AbstractController implements Initial
             showSuccessMessage(foundByPhoneResult, "Found");
             System.out.println("found");
             usernameLabel.setText(username);
+            AppContext.getInstance().setTempData("customer_username", username);
+            System.out.println(username);
             phoneLabel.setText(phone);
             showReservation(phone);
             String CNo = AppContext.getInstance().getTempData("confirmNo");
