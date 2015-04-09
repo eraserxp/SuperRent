@@ -21,6 +21,11 @@
                <content>
                   <BorderPane fx:id="ReturnContents" prefHeight="200.0" prefWidth="200.0" />
                </content></Tab>
+            <Tab fx:id="queryTab" text="Search vehicles">
+               <content>
+                  <BorderPane fx:id="queryContents" prefHeight="200.0" prefWidth="200.0" />
+               </content>
+            </Tab>
          </tabs>
       </TabPane>
       <ImageView fitHeight="123.0" fitWidth="181.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">

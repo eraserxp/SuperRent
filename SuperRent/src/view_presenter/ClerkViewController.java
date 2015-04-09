@@ -35,16 +35,13 @@ import model.ClerkModel;
 /**
  * FXML Controller class
  *
- * 
+ *
  */
-
-
 public class ClerkViewController extends AbstractController implements Initializable {
 
     /**
      * Initializes the controller class.
      */
-    
     //ClerkViewControllers
     @FXML
     private Button logoutButton;
@@ -52,39 +49,40 @@ public class ClerkViewController extends AbstractController implements Initializ
     private Label usernameLabel;
     @FXML
     private Label userTypeLabel;
-    
+
     //the three tabs in the view
     @FXML
-    private Tab SearchRentTab;   
+    private Tab SearchRentTab;
     @FXML
     private Tab ReturnTab;
+    
+    @FXML
+    private Tab queryTab;
     //three corresponeding border panes to hold the contents of the three tab view
     @FXML
     private BorderPane SearchRentContents;
     @FXML
     private BorderPane ReturnContents;
-  
-    
-    
-    
+
+    @FXML
+    private BorderPane queryContents;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        
-   // TODO
+
+        // TODO
         usernameLabel.setText(AppContext.getInstance().getUsername());
         usernameLabel.setTextFill(Color.GREEN);
         userTypeLabel.setText(AppContext.getInstance().getUserType());
         userTypeLabel.setTextFill(Color.GREEN);
-        
-        
+
         //the following try-catch block swith from different tabs to others
         try {
             //when the check reservatoin tab is selected, show the contents of the tab
-            
+
             Parent root = FXMLLoader.load(getClass().getResource("ReserveRentView.fxml"));
             SearchRentContents.setCenter(root);
-            
+
             SearchRentTab.setOnSelectionChanged(new EventHandler<Event>() {
                 @Override
                 public void handle(Event event) {
@@ -98,7 +96,7 @@ public class ClerkViewController extends AbstractController implements Initializ
                     }
                 }
             });
-            
+
             ReturnTab.setOnSelectionChanged(new EventHandler<Event>() {
                 @Override
                 public void handle(Event event) {
@@ -112,16 +110,27 @@ public class ClerkViewController extends AbstractController implements Initializ
                     }
                 }
             });
-            
+
 //        show the state that the tab is selected
 //        ClerkTabPane.getSelectionModel().select(CheckReservationTab);
+            queryTab.setOnSelectionChanged(new EventHandler<Event>() {
+                @Override
+                public void handle(Event event) {
+                    if (queryTab.isSelected()) {
+                        try {
+                            Parent root = FXMLLoader.load(getClass().getResource("QueryVehicles.fxml"));
+                            queryContents.setCenter(root);
+                        } catch (IOException ex) {
+                            Logger.getLogger(AdminOverviewController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            });
 
-            
         } catch (IOException ex) {
             Logger.getLogger(ClerkViewController.class.getName()).log(Level.SEVERE, null, ex);
         }//the end of the try-catch of the view switch
-        
-        
+
     }   //the end of the initialize 
 
     //ClerkViewController
@@ -139,13 +148,5 @@ public class ClerkViewController extends AbstractController implements Initializ
         app_stage.show();
 
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
 }
