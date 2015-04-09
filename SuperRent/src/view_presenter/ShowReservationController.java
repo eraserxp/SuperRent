@@ -37,6 +37,9 @@ public class ShowReservationController extends AbstractController implements Ini
 
     @FXML
     private BorderPane borderPane;
+    
+    @FXML
+    private Label foundCustomerLabel;
 
     private ClerkModel clerkModel = new ClerkModel();
 
@@ -51,14 +54,18 @@ public class ShowReservationController extends AbstractController implements Ini
 //        String city = AppContext.getInstance().getTempData("city");
 //        String location = AppContext.getInstance().getTempData("location");
         String phone = AppContext.getInstance().getTempData("phone");
+        String username = AppContext.getInstance().getTempData("customer_username");
         //once get the data, clear them immediately
         AppContext.getInstance().emptyTempData();
 
         searchResult = clerkModel.getReservationsByPhone(phone);
+        
+        String foundCustomer = "Customer with username: " + username + " has been found.";
+        foundCustomerLabel.setText(foundCustomer);
         borderPane.setCenter(searchResult);
-        Label info = new Label();
-        info.setText("Reservation list");
-        borderPane.setTop(info);
+//        Label info = new Label();
+//        info.setText("Reservation list");
+//        borderPane.setTop(info);
     }
 
 //    public void setStage(Stage stage) {

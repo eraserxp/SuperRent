@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.ReserveRentController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.ReserveRentController">
    <children>
       <SplitPane dividerPositions="0.32456140350877194" layoutX="62.0" layoutY="14.0" prefHeight="339.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
@@ -139,7 +139,7 @@
                                           <Insets left="20.0" />
                                        </GridPane.margin>
                                     </Label>
-                                    <Button fx:id="byPhoneSubmitButton" mnemonicParsing="false" onAction="#handleSubmitByPhone" text="Submit" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                                    <Button fx:id="byPhoneSubmitButton" mnemonicParsing="false" onAction="#handleSubmitByPhone" text="Check Customer" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
                                     <Label alignment="BASELINE_LEFT" prefHeight="16.0" prefWidth="121.0" text="by confirmation No." GridPane.columnSpan="2" GridPane.rowIndex="1">
                                        <GridPane.margin>
                                           <Insets left="20.0" />
@@ -177,6 +177,8 @@
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -186,7 +188,7 @@
                           </rowConstraints>
                            <children>
                               <Label text="Customer:" GridPane.halignment="LEFT" />
-                              <Label fx:id="usernameLabel" text="username" GridPane.columnIndex="1" GridPane.halignment="LEFT">
+                              <Label fx:id="usernameLabel" text="username" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="LEFT">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
@@ -194,7 +196,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Label>
-                              <Label text="Vehicle type:" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+                              <Label text="Type:" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
                               <Label fx:id="vehicleTypeLabel" text="type" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
@@ -203,8 +205,8 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Label>
-                              <Label text="Plate No: " GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-                              <Label fx:id="plateNoLabel" text="plateNo" GridPane.columnIndex="4" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+                              <Label text="Plate No: " GridPane.columnIndex="4" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+                              <Label fx:id="plateNoLabel" text="plateNo" GridPane.columnIndex="6" GridPane.halignment="LEFT" GridPane.rowIndex="1">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
@@ -227,8 +229,8 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Label>
-                              <Label text="To:" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
-                              <Label fx:id="toTimeLabel" text="toTime" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+                              <Label text="To:" GridPane.columnIndex="4" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+                              <Label fx:id="toTimeLabel" text="toTime" GridPane.columnIndex="6" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="2">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
@@ -236,8 +238,8 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Label>
-                              <Label text="Phone:" GridPane.columnIndex="3" GridPane.halignment="LEFT" />
-                              <Label fx:id="phoneLabel" text="phone" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.halignment="LEFT">
+                              <Label text="Phone:" GridPane.columnIndex="4" GridPane.halignment="LEFT" />
+                              <Label fx:id="phoneLabel" text="phone" GridPane.columnIndex="6" GridPane.columnSpan="2" GridPane.halignment="LEFT">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
@@ -245,8 +247,8 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Label>
-                              <Label fx:id="showLicenseLabel" text="Driver license" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                              <Label fx:id="licenseLabel" text="license:" GridPane.columnIndex="4" GridPane.rowIndex="3">
+                              <Label fx:id="showLicenseLabel" text="Driver license: " GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                              <Label fx:id="licenseLabel" text="license" GridPane.columnIndex="6" GridPane.rowIndex="3">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
