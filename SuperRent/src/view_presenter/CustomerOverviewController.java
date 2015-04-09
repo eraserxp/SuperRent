@@ -99,12 +99,14 @@ public class CustomerOverviewController  extends AbstractController implements I
                                         makeReservationPane.setCenter(root);
                                     } else if (newTab == membershiptab) {
                                          AppContext.getInstance().setUsername(user_name);
-                                         AppContext.getInstance().setUserType(user_type);;
+                                         AppContext.getInstance().setUserType(user_type);
                                          //System.out.println("Username in customer"+user_name);
                                         root = FXMLLoader.load(getClass().getResource("Membership.fxml"));
                                         membershipPane.setCenter(root);
                                     } else if (newTab == updateProfiletab) {
-                                        root = FXMLLoader.load(getClass().getResource("ChangePasswdView.fxml"));
+                                        AppContext.getInstance().setUsername(user_name);
+                                         AppContext.getInstance().setUserType(user_type);
+                                        root = FXMLLoader.load(getClass().getResource("UpdateProfileView.fxml"));
                                         updateProfilePane.setCenter(root);
                                     }
                                 } catch (IOException ex) {

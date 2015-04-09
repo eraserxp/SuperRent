@@ -165,7 +165,7 @@ public class PaymentModel extends UserModel{
     }
     
 
-    public boolean updateCustomer(String username, String name, String address) throws ParseException {
+    public boolean updateCustomer(String username, String name, String address)  {
         boolean result = false,result1=false;
              
         
