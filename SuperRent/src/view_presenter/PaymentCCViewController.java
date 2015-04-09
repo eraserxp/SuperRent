@@ -119,8 +119,7 @@ public class PaymentCCViewController extends AbstractController implements Initi
     @FXML
     private Button Proceed_button;
 
-    @FXML
-    private Button GoBack_button;
+    
 
     private String radiobutton, cardtype, user_type, user_name;
 
@@ -282,6 +281,7 @@ public class PaymentCCViewController extends AbstractController implements Initi
     @FXML
     private void handleProceedButtonAction(ActionEvent event) throws IOException {
 
+        Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         boolean check = false;
         //System.out.print(user_type);
 
@@ -315,8 +315,11 @@ public class PaymentCCViewController extends AbstractController implements Initi
             AppContext.getInstance().setTempData("card_type", cardtype);
             AppContext.getInstance().setTempData("card_no", cardnumberTF.getText().trim());
             AppContext.getInstance().setTempData("expiry_date", expirydateTF.getText().trim());
-            showSuccessMessage(sucesslabel, "Payment Successful");
-            // AppContext.getInstance().setUserType("success");  /*To know the payment was successfull*/
+            //showSuccessMessage(sucesslabel, "Payment Successful");
+            AppContext.getInstance().setTempData("status","success");
+            
+            app_stage.hide();
+            /*To know the payment was successfull*/
         }
 
 //        if (check == true && radiobutton.equals("By Cash")) {
@@ -329,13 +332,5 @@ public class PaymentCCViewController extends AbstractController implements Initi
 
     }
 
-    @FXML
-    private void handleGoBackButtonAction(ActionEvent event) throws IOException {
-        Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        app_stage.hide();
-        Parent next_page_parent = null;
-        AppContext.getInstance().setUsername(user_name);
-        AppContext.getInstance().setUserType(user_type);
-        next_page_parent = FXMLLoader.load(getClass().getResource("CustomerView.fxml"));
-    }
+    
 }

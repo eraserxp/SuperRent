@@ -161,7 +161,11 @@ public class ReturnViewController extends AbstractController implements Initiali
     private void showSummary() throws SQLException {
 
         String PlateNumString = PlateNoTextField.getText();
+
+        LocalDate returnDate = ReturnDatePicker.getValue();
+
         returnDate = ReturnDatePicker.getValue();
+
         toDate = returnDate;
         String returnTimeString = ReturnTimeCombox.getSelectionModel().getSelectedItem().toString();
         returnTimeInt = Integer.parseInt(returnTimeString.split(":")[0]);

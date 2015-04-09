@@ -43,7 +43,6 @@
             <Label prefHeight="17.0" prefWidth="174.0" text="Amount " GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label fx:id="cardtypevalidator" prefHeight="17.0" prefWidth="176.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
             <Label fx:id="sucesslabel" prefHeight="17.0" prefWidth="228.0" GridPane.rowIndex="1" />
-            <Button fx:id="GoBack_button" mnemonicParsing="false" onAction="#handleGoBackButtonAction" text="GoBack" GridPane.columnIndex="2" GridPane.rowIndex="11" />
          </children>
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

@@ -63,16 +63,19 @@ public class MembershipController extends AbstractController implements Initiali
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
+        user_type=AppContext.getInstance().getUserType();
+         username=AppContext.getInstance().getUsername();
         setUp();
         
-         user_type=AppContext.getInstance().getUserType();
-         username=AppContext.getInstance().getUsername();
+         
     }
 
     private void setUp() {
         hide(NameValidator,addressValidator);
         
         setUpNameField();
+        setUpAddressField();
 
     }
 
@@ -132,8 +135,8 @@ public class MembershipController extends AbstractController implements Initiali
         {
              AppContext.getInstance().setUsername(username);
              AppContext.getInstance().setUserType(user_type);
-             AppContext.getInstance().setUserType(amount);
-             next_page_parent = FXMLLoader.load(getClass().getResource("PaymentCCView.fxml"));
+             AppContext.getInstance().setTempData("amount",amount);
+             setupNextPage(this, "PaymentCCView.fxml", "Payment");
             
         }
 

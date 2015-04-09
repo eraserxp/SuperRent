@@ -682,7 +682,7 @@ public class UserModel {
             LocalDate toDate, int toHour, boolean isRoadStar, int redeemedPoints,
             int odometer, String vlicense, boolean isForReturn) {
         GridPane gridPane = new GridPane();
-        Integer totalCost = 0;
+        int totalCost = 0;
 
         int all_days = (int) ChronoUnit.DAYS.between(fromDate, toDate);
         int total_day = all_days;
@@ -963,8 +963,6 @@ public class UserModel {
                 rowIndex++;
             }
         }
-        
-        AppContext.getInstance().setTempData("amount", totalCost.toString());
 
         //add the total sum
         rowIndex++;

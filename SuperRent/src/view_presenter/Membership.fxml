@@ -16,8 +16,7 @@
             <Label text="Address" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
             <Label text="Annual Fee" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
             <TextField fx:id="NameField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Button fx:id="makepaymentButton" mnemonicParsing="false" onAction="#handleChangeButton" text="Make Payment" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
-            <PasswordField fx:id="AddressField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Button fx:id="makepaymentButton" mnemonicParsing="false" onAction="#handleMakePaymentButton" text="Make Payment" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
             <Label fx:id="NameValidator" prefHeight="16.0" prefWidth="165.0" style="-fx-background-color: pink;" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <padding>
                   <Insets left="10.0" right="10.0" />
@@ -35,11 +34,12 @@
                </GridPane.margin>
             </Label>
             <Label prefHeight="17.0" prefWidth="148.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="Apply Membership" GridPane.rowIndex="1">
+            <Button fx:id="applyButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="Apply Membership" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="50.0" />
                </GridPane.margin>
             </Button>
+            <TextField fx:id="AddressField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="177.0" minWidth="10.0" prefWidth="177.0" />
