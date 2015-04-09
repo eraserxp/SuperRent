@@ -101,7 +101,7 @@ public class CustomerOverviewController  extends AbstractController implements I
                                          AppContext.getInstance().setUsername(user_name);
                                          AppContext.getInstance().setUserType(user_type);;
                                          //System.out.println("Username in customer"+user_name);
-                                        root = FXMLLoader.load(getClass().getResource("MembershipView.fxml"));
+                                        root = FXMLLoader.load(getClass().getResource("Membership.fxml"));
                                         membershipPane.setCenter(root);
                                     } else if (newTab == updateProfiletab) {
                                         root = FXMLLoader.load(getClass().getResource("ChangePasswdView.fxml"));

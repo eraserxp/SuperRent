@@ -123,6 +123,14 @@ public class ReturnViewController extends AbstractController implements Initiali
     ArrayList<Integer> quantities = new ArrayList<>();
     LocalDate fromDate, toDate;
 
+    LocalDate returnDate;
+    Integer rentidint,returnTimeInt,odometer;
+    
+    String rentid,city,location,customerusername,TankFull;
+    //payment method and total cost may not be available here
+    String Payment_Method = "Cash";
+    String totalcost = "";
+    Integer TankFullint = 0;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -153,20 +161,30 @@ public class ReturnViewController extends AbstractController implements Initiali
     private void showSummary() throws SQLException {
 
         String PlateNumString = PlateNoTextField.getText();
+
         LocalDate returnDate = ReturnDatePicker.getValue();
+
+        returnDate = ReturnDatePicker.getValue();
+
         toDate = returnDate;
         String returnTimeString = ReturnTimeCombox.getSelectionModel().getSelectedItem().toString();
-        Integer returnTimeInt = Integer.parseInt(returnTimeString.split(":")[0]);
+        returnTimeInt = Integer.parseInt(returnTimeString.split(":")[0]);
         //Integer returnTime = Integer.parseInt(returnTimeString.split(":")[0]);
         //String OdometerReading = OdometerTextField.getText();
-        //String TankFull = TankFullCombox.getSelectionModel().getSelectedItem().toString();
+        TankFull = TankFullCombox.getSelectionModel().getSelectedItem().toString();
+        if(TankFull.equals("Yes")){
+            TankFullint = 1;
+            
+        }else{
+            TankFullint = 0;
+        }
         //String Equipment1Selection = Equip1Combox.getSelectionModel().getSelectedItem().toString();
         //String Equipment2Selection = Equip2Combox.getSelectionModel().getSelectedItem().toString();
 
         ArrayList<String> rentList = new ArrayList<>();
         rentList = clerkModel.getRentDetails(PlateNumString.trim());
         //System.out.println(rentList);
-        String customerusername = rentList.get(0);
+        customerusername = rentList.get(0);
         UsernameLabel.setText(customerusername);
         PlatenoLabel.setText(PlateNumString);
         String pickuplocation = rentList.get(2) + ", " + rentList.get(1);
@@ -185,13 +203,16 @@ public class ReturnViewController extends AbstractController implements Initiali
 
         ArrayList<String> clerkbranch = new ArrayList<>();
         clerkbranch = clerkModel.getClerkDetails(username);
+        city = clerkbranch.get(0);
+        location = clerkbranch.get(1);
         String returnlocation = clerkbranch.get(1) + ", " + clerkbranch.get(0);
         ReturnLocationLabel.setText(returnlocation);
 
         String returnTime = " at " + returnTimeString + " in " + returnDate;
         ReturnTimeLabel.setText(returnTime);
 
-        String rentid = rentList.get(5);
+        rentid = rentList.get(5);
+        rentidint =  Integer.parseInt(rentid);
         equipmentslist = new ArrayList<>();
         equipmentslist = clerkModel.getEquipmentDetails(rentid);
 
@@ -230,7 +251,7 @@ public class ReturnViewController extends AbstractController implements Initiali
 
         int redeemedPoints = 0;
         boolean isRoadStar = false;
-        int odometer = Integer.parseInt(OdometerTextField.getText());
+        odometer = Integer.parseInt(OdometerTextField.getText());
         if (!RoadStar.isDisabled() && RoadStar.isSelected()) {
             isRoadStar = true;
         }
@@ -247,11 +268,16 @@ public class ReturnViewController extends AbstractController implements Initiali
             summaryVBox.getChildren().remove(summaryGP);
         }
 
+//        passDataToNext();
         String vehicleType = clerkModel.getVehicleType(PlateNumString);
 
         summaryGP = userModel.calculateCost(vehicleType, equipments, quantities,
                 pickupDate, pickuptimeint, returnDate, returnTimeInt, isRoadStar,
                 redeemedPoints, odometer, PlateNumString,true );
+        totalcost = AppContext.getInstance().getTempData("amount");
+        Integer temp = Integer.parseInt(totalcost);
+        temp = temp/100;
+        totalcost = temp.toString();
         summaryVBox.getChildren().add(summaryGP);
         System.out.println(equipmentslist);
         //[child_safety_seat, 1, ski_rack, 1]
@@ -333,7 +359,16 @@ public class ReturnViewController extends AbstractController implements Initiali
             public void handle(ActionEvent e) {
 
                 try {
+                    
+                    
+                    clerkModel.createVreturn(rentidint,returnDate,returnTimeInt,city,location,TankFullint,odometer,totalcost,Payment_Method);
+
                     showPaymentDialog();
+                    
+                    
+                    
+                    
+                    
                 } catch (IOException ex) {
                     Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -344,6 +379,7 @@ public class ReturnViewController extends AbstractController implements Initiali
     }
 
     public void showPaymentDialog() throws IOException {
+
         AnchorPane loader = (AnchorPane) FXMLLoader.load(ReturnDialogViewController.class.getResource("PaymentCCView.fxml"));
 
         Stage dialogStage = new Stage();
@@ -353,12 +389,12 @@ public class ReturnViewController extends AbstractController implements Initiali
         dialogStage.setScene(scene);
 
         //do sth when the dialog is closed
-        dialogStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent we) {
-                System.out.println("Do sth when user click the X close icon of the dialog");
-
-            }
-        });
+//        dialogStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+//            public void handle(WindowEvent we) {
+//                System.out.println("Do sth when user click the X close icon of the dialog");
+//
+//            }
+//        });
         dialogStage.showAndWait();
 
     }
@@ -565,5 +601,19 @@ public class ReturnViewController extends AbstractController implements Initiali
         });
 
     }
+
+//    private void passDataToNext() {
+//        String equipment1 = null, equipment2 = null;
+//        if (Equip1Combox.getValue() != null) {
+//            equipment1 = Equip1Combox.getValue().toString();
+//        }
+//        if (Equip2Combox.getValue() != null) {
+//            equipment2 = Equip2Combox.getValue().toString();
+//        }
+//        AppContext.getInstance().setTempData("equipment1", equipment1);
+//        AppContext.getInstance().setTempData("equipment2", equipment2);
+//
+//    }
+
 
 }
