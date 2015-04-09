@@ -156,6 +156,7 @@ public class PaymentCCViewController extends AbstractController implements Initi
         setUpCardNumber();
         setUpExpiryDate();
         setUpAmountField();
+        radiobutton = "By Credit Card";
     }
 
     private void setUpCardTypeCMB() {
@@ -307,6 +308,10 @@ public class PaymentCCViewController extends AbstractController implements Initi
         }
 
         if (check == true ) {
+            System.out.println(cardtype);
+            System.out.println(cardnumberTF.getText().trim());
+            System.out.println(expirydateTF.getText().trim());
+            
             AppContext.getInstance().setTempData("card_type", cardtype);
             AppContext.getInstance().setTempData("card_no", cardnumberTF.getText().trim());
             AppContext.getInstance().setTempData("expiry_date", expirydateTF.getText().trim());
