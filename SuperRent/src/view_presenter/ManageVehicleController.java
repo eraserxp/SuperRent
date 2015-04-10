@@ -42,8 +42,7 @@ public class ManageVehicleController extends AbstractController implements Initi
 
     @FXML
     private ComboBox<String> typeCombobox;
-    @FXML
-    private ComboBox<String> testCombobox;
+   
 
     @FXML
     private TextField plateNumTextField;
@@ -63,15 +62,12 @@ public class ManageVehicleController extends AbstractController implements Initi
     @FXML
     private Button addButton;
 
-    @FXML
-    private Button showButton;
+  
 
     @FXML
     private Button soldButton;
 
-    @FXML
-    private TextField handleAddButtonAction;
-
+   
     @FXML
     private ComboBox<String> locationCMB;
 
@@ -251,6 +247,7 @@ public class ManageVehicleController extends AbstractController implements Initi
         if (addRentAndBranch) {
             showSuccessMessage(addingValidator, "Vehicle Added!");
             addingValidator.setTextFill(Color.GREEN);
+           
         } else {
             showWarning(addingValidator, "Vehicle Not Added!");
             addingValidator.setTextFill(Color.RED);
@@ -318,8 +315,11 @@ public class ManageVehicleController extends AbstractController implements Initi
 
         configureComboBox(locationCMB, userModel.getAllBranches());
         locationCMB.setOnAction((ActionEvent event) -> {
+            
             showWarning(addingValidator, "");
             String branch = locationCMB.getSelectionModel().getSelectedItem();
+                        if(locationCMB.getSelectionModel().getSelectedItem()!=null){
+
             location = branch.split(",")[0].trim();
             city = branch.split(",")[1].trim();
 
@@ -327,7 +327,11 @@ public class ManageVehicleController extends AbstractController implements Initi
                     managerModel.getVehicleTypeAtBranch(city, location, vehicleCategory));
 
             handleVehicleType();
+                        }
         });
+        
+        
+      
     }
 
     @FXML
@@ -351,6 +355,28 @@ public class ManageVehicleController extends AbstractController implements Initi
             soldLabel.setTextFill(Color.RED);
 
         }
+
+    }
+    
+    
+    
+    
+       public void refreshBoxes() {
+
+        carRadioButton.setSelected(false);
+        truckRadioButton.setSelected(false);
+        vehicleCategory = "";
+        locationCMB.getSelectionModel().clearSelection();
+        locationCMB.valueProperty().set(null);
+        location = "";
+        city = "";
+        plateNumTextField.setText("");
+      brandTextField.setText("");
+        
+        
+        
+        
+        
 
     }
 
