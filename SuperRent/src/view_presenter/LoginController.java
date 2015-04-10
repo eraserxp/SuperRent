@@ -136,7 +136,7 @@ public class LoginController extends AbstractController implements Initializable
         password=passwordField.getText();
         
         valid=loginModel.isValidCredentials(username,password);
-        System.out.println("Valid="+valid);
+        //System.out.println("Valid="+valid);
        
          
         

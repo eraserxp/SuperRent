@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="464.0" prefWidth="674.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.UpdateProfileController">
+   <children>
+      <GridPane alignment="CENTER_LEFT" prefHeight="442.0" prefWidth="656.0" vgap="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label prefHeight="20.0" prefWidth="120.0" text="Change Password" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Label>
+            <Label prefHeight="17.0" prefWidth="81.0" text="Old Password:" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+            <Label text="New password:  " GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+            <Label text="Re-type new password:  " GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+            <Button fx:id="changepassButton" mnemonicParsing="false" onAction="#handleChangePassButton" text="Change Password" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
+            <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" />
+            <PasswordField fx:id="passwdField" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <PasswordField fx:id="repasswdField" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Label fx:id="oldpassValidatorLabel" prefHeight="17.0" prefWidth="181.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Label>
+            <Label fx:id="passwdValidatorLabel" prefHeight="16.0" prefWidth="152.0" GridPane.columnIndex="3" GridPane.rowIndex="4">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Label>
+            <Label fx:id="changeInfoLabel" text="changeInfoLabel" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <Separator prefHeight="13.0" prefWidth="204.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" />
+            <Label prefHeight="20.0" prefWidth="99.0" text="Change Phone" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Label>
+            <Label prefHeight="17.0" prefWidth="90.0" text="Phone Number:" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
+            <PasswordField fx:id="oldpassField" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <TextField fx:id="phoneField" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+            <Button fx:id="changephoneButton" mnemonicParsing="false" onAction="#handleChangePhoneButton" text="Change Phone" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="9" />
+            <Separator prefHeight="13.0" prefWidth="204.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="10" />
+            <Label prefHeight="20.0" prefWidth="107.0" text="Change Address" GridPane.halignment="RIGHT" GridPane.rowIndex="11">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="addressField" GridPane.columnIndex="2" GridPane.rowIndex="12" />
+            <Label prefHeight="17.0" prefWidth="53.0" text="Address:" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="12" />
+            <Label fx:id="phoneValidator" prefHeight="17.0" prefWidth="148.0" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+            <Label fx:id="addressValidator" prefHeight="17.0" prefWidth="159.0" GridPane.columnIndex="3" GridPane.rowIndex="12" />
+            <Button fx:id="changeaddButton" mnemonicParsing="false" onAction="#handleChangeAddressButton" text="Change Address" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="13" />
+            <Label fx:id="newpassValidatorLabel" prefHeight="17.0" prefWidth="207.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+         </children>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0" prefWidth="144.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="139.0" minWidth="10.0" prefWidth="139.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="221.0" minWidth="10.0" prefWidth="144.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="173.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+      </GridPane>
+   </children>
+</AnchorPane>

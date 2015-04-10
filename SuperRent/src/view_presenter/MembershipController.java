@@ -7,6 +7,10 @@ package view_presenter;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +25,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.AdminModel;
 import model.AppContext;
+import model.PaymentModel;
 import model.ValidationResult;
 
 /**
@@ -52,10 +57,43 @@ public class MembershipController extends AbstractController implements Initiali
     
     @FXML
     private Button applyButton;
+            
+    @FXML
+    private Button cancelButton;
 
-    private AdminModel adminModel = new AdminModel();
+    @FXML
+    private Label namelabel;
     
-    String user_type,username,amount;
+    @FXML
+    private Label   addresslabel;
+    
+    @FXML
+    private Label annualfeelabel;
+    
+    @FXML
+    private Label annuallabel;
+            
+    @FXML
+    private Label lastpaydatelabel;
+    
+    @FXML
+    private Label paydatelabel;
+    
+    @FXML
+    private Label memvaliduptolabel;
+    
+    @FXML
+    private Label memvaliddatelabel;
+    
+    @FXML
+    private Label memstatuslabel;
+    
+    @FXML
+    private Label statuslabel;
+    
+    private PaymentModel payModel = new PaymentModel();
+    
+    String user_type,username,amount="100.00",name,address,success;
 
     /**
      * Initializes the controller class.
@@ -65,7 +103,8 @@ public class MembershipController extends AbstractController implements Initiali
         // TODO
         
         user_type=AppContext.getInstance().getUserType();
-         username=AppContext.getInstance().getUsername();
+        username=AppContext.getInstance().getUsername();
+        AppContext.getInstance().setTempData("amount",amount);
         setUp();
         
          
@@ -76,7 +115,53 @@ public class MembershipController extends AbstractController implements Initiali
         
         setUpNameField();
         setUpAddressField();
+        setUpMember();
 
+    }
+    
+    private void setUpMember() {
+        
+        boolean isCMember,isOverdue;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date payment_date;
+        Date date_return;
+        
+        isCMember=payModel.isMember(username);
+        cancelButton.setDisable(true);
+        
+        
+        //System.out.println("Is Club Member"+isCMember);
+        
+        if(isCMember==true)
+        {
+            hide(namelabel,NameField,NameValidator,addresslabel,AddressField,addressValidator,
+                  annualfeelabel,annuallabel,applyButton,cancelButton);
+            payment_date=payModel.MemberPayDate(username);
+            date_return=payModel.GetReturnDate(payment_date);
+            isOverdue=payModel.isMembershipOverdue(username);
+            
+            paydatelabel.setText(dateFormat.format(payment_date));
+            memvaliddatelabel.setText(dateFormat.format(date_return));
+            
+            if(isOverdue==true)
+            {
+            statuslabel.setText("Membership Overdue");
+            }
+            else 
+            {
+            statuslabel.setText("Membership Period is Valid");
+            hide(makepaymentButton);
+            }
+        }
+          
+        else if (isCMember==false)
+        {
+           hide(lastpaydatelabel,paydatelabel,memvaliduptolabel,memvaliddatelabel,memstatuslabel,statuslabel,
+           namelabel,NameField,NameValidator,addresslabel,AddressField,addressValidator,
+                  annualfeelabel,annuallabel,makepaymentButton); 
+        }
+            
+            
     }
 
     private void setUpNameField() {
@@ -117,8 +202,8 @@ public class MembershipController extends AbstractController implements Initiali
         });
     }
 
-    
-    public void handleMakePaymentButton(ActionEvent event)throws IOException {
+    @FXML
+    public void handleMakePaymentButton(ActionEvent event)throws IOException, ParseException {
         
         Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         
@@ -135,11 +220,54 @@ public class MembershipController extends AbstractController implements Initiali
         {
              AppContext.getInstance().setUsername(username);
              AppContext.getInstance().setUserType(user_type);
-             AppContext.getInstance().setTempData("amount",amount);
-             setupNextPage(this, "PaymentCCView.fxml", "Payment");
+             //AppContext.getInstance().setTempData("amount",amount);
+              boolean updateOK=false;
+        
+        name=NameField.getText();
+        address=AddressField.getText();
+                              
+        setupNextPage(this, "PaymentCCView.fxml", "Payment");
+        
+        success=AppContext.getInstance().getTempData("status");
+        
+        if(success.equals("success"))
+        {
+            popUpMessage("Payment is successful!");
+            updateOK=payModel.updateCustomer(username, name, address);
+            hide(namelabel,NameField,NameValidator,addresslabel,AddressField,addressValidator,
+                  annualfeelabel,annuallabel,applyButton,cancelButton,makepaymentButton);
+            show(lastpaydatelabel,paydatelabel,memvaliduptolabel,memvaliddatelabel,memstatuslabel,statuslabel);
+            setUpMember();
             
         }
-
         
+            
+        }
+  }
+    @FXML
+    public void handleApplyButton(ActionEvent event)throws IOException {
+        
+        show(namelabel,NameField,NameValidator,addresslabel,AddressField,addressValidator,
+                  annualfeelabel,annuallabel,makepaymentButton);
+        
+        NameField.requestFocus();
+        //AddressField.requestFocus();
+        
+        applyButton.setDisable(true);
+        cancelButton.setDisable(false);
+        
+       
     }
+    
+    @FXML
+    public void handleCancelButton(ActionEvent event)throws IOException {
+        
+        hide(namelabel,NameField,NameValidator,addresslabel,AddressField,addressValidator,
+                  annualfeelabel,annuallabel,makepaymentButton,cancelButton);
+        
+              
+       
+    }
+    
+    
 }

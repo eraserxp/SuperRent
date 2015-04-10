@@ -162,7 +162,7 @@ public class ReturnViewController extends AbstractController implements Initiali
 
         String PlateNumString = PlateNoTextField.getText();
 
-        LocalDate returnDate = ReturnDatePicker.getValue();
+//        LocalDate returnDate = ReturnDatePicker.getValue();
 
         returnDate = ReturnDatePicker.getValue();
 
@@ -274,10 +274,10 @@ public class ReturnViewController extends AbstractController implements Initiali
         summaryGP = userModel.calculateCost(vehicleType, equipments, quantities,
                 pickupDate, pickuptimeint, returnDate, returnTimeInt, isRoadStar,
                 redeemedPoints, odometer, PlateNumString,true );
-        totalcost = AppContext.getInstance().getTempData("amount");
-        Integer temp = Integer.parseInt(totalcost);
-        temp = temp/100;
-        totalcost = temp.toString();
+//        totalcost = AppContext.getInstance().getTempData("amount");
+//        Integer temp = Integer.parseInt(totalcost);
+//        temp = temp/100;
+//        totalcost = temp.toString();
         summaryVBox.getChildren().add(summaryGP);
         System.out.println(equipmentslist);
         //[child_safety_seat, 1, ski_rack, 1]
