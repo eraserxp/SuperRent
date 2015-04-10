@@ -128,6 +128,8 @@ public class FindOldVehicleController extends AbstractController implements Init
         sortByCategoryCB.selectedProperty().addListener(new ChangeListener<Boolean>() {
             public void changed(ObservableValue<? extends Boolean> ov,
                     Boolean old_val, Boolean new_val) {
+              
+                
                 if (sortByCategoryCB.isSelected()) {
                     categoryCBSelected = true;
                 } else {
@@ -175,7 +177,7 @@ public class FindOldVehicleController extends AbstractController implements Init
 
         tableContent = managerModel.getVehicles(location, vehicleCategory, yearTextField.getText(), locationCBSlected, categoryCBSelected);
         oldVehicleVbox.getChildren().add(tableContent);
-     refreshBoxes();
+     //refreshBoxes();
         tableContent.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -291,7 +293,8 @@ public class FindOldVehicleController extends AbstractController implements Init
         tableContent = adminModel.getTable("vehicleforrent");
         oldVehicleVbox.getChildren().add(tableContent);
     }
-
+    
+ @FXML
     public void refreshBoxes() {
 
         carRadioButton.setSelected(false);
@@ -302,12 +305,14 @@ public class FindOldVehicleController extends AbstractController implements Init
         location = "";
         city = "";
         yearTextField.setText("");
-        sortByCategoryCB.setSelected(false);
-        sortByLocationCB.setSelected(false);
+      
         categorySelected = false;
         locationSelected=false;
         sortByCategoryCB.setDisable(false);
         sortByLocationCB.setDisable(false);
+        sortByLocationCB.setSelected(false);
+        sortByCategoryCB.setSelected(false);
+        
         
         
         
