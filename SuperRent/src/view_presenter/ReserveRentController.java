@@ -773,7 +773,7 @@ public class ReserveRentController extends AbstractController implements Initial
         boolean isForReturn = false;
         summaryGP = userModel.calculateCost(vehicleType, equipments, EquipmentQuantities,
                 fromDate, fromHour, toDate, toHour, isRoadStar,
-                redeemedPoints, odometer, null, false);
+                redeemedPoints, odometer, null, false,null,null);
         summaryVBox.getChildren().add(summaryGP);
 
     }

@@ -124,13 +124,14 @@ public class ReturnViewController extends AbstractController implements Initiali
     LocalDate fromDate, toDate;
 
     LocalDate returnDate;
-    Integer rentidint,returnTimeInt,odometer;
-    
-    String rentid,city,location,customerusername,TankFull;
+    Integer rentidint, returnTimeInt, odometer;
+
+    String rentid, city, location, customerusername, TankFull;
     //payment method and total cost may not be available here
     String Payment_Method = "Cash";
     String totalcost = "";
     Integer TankFullint = 0;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -161,9 +162,15 @@ public class ReturnViewController extends AbstractController implements Initiali
     private void showSummary() throws SQLException {
 
         String PlateNumString = PlateNoTextField.getText();
+        Integer Numequipment1 = null, Numequipment2 = null;
 
-//        LocalDate returnDate = ReturnDatePicker.getValue();
-
+        if (!Equip1Combox.getSelectionModel().isEmpty()) {
+            Numequipment1 = Integer.parseInt(Equip1Combox.getSelectionModel().getSelectedItem().toString());
+        }
+        if (!Equip2Combox.getSelectionModel().isEmpty()) {
+            Numequipment2 = Integer.parseInt(Equip2Combox.getSelectionModel().getSelectedItem().toString());
+        }
+//        LocalDate returnDate =ReturnDatePicker.getValue();
         returnDate = ReturnDatePicker.getValue();
 
         toDate = returnDate;
@@ -172,10 +179,10 @@ public class ReturnViewController extends AbstractController implements Initiali
         //Integer returnTime = Integer.parseInt(returnTimeString.split(":")[0]);
         //String OdometerReading = OdometerTextField.getText();
         TankFull = TankFullCombox.getSelectionModel().getSelectedItem().toString();
-        if(TankFull.equals("Yes")){
+        if (TankFull.equals("Yes")) {
             TankFullint = 1;
-            
-        }else{
+
+        } else {
             TankFullint = 0;
         }
         //String Equipment1Selection = Equip1Combox.getSelectionModel().getSelectedItem().toString();
@@ -212,7 +219,7 @@ public class ReturnViewController extends AbstractController implements Initiali
         ReturnTimeLabel.setText(returnTime);
 
         rentid = rentList.get(5);
-        rentidint =  Integer.parseInt(rentid);
+        rentidint = Integer.parseInt(rentid);
         equipmentslist = new ArrayList<>();
         equipmentslist = clerkModel.getEquipmentDetails(rentid);
 
@@ -273,8 +280,8 @@ public class ReturnViewController extends AbstractController implements Initiali
 
         summaryGP = userModel.calculateCost(vehicleType, equipments, quantities,
                 pickupDate, pickuptimeint, returnDate, returnTimeInt, isRoadStar,
-                redeemedPoints, odometer, PlateNumString,true );
-        
+                redeemedPoints, odometer, PlateNumString, true, Numequipment1, Numequipment2);
+
         //get the total cost from the appcontext
 //        totalcost = AppContext.getInstance().getTempData("amount");
 //        Integer temp = Integer.parseInt(totalcost);
@@ -361,16 +368,11 @@ public class ReturnViewController extends AbstractController implements Initiali
             public void handle(ActionEvent e) {
 
                 try {
-                    
-                    
-                    clerkModel.createVreturn(rentidint,returnDate,returnTimeInt,city,location,TankFullint,odometer,totalcost,Payment_Method);
+
+                    clerkModel.createVreturn(rentidint, returnDate, returnTimeInt, city, location, TankFullint, odometer, totalcost, Payment_Method);
 
                     showPaymentDialog();
-                    
-                    
-                    
-                    
-                    
+
                 } catch (IOException ex) {
                     Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -616,6 +618,4 @@ public class ReturnViewController extends AbstractController implements Initiali
 //        AppContext.getInstance().setTempData("equipment2", equipment2);
 //
 //    }
-
-
 }
