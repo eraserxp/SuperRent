@@ -1291,7 +1291,7 @@ public class UserModel {
             }
 
             if (dailyRental) {
-                if (!location.equals("")) {
+                if (location.equals("")) {
                     text = "\nNumber of Trucks," + (count[0] + count[2]);
                     text += "\nNumber of Cars," + (count[1] + count[3]);
                     text += "\nSubtotal for Westbrook Branch," + (count[0] + count[1]);
@@ -1307,7 +1307,7 @@ public class UserModel {
                 }
 
             } else if (dailyReturn) {
-                if (!location.equals("")) {
+                if (location.equals("")) {
                     text = "\nNumber of Trucks," + (count[0] + count[2]) + ", Amount Paid," + ((count[4] + count[5]) / 100);
                     text += "\nNumber of Cars," + (count[1] + count[3]) + ", Amount Paid," + ((count[6] + count[7]) / 100);
                     text += "\nSubtotal for Westbrook Branch," + (count[0] + count[1]) + ", Amount Paid," + ((count[4] + count[6]) / 100);
