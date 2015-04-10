@@ -6,10 +6,15 @@
 package model;
 
 import database.MysqlConnection;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,6 +38,7 @@ import static javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.stage.DirectoryChooser;
 import javafx.util.Callback;
 
 /**
@@ -1217,6 +1223,114 @@ public class UserModel {
             Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+
+    }
+    
+    
+    
+     public boolean exportCSV(TableView table, String location, boolean dailyRental, boolean dailyReturn, int[] count) {
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        //get current date time with Date()
+        Date date = new Date();
+        System.out.println(location + " " + dateFormat.format(date));
+
+        ObservableList<ObservableList> data;
+
+        data = table.getItems();
+
+/////////////////////////////Exporting();
+        try {
+
+            DirectoryChooser dc = new DirectoryChooser();
+            File file = dc.showDialog(null);
+            if (file != null) {
+                String fileName = "";
+
+                if (dailyRental) {
+
+                    if (!location.equals("")) {
+
+                        fileName = dateFormat.format(date) + "_" + location + "_DailyRentalReport.csv";
+                        System.out.print(fileName);
+                    } else {
+
+                        fileName = dateFormat.format(date) + "_" + "DailyRentalReport.csv";
+                        file = new File(file.getAbsolutePath() + "/" + fileName);
+                        System.out.print(fileName);
+                    }
+
+                } else if (dailyReturn) {
+
+                    if (!location.equals("")) {
+
+                        fileName = dateFormat.format(date) + "_" + location + "_DailyReturnReport.csv";
+                        System.out.print(fileName);
+                    } else {
+                        System.out.print("return/");
+                        fileName = dateFormat.format(date) + "_" + "DailyReturnReport.csv";
+                        System.out.print(fileName);
+                    }
+
+                }
+
+                file = new File(file.getAbsolutePath() + "/" + fileName);
+            }
+
+            FileWriter fstream = new FileWriter(file);
+            BufferedWriter out = new BufferedWriter(fstream);
+
+            String text = "License,Location,City,Category,Date" + "\n";
+            out.write(text);
+            for (int i = 0; i < data.size(); i++) {
+
+                text = data.get(i).toString().substring(1, data.get(i).toString().length() - 1) + "\n";
+                System.out.print("inja");
+                System.out.print(text);
+
+                out.write(text);
+            }
+
+            if (dailyRental) {
+                if (!location.equals("")) {
+                    text = "\nNumber of Trucks," + (count[0] + count[2]);
+                    text += "\nNumber of Cars," + (count[1] + count[3]);
+                    text += "\nSubtotal for Westbrook Branch," + (count[0] + count[1]);
+                    text += "\nSubtotal for 300 Regina Street Branch," + (count[2] + count[3]);
+                    text += "\nTotal Numbers," + (count[0] + count[1] + count[2] + count[3]);
+
+                } else {
+
+                    text = "\nNumber of Trucks," + (count[0] + count[2]);
+                    text += "\nNumber of Cars," + (count[1] + count[3]);
+                    text += "\nTotal Numbers," + (count[0] + count[1] + count[2] + count[3]);
+
+                }
+
+            } else if (dailyReturn) {
+                if (!location.equals("")) {
+                    text = "\nNumber of Trucks," + (count[0] + count[2]) + ", Amount Paid," + ((count[4] + count[5]) / 100);
+                    text += "\nNumber of Cars," + (count[1] + count[3]) + ", Amount Paid," + ((count[6] + count[7]) / 100);
+                    text += "\nSubtotal for Westbrook Branch," + (count[0] + count[1]) + ", Amount Paid," + ((count[4] + count[6]) / 100);
+                    text += "\nSubtotal for 300 Regina Street Branch," + (count[2] + count[3]) + ", Amount Paid," + ((count[4] + count[6]) / 100);
+                    text += "\nTotal Numbers," + (count[0] + count[1] + count[2] + count[3]) + ", Amount Paid," + ((count[4] + count[5] + count[6] + count[7]) / 100);
+
+                } else {
+                    text = "\nNumber of Trucks," + (count[0] + count[2]) + ", Amount Paid," + ((count[4] + count[5]) / 100);
+                    text += "\nNumber of Cars," + (count[1] + count[3]) + ", Amount Paid," + ((count[6] + count[7]) / 100);
+                    text += "\nTotal Numbers," + (count[0] + count[1] + count[2] + count[3]) + ", Amount Paid," + ((count[4] + count[5] + count[6] + count[7]) / 100);
+
+                }
+
+            }
+
+            out.write(text);
+            out.close();
+            return true;
+        } catch (Exception e) {//Catch exception if any
+            System.err.println("Error: " + e.getMessage());
+            return false;
+        }
 
     }
 
