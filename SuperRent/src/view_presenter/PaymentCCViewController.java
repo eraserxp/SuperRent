@@ -121,7 +121,7 @@ public class PaymentCCViewController extends AbstractController implements Initi
 
     
 
-    private String radiobutton, cardtype, user_type, user_name;
+    private String radiobutton, cardtype, user_type, user_name,amount;
 
     boolean cardnumberOK, expirydateOK, amountOK;
 
@@ -132,6 +132,9 @@ public class PaymentCCViewController extends AbstractController implements Initi
         hide(cardnumbervalidator, expirydatevalidator, amountvalidator);
         user_type = AppContext.getInstance().getUserType();
         user_name = AppContext.getInstance().getUsername();
+        amount=AppContext.getInstance().getTempData("amount");
+        //System.out.println("Amount"+amount);
+        amountvaluelabel.setText(amount);
 
         switch (user_type) {
             case "CUSTOMER":
@@ -143,15 +146,15 @@ public class PaymentCCViewController extends AbstractController implements Initi
         }
 
         // do things differently for customer and employee
-       /* String userType = AppContext.getInstance().getUserType();
+        String userType = AppContext.getInstance().getUserType();
          if (userType.equals("CUSTOMER")) {
-         hide(creditcardRB,cashRB,amountlabel,AmountTF,amountvalidator);
+         hide(creditcardRB,cashRB,amountlabel,AmountTF,amountvalidator,sep);
          } else {
          setUpPaymentRB();
          }
-         */
+         
         setUpCardTypeCMB();
-        setUpPaymentRB();
+        //setUpPaymentRB();
         setUpCardNumber();
         setUpExpiryDate();
         setUpAmountField();
@@ -308,9 +311,9 @@ public class PaymentCCViewController extends AbstractController implements Initi
         }
 
         if (check == true ) {
-            System.out.println(cardtype);
-            System.out.println(cardnumberTF.getText().trim());
-            System.out.println(expirydateTF.getText().trim());
+            //System.out.println(cardtype);
+           //System.out.println(cardnumberTF.getText().trim());
+            //System.out.println(expirydateTF.getText().trim());
             
             AppContext.getInstance().setTempData("card_type", cardtype);
             AppContext.getInstance().setTempData("card_no", cardnumberTF.getText().trim());

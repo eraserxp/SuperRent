@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -27,6 +28,16 @@ import javafx.util.Callback;
  *
  */
 public class ManagerModel extends UserModel {
+
+    int countTruckVanoucver = 0;
+    int countTruckToronto = 0;
+    int countCarVancouver = 0;
+    int countCarToronto = 0;
+
+    int amountTruckVanoucver = 0;
+    int amountTruckToronto = 0;
+    int amountCarVancouver = 0;
+    int amountCarToronto = 0;
 
     public ManagerModel() {
         super();
@@ -149,7 +160,7 @@ public class ManagerModel extends UserModel {
                 System.out.println(rs.getString("starting_date"));
 
                 addForSaleVehicle = "insert into vehicleforsale values (" + addQuotation(rs.getString("vlicense"))
-                        + "," + addQuotation(price) + "," + addQuotation(rs.getString("starting_date")) + "," + addQuotation(rs.getString("category")) + ","
+                        + "," + addQuotation(price) + "*100," + addQuotation(rs.getString("starting_date")) + "," + addQuotation(rs.getString("category")) + ","
                         + addQuotation(rs.getString("brand")) + "," + addQuotation(rs.getString("vehicletype")) + "," + addQuotation(rs.getString("odometer"))
                         + ")";
 
@@ -175,43 +186,43 @@ public class ManagerModel extends UserModel {
 
         if (!weeklyRate.equals("")) {
 
-            updateStatement = updateStatement + " vehicletype.w_rate = " + addQuotation(weeklyRate) + ",";
+            updateStatement = updateStatement + " vehicletype.w_rate = " + addQuotation(weeklyRate) + "*100,";
         }
 
         if (!dailylyRate.equals("")) {
 
-            updateStatement = updateStatement + " vehicletype.d_rate =" + addQuotation(dailylyRate) + " ,";
+            updateStatement = updateStatement + " vehicletype.d_rate =" + addQuotation(dailylyRate) + "*100,";
 
         }
         if (!hourlylyRate.equals("")) {
 
-            updateStatement = updateStatement + " vehicletype.h_rate =" + addQuotation(hourlylyRate) + " ,";
+            updateStatement = updateStatement + " vehicletype.h_rate =" + addQuotation(hourlylyRate) + "*100,";
 
         }
         if (!PkRate.equals("")) {
 
-            updateStatement = updateStatement + " vehicletype.pk_rate =" + addQuotation(PkRate) + " ,";
+            updateStatement = updateStatement + " vehicletype.pk_rate =" + addQuotation(PkRate) + "*100,";
 
         }
         if (!weeklyInsurance.equals("")) {
 
-            updateStatement = updateStatement + " vehicletype.w_insurance =" + addQuotation(weeklyInsurance) + " ,";
+            updateStatement = updateStatement + " vehicletype.w_insurance =" + addQuotation(weeklyInsurance) + "*100,";
 
         }
         if (!dailyInsurance.equals("")) {
 
-            updateStatement = updateStatement + " vehicletype.h_insurance =" + addQuotation(dailyInsurance) + " ,";
+            updateStatement = updateStatement + " vehicletype.h_insurance =" + addQuotation(dailyInsurance) + "*100,";
 
         }
 
         if (!hourlyInsurance.equals("")) {
 
-            updateStatement = updateStatement + "vehicletype.d_insurance =" + addQuotation(hourlyInsurance) + " ,";
+            updateStatement = updateStatement + "vehicletype.d_insurance =" + addQuotation(hourlyInsurance) + "*100,";
 
         }
         if (!mileLimit.equals("")) {
 
-            updateStatement = updateStatement + "vehicletype.milelimit =" + addQuotation(mileLimit) + " ,";
+            updateStatement = updateStatement + "vehicletype.milelimit =" + addQuotation(mileLimit) + "*100,";
 
         }
 
@@ -243,7 +254,7 @@ public class ManagerModel extends UserModel {
     }
 
     public TableView getVehicles(String location,
-            String category, String year,boolean locationCBSlected,boolean categoryCBSelected) {
+            String category, String year, boolean locationCBSlected, boolean categoryCBSelected) throws IOException {
         TableView tableview;
 
         String SQL = "select vehicleinbranch.vlicense,vehicleinbranch.location,vehicleforrent.category,vehicleforrent.starting_date from"
@@ -263,36 +274,20 @@ public class ManagerModel extends UserModel {
 
         }
 
-        if(locationCBSlected && categoryCBSelected){
-        SQL = SQL + " order by vehicleinbranch.location,vehicleforrent.category ;";
+        if (locationCBSlected && categoryCBSelected) {
+            SQL = SQL + " order by vehicleinbranch.location,vehicleforrent.category ;";
+        } else if (locationCBSlected && !categoryCBSelected) {
+            SQL = SQL + " order by vehicleinbranch.location ;";
+
+        } else if (!locationCBSlected && categoryCBSelected) {
+            SQL = SQL + " order by vehicleforrent.category ;";
+
+        } else if (!locationCBSlected && !categoryCBSelected) {
+            SQL = SQL + " order by vehicleforrent.starting_date ;";
+
         }
-        else if(locationCBSlected && !categoryCBSelected)
-        {
-             SQL = SQL + " order by vehicleinbranch.location ;";
-        
-        }
-         else if(!locationCBSlected && categoryCBSelected)
-        {
-             SQL = SQL + " order by vehicleforrent.category ;";
-        
-        }
-         else if(!locationCBSlected && !categoryCBSelected)
-        {
-             SQL = SQL + " order by vehicleforrent.starting_date ;";
-        
-        }
-        
-        
-        
 
         System.out.println(SQL);
-        /*" select distinct BV.vlicense,BV.city,RV.category,RV.starting_date"
-         + " from vehicleinbranch BV, vehicleforrent RV"
-         + " where BV.vlicense=RV.vlicense"
-         + " and BV.city=" + addQuotation("tronto")
-         + " and BV.location=" + addQuotation("300 Regina Street")
-         + " and RV.category=" + addQuotation("truck");
-         */
 
         tableview = getTableViewForSQL(SQL);
 
@@ -319,6 +314,227 @@ public class ManagerModel extends UserModel {
         observableList.add("item one");
         list.add("item two");
         System.out.println("Size: " + observableList.size());
+
+    }
+
+    public TableView getRentalReports(String location) throws SQLException {
+        TableView tableview;
+
+        String SQL = "select rent.vlicense,rent.branch_location,rent.branch_city, vehicleforrent.category,rent.from_date"
+                + " from rent, vehicleforrent"
+                + " where rent.vlicense= vehicleforrent.vlicense"
+                + " and rent.from_date= CURDATE() ";
+
+        if (!location.equals("")) {
+            SQL = SQL + " and rent.branch_location=" + addQuotation(location)
+                    + "order by rent.branch_location,vehicleforrent.category ;";
+
+        } else {
+
+            SQL = SQL + " order by rent.branch_location,vehicleforrent.category ;";
+
+        }
+
+        System.out.println(SQL);
+
+        tableview = getTableViewForSQL(SQL);
+
+        return tableview;
+
+    }
+
+    public TableView getRetrunReports(String location) throws SQLException {
+        TableView tableview;
+        String SQL = "select rent.vlicense,vreturn.branch_location,vreturn.branch_city, vehicleforrent.category,vreturn.return_date "
+                + "from vreturn, vehicleforrent, rent"
+                + " where rent.vlicense= vehicleforrent.vlicense "
+                + " and  vreturn.rent_id=rent.rentid  "
+                + " and  vreturn.return_date= CURDATE() ";
+
+        if (location.equals("")) {
+            SQL = SQL + " order by vreturn.branch_location,vehicleforrent.category ;";
+
+        } else {
+
+            SQL = SQL + " and vreturn.branch_location=" + addQuotation(location)
+                    + "order by rent.branch_location,vehicleforrent.category ;";
+
+        }
+
+        System.out.println(SQL);
+
+        tableview = getTableViewForSQL(SQL);
+
+        return tableview;
+
+    }
+
+    public int[] countRentVehicles(String location) throws SQLException {
+
+        String SQL = "select rent.vlicense,rent.branch_location,rent.branch_city, vehicleforrent.category,rent.from_date"
+                + " from rent, vehicleforrent"
+                + " where rent.vlicense= vehicleforrent.vlicense"
+                + " and rent.from_date= CURDATE() ";
+
+        if (location.equals("")) {
+            SQL = SQL + " order by rent.branch_location,vehicleforrent.category ;";
+
+        } else {
+
+            SQL = SQL + " and rent.branch_location=" + addQuotation(location)
+                    + "order by rent.branch_location,vehicleforrent.category ;";
+
+        }
+
+        System.out.print("\n" + SQL);
+        System.out.print("\ncountVehicle");
+
+        countTruckVanoucver = 0;
+        countTruckToronto = 0;
+        countCarVancouver = 0;
+        countCarToronto = 0;
+
+        amountTruckVanoucver = 0;
+        amountTruckToronto = 0;
+        amountCarVancouver = 0;
+        amountCarToronto = 0;
+
+        int[] counts = new int[8];
+
+        try (ResultSet rs = con.createStatement().executeQuery(SQL)) {
+
+            while (rs.next()) {
+                System.out.println(rs.getString(4).toString());
+                System.out.println("\n" + rs.getString(3).toString());
+
+                if (rs.getString(4).equalsIgnoreCase("truck") && rs.getString(3).equalsIgnoreCase("Vancouver")) {
+                    countTruckVanoucver++;
+
+                }
+                if (rs.getString(4).equalsIgnoreCase("truck") && rs.getString(3).equalsIgnoreCase("Toronto")) {
+                    countTruckToronto++;
+                }
+                if (rs.getString(4).equalsIgnoreCase("car") && rs.getString(3).equalsIgnoreCase("Toronto")) {
+                    countCarToronto++;
+                }
+                if (rs.getString(4).equalsIgnoreCase("car") && rs.getString(3).equalsIgnoreCase("Vancouver")) {
+                    countCarVancouver++;
+                }
+
+            }
+
+            counts[0] = countTruckVanoucver;
+            counts[1] = countCarVancouver;
+            counts[2] = countTruckToronto;
+            counts[3] = countCarToronto;
+
+            counts[4] = amountTruckVanoucver;
+            counts[5] = amountTruckToronto;
+            counts[6] = amountCarToronto;
+            counts[7] = amountCarVancouver;
+
+            for (int i = 0; i < 4; i++) {
+                System.out.print("\n" + counts[i]);
+
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            System.out.println("Error on Building Data");
+
+        }
+
+        return counts;
+
+    }
+
+    public int[] countReturnVehicles(String location) throws SQLException {
+
+        String SQL = "select rent.vlicense,vreturn.branch_location,vreturn.branch_city, vehicleforrent.category,vreturn.return_date,vreturn.total_cost "
+                + "from vreturn, vehicleforrent, rent"
+                + " where rent.vlicense= vehicleforrent.vlicense "
+                + " and  vreturn.rent_id=rent.rentid  "
+                + " and  vreturn.return_date= CURDATE() ";
+
+        if (location.equals("")) {
+            SQL = SQL + " order by vreturn.branch_location,vehicleforrent.category ;";
+
+        } else {
+
+            SQL = SQL + " and vreturn.branch_location=" + addQuotation(location)
+                    + "order by rent.branch_location,vehicleforrent.category ;";
+
+        }
+
+        System.out.print("\n" + SQL);
+        System.out.print("\nReturnVehicle");
+        System.out.print(location);
+
+        countTruckVanoucver = 0;
+        countTruckToronto = 0;
+        countCarVancouver = 0;
+        countCarToronto = 0;
+
+        amountTruckVanoucver = 0;
+        amountTruckToronto = 0;
+        amountCarVancouver = 0;
+        amountCarToronto = 0;
+
+        int[] counts = new int[8];
+
+        try (ResultSet rs = con.createStatement().executeQuery(SQL)) {
+
+            while (rs.next()) {
+                System.out.println(rs.getString(4).toString());
+                // System.out.println("\n"+rs.getString(3).toString());
+
+                if (rs.getString(4).equalsIgnoreCase("truck") && rs.getString(3).equalsIgnoreCase("Vancouver")) {
+                    countTruckVanoucver++;
+                    amountTruckVanoucver += rs.getInt(6);
+
+                }
+                if (rs.getString(4).equalsIgnoreCase("truck") && rs.getString(3).equalsIgnoreCase("Toronto")) {
+                    countTruckToronto++;
+                    amountTruckToronto += rs.getInt(6);
+                }
+                if (rs.getString(4).equalsIgnoreCase("car") && rs.getString(3).equalsIgnoreCase("Toronto")) {
+                    countCarToronto++;
+                    amountCarToronto += rs.getInt(6);
+
+                }
+                if (rs.getString(4).equalsIgnoreCase("car") && rs.getString(3).equalsIgnoreCase("Vancouver")) {
+                    countCarVancouver++;
+                    amountCarVancouver += rs.getInt(6);
+                }
+
+            }
+
+            counts[0] = countTruckVanoucver;
+            counts[1] = countCarVancouver;
+            counts[2] = countTruckToronto;
+            counts[3] = countCarToronto;
+
+            counts[4] = amountTruckVanoucver / 100;
+            counts[5] = amountTruckToronto / 100;
+            counts[6] = amountCarVancouver / 100;
+            counts[7] = amountCarToronto / 100;
+
+            for (int i = 0; i < 4; i++) {
+                System.out.print("\n" + counts[i]);
+
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            System.out.println("Error on Building Data");
+
+        }
+
+        return counts;
 
     }
 

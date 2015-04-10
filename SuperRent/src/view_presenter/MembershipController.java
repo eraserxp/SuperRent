@@ -93,7 +93,7 @@ public class MembershipController extends AbstractController implements Initiali
     
     private PaymentModel payModel = new PaymentModel();
     
-    String user_type,username,amount="100",name,address,success;
+    String user_type,username,amount="100.00",name,address,success;
 
     /**
      * Initializes the controller class.
@@ -104,6 +104,7 @@ public class MembershipController extends AbstractController implements Initiali
         
         user_type=AppContext.getInstance().getUserType();
         username=AppContext.getInstance().getUsername();
+        AppContext.getInstance().setTempData("amount",amount);
         setUp();
         
          
@@ -219,7 +220,7 @@ public class MembershipController extends AbstractController implements Initiali
         {
              AppContext.getInstance().setUsername(username);
              AppContext.getInstance().setUserType(user_type);
-             AppContext.getInstance().setTempData("amount",amount);
+             //AppContext.getInstance().setTempData("amount",amount);
               boolean updateOK=false;
         
         name=NameField.getText();
@@ -234,8 +235,9 @@ public class MembershipController extends AbstractController implements Initiali
             popUpMessage("Payment is successful!");
             updateOK=payModel.updateCustomer(username, name, address);
             hide(namelabel,NameField,NameValidator,addresslabel,AddressField,addressValidator,
-                  annualfeelabel,annuallabel,applyButton,cancelButton);
+                  annualfeelabel,annuallabel,applyButton,cancelButton,makepaymentButton);
             show(lastpaydatelabel,paydatelabel,memvaliduptolabel,memvaliddatelabel,memstatuslabel,statuslabel);
+            setUpMember();
             
         }
         
@@ -247,6 +249,9 @@ public class MembershipController extends AbstractController implements Initiali
         
         show(namelabel,NameField,NameValidator,addresslabel,AddressField,addressValidator,
                   annualfeelabel,annuallabel,makepaymentButton);
+        
+        NameField.requestFocus();
+        //AddressField.requestFocus();
         
         applyButton.setDisable(true);
         cancelButton.setDisable(false);
