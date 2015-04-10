@@ -38,8 +38,8 @@
       </Label>
       <PasswordField id="pass" fx:id="passwordField" focusTraversable="false" layoutX="226.0" layoutY="178.0" promptText="Password" />
       <Button id="log" fx:id="login_button" layoutX="329.0" layoutY="220.0" mnemonicParsing="false" onAction="#handleloginButtonAction" text="Login" AnchorPane.leftAnchor="329.0" />
-      <Button id="reg" fx:id="register_button" layoutX="263.0" layoutY="220.0" mnemonicParsing="false" onAction="#handleregisterButtonAction" text="Register" />
-      <Button fx:id="clear_button" layoutX="217.0" layoutY="220.0" mnemonicParsing="false" text="Clear" />
+      <Button id="reg" fx:id="register_button" layoutX="249.0" layoutY="220.0" mnemonicParsing="false" onAction="#handleregisterButtonAction" text="Register" />
+      <Button fx:id="clear_button" layoutX="182.0" layoutY="220.0" mnemonicParsing="false" text="Clear" />
       <Label fx:id="usernameValidator" layoutX="394.0" layoutY="135.0" prefHeight="17.0" prefWidth="159.0" />
       <Label fx:id="passwordValidator" layoutX="394.0" layoutY="182.0" prefHeight="17.0" prefWidth="159.0" />
       <Label fx:id="credentialValidator" layoutX="66.0" layoutY="97.0" prefHeight="17.0" prefWidth="159.0" textFill="#ee158c" />
