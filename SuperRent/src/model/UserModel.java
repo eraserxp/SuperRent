@@ -1252,12 +1252,11 @@ public class UserModel {
                     if (!location.equals("")) {
 
                         fileName = dateFormat.format(date) + "_" + location + "_DailyRentalReport.csv";
-                        System.out.print(fileName);
+                       
                     } else {
 
                         fileName = dateFormat.format(date) + "_" + "DailyRentalReport.csv";
-                        file = new File(file.getAbsolutePath() + "/" + fileName);
-                        System.out.print(fileName);
+                        
                     }
 
                 } else if (dailyReturn) {
@@ -1265,11 +1264,11 @@ public class UserModel {
                     if (!location.equals("")) {
 
                         fileName = dateFormat.format(date) + "_" + location + "_DailyReturnReport.csv";
-                        System.out.print(fileName);
+                      
                     } else {
-                        System.out.print("return/");
+                      
                         fileName = dateFormat.format(date) + "_" + "DailyReturnReport.csv";
-                        System.out.print(fileName);
+                      
                     }
 
                 }
