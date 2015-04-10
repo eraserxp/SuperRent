@@ -274,6 +274,8 @@ public class ReturnViewController extends AbstractController implements Initiali
         summaryGP = userModel.calculateCost(vehicleType, equipments, quantities,
                 pickupDate, pickuptimeint, returnDate, returnTimeInt, isRoadStar,
                 redeemedPoints, odometer, PlateNumString,true );
+        
+        //get the total cost from the appcontext
 //        totalcost = AppContext.getInstance().getTempData("amount");
 //        Integer temp = Integer.parseInt(totalcost);
 //        temp = temp/100;
