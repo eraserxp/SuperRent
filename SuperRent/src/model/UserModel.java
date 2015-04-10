@@ -686,7 +686,7 @@ public class UserModel {
             ArrayList<Integer> equipQuantityList,
             LocalDate fromDate, int fromHour,
             LocalDate toDate, int toHour, boolean isRoadStar, int redeemedPoints,
-            int odometer, String vlicense, boolean isForReturn) {
+            int odometer, String vlicense, boolean isForReturn, Integer num1, Integer num2) {
         GridPane gridPane = new GridPane();
         int totalCost = 0;
 
@@ -921,7 +921,7 @@ public class UserModel {
                 rowIndex++;
 
                 //
-                gridPane.add(new Label("Exceed mileage limt"), 0, rowIndex);
+                gridPane.add(new Label("Exceed mile limt"), 0, rowIndex);
                 gridPane.add(new Label("by " + outstandingOdometer / 1000 + " km"), 0, rowIndex + 1);
                 gridPane.add(new Label(outstandingOdometer + " x " + vehicleRates.get("pk_rate") / 100 + ".00"),
                         2, rowIndex);
@@ -957,7 +957,7 @@ public class UserModel {
                 gridPane.add(new Label("--------------"), colIndex, rowIndex - 1);
             }
             if (over_days > 0) {
-                gridPane.add(new Label("Overdue penalty"), 0, rowIndex);
+                gridPane.add(new Label("Penalty"), 0, rowIndex);
                 gridPane.add(new Label(over_days + " overdue day(s)"), 1, rowIndex);
                 gridPane.add(new Label(over_days + " x " + vehicleRates.get("d_rate") / 100 + ".00" + " x 10%"),
                         2, rowIndex);
@@ -967,6 +967,39 @@ public class UserModel {
                 gridPane.add(new Label((over_rent) / 100 + ".00"),
                         4, rowIndex);
                 rowIndex++;
+                Integer rentnum1 = null;
+                Integer rentnum2 = null;
+                if (equipList != null && !equipList.isEmpty()) {
+                    rentnum1 = equipQuantityList.get(0);
+                    rentnum2 = equipQuantityList.get(1);
+                }
+                //lost equipment
+                //the price should be added to the database
+                Integer eprice1 = 500000;
+                Integer eprice2 = 500000;
+                Integer lostequipmentfees = 0;
+                                Integer lostequipmentfees2 = 0;
+
+                if (num1 != null && num1 < rentnum1) {
+                    Integer lostquantity = rentnum1 - num1;
+                    lostequipmentfees += (lostquantity) * eprice1;
+                    gridPane.add(new Label(equipList.get(0)), 1, rowIndex);
+                    gridPane.add(new Label(lostquantity.toString() + " lost"), 2, rowIndex);
+                    gridPane.add(new Label((lostequipmentfees) / 100 + ".00"),
+                            4, rowIndex);
+                    rowIndex++;
+                }
+                if (num2 != null && num2 < rentnum1) {
+                    Integer lostquantity2 = rentnum2 - num2;
+                    lostequipmentfees2 += (lostquantity2) * eprice2;
+                    gridPane.add(new Label(equipList.get(1)), 1, rowIndex);
+                    gridPane.add(new Label(lostquantity2.toString() + " lost"), 2, rowIndex);
+                    gridPane.add(new Label((lostequipmentfees2) / 100 + ".00"),
+                            4, rowIndex);
+                }
+
+                totalCost += lostequipmentfees + lostequipmentfees2;
+
             }
         }
 
@@ -1032,7 +1065,7 @@ public class UserModel {
 
     // return the auto incremented id, return -1 if something went wrong
     public int createReservation(LocalDate pickup_date, int pickup_time,
-            LocalDate return_date, int return_time, 
+            LocalDate return_date, int return_time,
             String branch_city, String branch_location, String customer_username,
             String status, String vehicleType) {
 //pickup_date date,
@@ -1225,10 +1258,8 @@ public class UserModel {
         return null;
 
     }
-    
-    
-    
-     public boolean exportCSV(TableView table, String location, boolean dailyRental, boolean dailyReturn, int[] count) {
+
+    public boolean exportCSV(TableView table, String location, boolean dailyRental, boolean dailyReturn, int[] count) {
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         //get current date time with Date()

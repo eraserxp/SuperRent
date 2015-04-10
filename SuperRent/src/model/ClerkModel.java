@@ -337,7 +337,7 @@ public class ClerkModel extends UserModel {
 
     //method to set the vehicle to be available
     public void updatevehicleforrent(String vlicense) {
-        String updateavailable = "update vehicleforrent set is_available = 1"
+        String updateavailable = "update vehicleforrent set isAvailable = 1"
                 + " where vlicense = " + addQuotation(vlicense);
         updateDatabase(updateavailable);
 
