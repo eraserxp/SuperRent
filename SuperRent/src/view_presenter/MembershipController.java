@@ -91,6 +91,12 @@ public class MembershipController extends AbstractController implements Initiali
     @FXML
     private Label statuslabel;
     
+    @FXML
+    private Label pointsearnlabel;
+    
+    @FXML
+    private Label pointslabel;
+    
     private PaymentModel payModel = new PaymentModel();
     
     String user_type,username,amount="100.00",name,address,success;
@@ -125,6 +131,8 @@ public class MembershipController extends AbstractController implements Initiali
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date payment_date;
         Date date_return;
+        int points;
+        String pt;
         
         isCMember=payModel.isMember(username);
         cancelButton.setDisable(true);
@@ -139,9 +147,12 @@ public class MembershipController extends AbstractController implements Initiali
             payment_date=payModel.MemberPayDate(username);
             date_return=payModel.GetReturnDate(payment_date);
             isOverdue=payModel.isMembershipOverdue(username);
+            points=payModel.getPoints(username);
+            pt=Integer.toString(points);
             
             paydatelabel.setText(dateFormat.format(payment_date));
             memvaliddatelabel.setText(dateFormat.format(date_return));
+            pointslabel.setText(pt);
             
             if(isOverdue==true)
             {
@@ -158,7 +169,7 @@ public class MembershipController extends AbstractController implements Initiali
         {
            hide(lastpaydatelabel,paydatelabel,memvaliduptolabel,memvaliddatelabel,memstatuslabel,statuslabel,
            namelabel,NameField,NameValidator,addresslabel,AddressField,addressValidator,
-                  annualfeelabel,annuallabel,makepaymentButton); 
+                  annualfeelabel,annuallabel,pointsearnlabel,pointslabel,makepaymentButton); 
         }
             
             
@@ -236,7 +247,7 @@ public class MembershipController extends AbstractController implements Initiali
             updateOK=payModel.updateCustomer(username, name, address);
             hide(namelabel,NameField,NameValidator,addresslabel,AddressField,addressValidator,
                   annualfeelabel,annuallabel,applyButton,cancelButton,makepaymentButton);
-            show(lastpaydatelabel,paydatelabel,memvaliduptolabel,memvaliddatelabel,memstatuslabel,statuslabel);
+            show(lastpaydatelabel,paydatelabel,memvaliduptolabel,memvaliddatelabel,memstatuslabel,statuslabel,pointsearnlabel,pointslabel);
             setUpMember();
             
         }
