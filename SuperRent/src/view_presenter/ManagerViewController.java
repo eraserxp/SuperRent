@@ -52,18 +52,22 @@ public class ManagerViewController extends AbstractController implements Initial
 
     @FXML
     private Tab manageVehicleTab;
+    
+     @FXML
+    private Tab reportsTab;
 
     @FXML
     private Tab findOldVehicleTab;
 
-    @FXML
-    private Tab setPriceTab;
 
     @FXML
     private BorderPane manageVehiclePane;
 
     @FXML
     private BorderPane fineOldVehiclePane;
+    
+    @FXML
+    private BorderPane reportsPane;
 
     @FXML
     private Button logoutButton;
@@ -123,14 +127,20 @@ public class ManagerViewController extends AbstractController implements Initial
                                     } else if (newTab == findOldVehicleTab) {
                                         root = FXMLLoader.load(getClass().getResource("FindOldVehicle.fxml"));
                                         fineOldVehiclePane.setCenter(root);
+                                    
+                                    } else if (newTab == reportsTab) {
+                                        root = FXMLLoader.load(getClass().getResource("Reports.fxml"));
+                                        reportsPane.setCenter(root);
                                     }
+                                    
+                                    
                                 } catch (IOException ex) {
                                     Logger.getLogger(AdminOverviewController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
                 });
 
-        tabPane.getSelectionModel().select(manageVehicleTab);
+        tabPane.getSelectionModel().select(findOldVehicleTab);
 
         setUpTypeCM();
 
