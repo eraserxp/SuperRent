@@ -121,7 +121,7 @@ public class PaymentCCViewController extends AbstractController implements Initi
 
     
 
-    private String radiobutton, cardtype, user_type, user_name,amount,Totalcost;
+    private String radiobutton, cardtype, user_type, user_name,amount,Totalcost,payment_met;
 
     boolean cardnumberOK, expirydateOK, amountOK;
 
@@ -133,6 +133,7 @@ public class PaymentCCViewController extends AbstractController implements Initi
         user_type = AppContext.getInstance().getUserType();
         user_name = AppContext.getInstance().getUsername();
         amount=AppContext.getInstance().getTempData("amount")+".00";
+        payment_met=AppContext.getInstance().getTempData("requestFrom");
 //        Totalcost = AppContext.getInstance().getTempData("TotalCost");
         //System.out.println("Amount"+amount);
         amountvaluelabel.setText(amount);
@@ -152,6 +153,15 @@ public class PaymentCCViewController extends AbstractController implements Initi
          hide(creditcardRB,cashRB,amountlabel,AmountTF,amountvalidator,sep);
          } else {
          setUpPaymentRB();
+         if(payment_met.equals("rentPage"))
+         {
+          hide(creditcardRB,cashRB,amountlabel,AmountTF,amountvalidator,sep);   
+         }
+         else if(payment_met.equals("returnPage"))
+         {
+             show(creditcardRB,cashRB,amountlabel,AmountTF,amountvalidator,sep);  
+         }
+         
          }
          
         setUpCardTypeCMB();
@@ -168,9 +178,22 @@ public class PaymentCCViewController extends AbstractController implements Initi
         cardtypes.add("Visa");
         cardtypes.add("American Express");
         configureComboBox(cardtypeCMB, cardtypes);
-        cardtypeCMB.getSelectionModel().selectFirst();
+       // cardtypeCMB.getSelectionModel().selectFirst();
         cardtypeCMB.setOnAction((ActionEvent event) -> {
-            cardtype = cardtypeCMB.getSelectionModel().getSelectedItem().toString();
+           // cardtype = cardtypeCMB.getSelectionModel().getSelectedItem().toString();
+            
+            if(cardtypeCMB.getSelectionModel().isEmpty())
+                {
+                showWarning(cardtypevalidator,"Cardtype can't be empty!");
+               
+                }
+               else 
+               {
+                hide(cardtypevalidator);
+                showWarning(cardtypevalidator,"");
+                cardtype = cardtypeCMB.getSelectionModel().getSelectedItem().toString();
+                
+               }
 
         });
     }

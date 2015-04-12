@@ -194,8 +194,8 @@ public class CancelReserveController extends AbstractController implements Initi
                     {
                     confnoOK = true;
                     confnoselected=true;
-                    conformationno=Integer.parseInt(ConfNoTextField.getText());
-                    System.out.println("Confirmation NUmber"+conformationno);
+                    //conformationno=Integer.parseInt(ConfNoTextField.getText());
+                    //System.out.println("Confirmation Number"+conformationno);
                     }
                     else 
                     {
@@ -269,12 +269,12 @@ public class CancelReserveController extends AbstractController implements Initi
         boolean s1=statuscb.isSelected();
         boolean s2=confnocb.isSelected();
         
-        System.out.print("Ammu"+s1+" "+s2);
+        System.out.println("Ammu "+s1+" "+s2);
         
         
         if(s1==true && s2==true )
         {
-            System.out.print("HiHello");
+            System.out.println("HiHello");
         if(StatusCombobox.getSelectionModel().isEmpty())
                 {
                 showWarning(showValidator,"Status can't be empty!");
@@ -293,7 +293,7 @@ public class CancelReserveController extends AbstractController implements Initi
         
         else if(s1==true)
         {
-            System.out.print("Hi");
+            System.out.println("Hi");
                 if(StatusCombobox.getSelectionModel().isEmpty())
                 {
                 showWarning(showValidator,"Status can't be empty!");
@@ -312,17 +312,18 @@ public class CancelReserveController extends AbstractController implements Initi
         
         else if(s2==true)
         {
-            System.out.print("Hello");
+            System.out.println("Hello");
             ConfNoTextField.requestFocus();
         setUpConfirmationNoField();
         }
         
+        System.out.println("Ammu2 "+s1+" "+s2+" "+statusOK+" "+confnoOK);
         
-        if(confnoselected==true && statusselected==true)
+        if(statusOK==true && confnoOK==true && s1==true && s2==true)
         {        
             
-            
-        boolean result =cusModel.isReservationbyCNSExist(username, conformationno,status);
+        conformationno=Integer.parseInt(ConfNoTextField.getText());
+        boolean result =cusModel.isReservationbyCNSExist(username,conformationno,status.toLowerCase());
         
         if(result==false)
             popUpError("No Data Found !");
@@ -330,7 +331,7 @@ public class CancelReserveController extends AbstractController implements Initi
         {
             
         
-        tableContent = cusModel.getReservationsbyCNS(username, conformationno,status);
+        tableContent = cusModel.getReservationsbyCNS(username,conformationno,status.toLowerCase());
         ReserveVbox.getChildren().add(tableContent);
          tableContent.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -357,7 +358,7 @@ public class CancelReserveController extends AbstractController implements Initi
         }
                
         
-        else if(statusselected==true)
+        else if(statusOK==true && s1==true)
         {        
             
             
@@ -391,10 +392,10 @@ public class CancelReserveController extends AbstractController implements Initi
         }
         }
         
-        else if(confnoselected==true)
+        else if(confnoOK==true && s2==true)
         {        
             
-            
+        conformationno=Integer.parseInt(ConfNoTextField.getText());
         boolean result =cusModel.isReservationbyCNExist(username, conformationno);
         
         if(result==false)
@@ -402,7 +403,7 @@ public class CancelReserveController extends AbstractController implements Initi
         else
         {
             
-        
+        conformationno=Integer.parseInt(ConfNoTextField.getText());
         tableContent = cusModel.getReservationsbyCN(username, conformationno);
         ReserveVbox.getChildren().add(tableContent);
          tableContent.setOnMousePressed(new EventHandler<MouseEvent>() {

@@ -11,7 +11,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.CustomerOverviewController">
+<AnchorPane id="AnchorPane" prefHeight="714.0" prefWidth="919.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.CustomerOverviewController">
    <children>
       <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
@@ -30,7 +30,7 @@
                      <content>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <BorderPane fx:id="membershipPane" prefHeight="490.0" prefWidth="800.0" />
+                              <BorderPane fx:id="membershipPane" prefHeight="604.0" prefWidth="919.0" />
                            </children>
                         </AnchorPane>
                      </content>
@@ -48,7 +48,7 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <BorderPane fx:id="cancelreservePane" prefHeight="497.0" prefWidth="800.0" />
+                              <BorderPane fx:id="cancelreservePane" prefHeight="605.0" prefWidth="919.0" />
                            </children>
                         </AnchorPane>
                     </content>

@@ -369,7 +369,7 @@ public abstract class AbstractController {
 
     //check for the input if its integer
     protected boolean isInputInteger(TextField t) {
-        System.out.print("injaa");
+        
 
         return t.getText().trim().matches("^[0-9]+$");
 
