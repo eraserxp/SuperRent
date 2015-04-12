@@ -73,10 +73,14 @@ public class AdminModel extends UserModel {
         String isRoadStar = "0";
         String isClubMember = "0";
         Integer point = 0;
-        String addCustomer = "insert into customer values ( " + addQuotation(username) + ","
+        String addCustomer = "insert into customer "
+                + "( username, phone, address, isRoadStar, isClubMember, point, payment_date ) "
+                + " values ( " + addQuotation(username) + ","
                 + addQuotation(phone) + "," + addQuotation(address) + ", " 
-                + isRoadStar + ", " + isClubMember + ", " + point.toString() + ")";
-
+                + isRoadStar + ", " + isClubMember + ", " + point.toString() + "," 
+                + " null "
+                + ")";
+        System.out.print(addCustomer);
         return updateDatabaseBatch(addUser, addCustomer);
     }
 

@@ -39,7 +39,7 @@ import model.ManagerModel;
  *
  *
  */
-public class ManagerViewController extends AbstractController implements Initializable {
+public class ManagerOverviewController extends AbstractController implements Initializable {
 
     @FXML
     private Label usernameLabel;

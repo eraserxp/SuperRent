@@ -149,19 +149,19 @@ public class LoginController extends AbstractController implements Initializable
                 case "CUSTOMER":
                     AppContext.getInstance().setUsername(username);
                     AppContext.getInstance().setUserType(user_type);
-                  next_page_parent = FXMLLoader.load(getClass().getResource("CustomerView.fxml"));
+                  next_page_parent = FXMLLoader.load(getClass().getResource("CustomerOverview.fxml"));
                     break;
                 case "CLERK":
                     // set the enxt page to be the page for clerk
                     AppContext.getInstance().setUsername(username);
                     AppContext.getInstance().setUserType(user_type);
-                    next_page_parent = FXMLLoader.load(getClass().getResource("ClerkView.fxml"));
+                    next_page_parent = FXMLLoader.load(getClass().getResource("ClerkOverview.fxml"));
                     break;
                 case "MANAGER":
                     // set the enxt page to be the page for manager
                      AppContext.getInstance().setUsername(username);
                     AppContext.getInstance().setUserType(user_type);
-                    next_page_parent = FXMLLoader.load(getClass().getResource("ManagerView.fxml"));
+                    next_page_parent = FXMLLoader.load(getClass().getResource("ManagerOverview.fxml"));
                     break;
                 case "ADMIN":
                     // set the enxt page to be the page for Aadministrator
