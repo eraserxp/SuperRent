@@ -37,7 +37,7 @@ import model.ClerkModel;
  *
  *
  */
-public class ClerkViewController extends AbstractController implements Initializable {
+public class ClerkOverviewController extends AbstractController implements Initializable {
 
     /**
      * Initializes the controller class.
@@ -128,8 +128,8 @@ public class ClerkViewController extends AbstractController implements Initializ
             });
 
         } catch (IOException ex) {
-            Logger.getLogger(ClerkViewController.class.getName()).log(Level.SEVERE, null, ex);
-        }//the end of the try-catch of the view switch
+            Logger.getLogger(ClerkOverviewController.class.getName()).log(Level.SEVERE, null, ex);
+        }//the end of the try-catch of the view switch//the end of the try-catch of the view switch
 
     }   //the end of the initialize 
 

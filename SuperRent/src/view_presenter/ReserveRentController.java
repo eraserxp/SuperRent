@@ -256,6 +256,9 @@ public class ReserveRentController extends AbstractController implements Initial
         if (userType.equals("CUSTOMER")) {
             hide(rentButton, customerInfoAP,
                     registerButton, selectButton, showLicenseLabel);
+            usernameLabel.setText(AppContext.getInstance().getUsername());
+            phoneLabel.setText(userModel.getPhone(usernameLabel.getText()));
+            show(reserveButton);
         } else {
 
         }
