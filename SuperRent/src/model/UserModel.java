@@ -412,6 +412,7 @@ public class UserModel {
         return branchList;
     }
 
+
     public ArrayList<String> getVehicleTypeAtBranch(String city, String location, String carOrTruck) {
         String SQL = "select distinct typeName from vehicletype VT, vehicleforrent VF, vehicleinbranch VB"
                 + " where VF.vlicense=VB.vlicense and VF.vehicletype=VT.typeName "
@@ -978,7 +979,7 @@ public class UserModel {
                 Integer eprice1 = 500000;
                 Integer eprice2 = 500000;
                 Integer lostequipmentfees = 0;
-                                Integer lostequipmentfees2 = 0;
+                Integer lostequipmentfees2 = 0;
 
                 if (num1 != null && num1 < rentnum1) {
                     Integer lostquantity = rentnum1 - num1;
@@ -1217,6 +1218,12 @@ public class UserModel {
                     + " where confirmation_number = " + reservationConfirmNo;
             updateDatabase(updateReservation);
         }
+        
+        //update vehicle status
+        String updateVehicleStatus = "update vehicleforrent set isAvailable=0 "
+                + " where vlicense = " + addQuotation(vlicense);
+        updateDatabase(updateVehicleStatus);
+        
         return confirmNo;
     }
 
@@ -1283,11 +1290,11 @@ public class UserModel {
                     if (!location.equals("")) {
 
                         fileName = dateFormat.format(date) + "_" + location + "_DailyRentalReport.csv";
-                       
+
                     } else {
 
                         fileName = dateFormat.format(date) + "_" + "DailyRentalReport.csv";
-                        
+
                     }
 
                 } else if (dailyReturn) {
@@ -1295,11 +1302,11 @@ public class UserModel {
                     if (!location.equals("")) {
 
                         fileName = dateFormat.format(date) + "_" + location + "_DailyReturnReport.csv";
-                      
+
                     } else {
-                      
+
                         fileName = dateFormat.format(date) + "_" + "DailyReturnReport.csv";
-                      
+
                     }
 
                 }

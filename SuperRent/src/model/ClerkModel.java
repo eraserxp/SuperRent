@@ -29,6 +29,18 @@ public class ClerkModel extends UserModel {
         super();
     }
 
+//    public ArrayList<String> getAvailableVehicles(String city, String location,
+//            String vehicleType, String fromDate, String toDate) {
+//        String SQL = "select distinct VR.vehicleType, VB.city, VB.location, "
+//                + " VR.vlicense, VR.category,  VR.brand"
+//                + " from vehicleforrent VR, vehicleinbranch VB "
+//                + " where vehicleType = " + addQuotation(vehicleType)
+//                + " and VR.isAvailable=1 "
+//                + " and VB.vlicense = VR.vlicense "
+//                + " and VB.city = " + addQuotation(city)
+//                + " and VB.location = " + addQuotation(location);
+//        
+//    }
     public TableView<VehicleSelection> getAvailableVehicles(String city, String location,
             String vehicleType, String fromDate, String toDate) {
         String SQL = "select distinct VR.vlicense, VR.category, VR.vehicleType, VR.brand, VR.odometer"
@@ -262,27 +274,20 @@ public class ClerkModel extends UserModel {
             }
         }
 
-
-        
-        
-        
         ArrayList<String> branchrentlist;
         branchrentlist = getRentBranch(Rentid);
 
         String rentcity = branchrentlist.get(0);
         String rentlocation = branchrentlist.get(1);
         String vlicense = branchrentlist.get(2);
-        
+
         //set the vehicle to be available
         updatevehicleforrent(vlicense);
 
         if (!rentcity.equals(city) && !rentlocation.equals(location)) {
             //update the vehicleinbranch
-            updatevehicleinbranch(vlicense,city,location);
-            
-            
-            
-            
+            updatevehicleinbranch(vlicense, city, location);
+
         } else {
             //do nothing
             System.out.println("The vehicle is returned to the rent branch!");
@@ -316,17 +321,16 @@ public class ClerkModel extends UserModel {
                     + " where rentid = " + addQuotation(rentid.toString());
 
             ResultSet rs = queryDatabase(SQL);
-            
-            
-            if(rs.next()){
-            String city = rs.getString("branch_city");
-            String location = rs.getString("branch_location");
-            String vlicense = rs.getString("vlicense");
 
-            templist.add(city);
-            templist.add(location);
-            templist.add(vlicense);
-            rs.close();
+            if (rs.next()) {
+                String city = rs.getString("branch_city");
+                String location = rs.getString("branch_location");
+                String vlicense = rs.getString("vlicense");
+
+                templist.add(city);
+                templist.add(location);
+                templist.add(vlicense);
+                rs.close();
             }
         } catch (SQLException ex) {
             Logger.getLogger(ClerkModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -344,14 +348,216 @@ public class ClerkModel extends UserModel {
     }
 
     //method to update the address of the vehicleinbranch
-    public void updatevehicleinbranch(String vlicense,String returncity, String returnlocation) {
+    public void updatevehicleinbranch(String vlicense, String returncity, String returnlocation) {
         String updateaddress = "update vehicleinbranch set city = "
                 + addQuotation(returncity)
                 + ", location = "
                 + addQuotation(returnlocation)
-                + " where vlicense = " 
+                + " where vlicense = "
                 + addQuotation(vlicense);
         updateDatabase(updateaddress);
+    }
+
+    public ArrayList<String> getAllVehicleTypes() {
+        String SQL = " select distinct typeName from vehicletype ";
+        ResultSet rs = queryDatabase(SQL);
+        System.out.println(SQL);
+        ArrayList<String> typeList = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                String type;
+                type = rs.getString("typeName");
+                typeList.add(type);
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return typeList;
+    }
+
+    public TableView showAvailableVehicles(LocalDate fromDate, LocalDate toDate) {
+        refeshDatabaseConnection();
+        String SQL = "select * from ( "
+                + " select VB.city, VB.location, VR.vehicleType,  VR.vlicense, "
+                + " VR.category,  VR.brand  "
+                + " from vehicleforrent VR, vehicleinbranch VB "
+                + " where VB.vlicense = VR.vlicense "
+                + " and not exists (select * from rent R where R.vlicense=VR.vlicense)"
+                + "       "
+                + " union "
+                + "       "
+                + " select VB.city, VB.location, VR.vehicleType,  VR.vlicense, "
+                + " VR.category,  VR.brand  "
+                + " from vehicleforrent VR, vehicleinbranch VB, rent R "
+                + " where VR.isAvailable=0  and VB.vlicense = VR.vlicense "
+                + " and VR.vlicense = R.vlicense "
+                + " and "
+                + " not exists "
+                + " ( select * from rent R2 where R2.vlicense = R.vlicense "
+                + "and " + addQuotation(fromDate.toString())
+                + " between R2.from_date and R2.expected_return_date "
+                + " or " + addQuotation(toDate.toString())
+                + " between R2.from_date and R2.expected_return_date )"
+                + " ) t "
+                + " order by city, location, vehicleType ";
+
+        System.out.println(SQL);
+
+        return getTableViewForSQL(SQL);
+    }
+
+    public TableView showAvailableVehicles(String city, String location,
+            LocalDate fromDate, LocalDate toDate) {
+        refeshDatabaseConnection();
+        String SQL = "select * from ( "
+                + " select VB.city, VB.location, VR.vehicleType,  VR.vlicense, "
+                + " VR.category,  VR.brand  "
+                + " from vehicleforrent VR, vehicleinbranch VB "
+                + " where VB.vlicense = VR.vlicense "
+                + " and not exists (select * from rent R where R.vlicense=VR.vlicense)"
+                + "       "
+                + " union "
+                + "       "
+                + " select VB.city, VB.location, VR.vehicleType,  VR.vlicense, "
+                + " VR.category,  VR.brand  "
+                + " from vehicleforrent VR, vehicleinbranch VB, rent R "
+                + " where VR.isAvailable=0  and VB.vlicense = VR.vlicense "
+                + " and VR.vlicense = R.vlicense "
+                + " and "
+                + " not exists "
+                + " ( select * from rent R2 where R2.vlicense = R.vlicense "
+                + "and " + addQuotation(fromDate.toString())
+                + " between R2.from_date and R2.expected_return_date "
+                + " or " + addQuotation(toDate.toString())
+                + " between R2.from_date and R2.expected_return_date )"
+                + " ) t "
+                + " where city = " + addQuotation(city)
+                + " and location = " + addQuotation(location)
+                + " order by city, location, vehicleType ";
+
+        System.out.println(SQL);
+
+        return getTableViewForSQL(SQL);
+    }
+
+    public TableView showAvailableVehicles(String vehicleType,
+            LocalDate fromDate, LocalDate toDate) {
+        refeshDatabaseConnection();
+        String SQL = "select * from ( "
+                + " select VB.city, VB.location, VR.vehicleType,  VR.vlicense, "
+                + " VR.category,  VR.brand  "
+                + " from vehicleforrent VR, vehicleinbranch VB "
+                + " where VB.vlicense = VR.vlicense "
+                + " and not exists (select * from rent R where R.vlicense=VR.vlicense)"
+                + "       "
+                + " union "
+                + "       "
+                + " select VB.city, VB.location, VR.vehicleType,  VR.vlicense, "
+                + " VR.category,  VR.brand  "
+                + " from vehicleforrent VR, vehicleinbranch VB, rent R "
+                + " where VR.isAvailable=0  and VB.vlicense = VR.vlicense "
+                + " and VR.vlicense = R.vlicense "
+                + " and "
+                + " not exists "
+                + " ( select * from rent R2 where R2.vlicense = R.vlicense "
+                + "and " + addQuotation(fromDate.toString())
+                + " between R2.from_date and R2.expected_return_date "
+                + " or " + addQuotation(toDate.toString())
+                + " between R2.from_date and R2.expected_return_date )"
+                + " ) t "
+                + " where vehicleType = " + addQuotation(vehicleType)
+                + " order by vehicleType, city, location";
+
+        System.out.println(SQL);
+
+        return getTableViewForSQL(SQL);
+    }
+
+    public TableView showAvailableVehicles(String city, String location,
+            String vehicleType, LocalDate fromDate, LocalDate toDate) {
+        refeshDatabaseConnection();
+        String SQL = "select * from ( "
+                + " select VB.city, VB.location, VR.vehicleType,  VR.vlicense, "
+                + " VR.category,  VR.brand  "
+                + " from vehicleforrent VR, vehicleinbranch VB "
+                + " where VB.vlicense = VR.vlicense "
+                + " and not exists (select * from rent R where R.vlicense=VR.vlicense)"
+                + "       "
+                + " union "
+                + "       "
+                + " select VB.city, VB.location, VR.vehicleType,  VR.vlicense, "
+                + " VR.category,  VR.brand  "
+                + " from vehicleforrent VR, vehicleinbranch VB, rent R "
+                + " where VR.isAvailable=0  and VB.vlicense = VR.vlicense "
+                + " and VR.vlicense = R.vlicense "
+                + " and "
+                + " not exists "
+                + " ( select * from rent R2 where R2.vlicense = R.vlicense "
+                + "and " + addQuotation(fromDate.toString())
+                + " between R2.from_date and R2.expected_return_date "
+                + " or " + addQuotation(toDate.toString())
+                + " between R2.from_date and R2.expected_return_date )"
+                + " ) t "
+                + " where city = " + addQuotation(city)
+                + " and location = " + addQuotation(location)
+                + " and vehicleType = " + addQuotation(vehicleType)
+                + " order by city, location, vehicleType ";
+
+        System.out.println(SQL);
+
+        return getTableViewForSQL(SQL);
+    }
+
+    public TableView showOverdueVehicles(String city, String location, String vehicleType) {
+        refeshDatabaseConnection();
+        LocalDate currentDate = LocalDate.now();
+        String SQL = " select VB.city, VB.location, VR.vehicleType, "
+                + " R.rentid, R.customer_username, VR.vlicense, "
+                + "  R.expected_return_date, VR.category "
+                + " from vehicleinbranch VB, vehicleforrent VR,  rent R"
+                + " where R.expected_return_date < " + addQuotation(currentDate.toString())
+                + " and R.vlicense = VR.vlicense and VR.vlicense = VB.vlicense "
+                + " and VR.isAvailable = 0 ";
+        if (city != null) {
+            SQL += " and VB.city = " + addQuotation(city);
+        }
+
+        if (location != null) {
+            SQL += " and VB.location = " + addQuotation(location);
+        }
+
+        if (vehicleType != null) {
+            SQL += " and VR.vehicleType = " + addQuotation(vehicleType);
+        }
+
+        SQL += " order by VB.city, VB.location, VR.vehicleType ";
+        System.out.println(SQL);
+        return getTableViewForSQL(SQL);
+    }
+
+    public TableView showVehiclesForSale(String city, String location, String vehicleType) {
+        refeshDatabaseConnection();
+        String SQL = " select VB.city, VB.location, VS.vehicleType, "
+                + " VS.vlicense, VS.brand, VS.category,  round(VS.odometer/1000, 1) as 'odometer (km)' , "
+                + "  round(VS.price/100, 2) as price "
+                + " from vehicleinbranch VB, vehicleforsale VS "
+                + " where VS.vlicense = VB.vlicense ";
+        if (city != null) {
+            SQL += " and VB.city = " + addQuotation(city);
+        }
+
+        if (location != null) {
+            SQL += " and VB.location = " + addQuotation(location);
+        }
+
+        if (vehicleType != null) {
+            SQL += " and VS.vehicleType = " + addQuotation(vehicleType);
+        }
+
+        SQL += " order by VB.city, VB.location, VS.vehicleType ";
+        System.out.println(SQL);
+        return getTableViewForSQL(SQL);
     }
 
 }
