@@ -936,6 +936,9 @@ public class UserModel extends AbstractController {
                         4, rowIndex);
                 rowIndex++;
                 rowIndex++;
+            }else{
+                    popUpError("The odometer should be larger than the previous record!");
+                    return null;
             }
         }
         rowIndex++;
