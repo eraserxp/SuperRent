@@ -560,4 +560,12 @@ public class ClerkModel extends UserModel {
         return getTableViewForSQL(SQL);
     }
 
+//    public void updateEquipNum(String EquipName, String City, String Location,Integer ReturnNum) {
+//        //keep_equipment
+//        String updateKeppE = "update keep_equipment set quantity = quantity+"+addQuotation(ReturnNum.toString())
+//                + " where equipName = " + addQuotation(EquipName) + "AND city = " + addQuotation(City) + "AND location =" + addQuotation(Location);
+//        updateDatabase(updateKeppE);
+//
+//    }
+
 }

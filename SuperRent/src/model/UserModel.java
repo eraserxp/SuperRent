@@ -999,6 +999,7 @@ public class UserModel extends AbstractController {
 
                 if (num1 != null && num1 < rentnum1) {
                     Integer lostquantity = rentnum1 - num1;
+//                    updateEquipNum(equipList.get(0),getClerkDetails(),,num1);
                     lostequipmentfees += (lostquantity) * eprice1;
                     gridPane.add(new Label(equipList.get(0)), 1, rowIndex);
                     gridPane.add(new Label(lostquantity.toString() + " lost"), 2, rowIndex);
