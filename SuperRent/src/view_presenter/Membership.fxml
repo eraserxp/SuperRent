@@ -17,7 +17,7 @@
             <Label fx:id="addresslabel" text="Address" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
             <Label fx:id="annualfeelabel" text="Annual Fee" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
             <TextField fx:id="NameField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Button fx:id="makepaymentButton" mnemonicParsing="false" onAction="#handleMakePaymentButton" text="Make Payment" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
+            <Button fx:id="makepaymentButton" mnemonicParsing="false" onAction="#handleMakePaymentButton" text="Make Payment" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
             <Label fx:id="NameValidator" prefHeight="16.0" prefWidth="165.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <padding>
                   <Insets left="10.0" right="10.0" />
@@ -41,15 +41,16 @@
                </GridPane.margin>
             </Button>
             <TextField fx:id="AddressField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label fx:id="lastpaydatelabel" prefHeight="17.0" prefWidth="110.0" text="Last Payment Date :" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-            <Label fx:id="paydatelabel" prefHeight="17.0" prefWidth="154.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="memvaliduptolabel" prefHeight="17.0" prefWidth="130.0" text="Membership Valid Upto:" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-            <Label fx:id="memvaliddatelabel" prefHeight="17.0" prefWidth="154.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label fx:id="memstatuslabel" prefHeight="17.0" prefWidth="108.0" text="Membership Status:" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-            <Label fx:id="statuslabel" prefHeight="17.0" prefWidth="156.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="lastpaydatelabel" prefHeight="17.0" prefWidth="107.0" text="Last Payment Date :" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+            <Label fx:id="paydatelabel" prefHeight="17.0" prefWidth="154.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Label fx:id="memvaliduptolabel" prefHeight="17.0" prefWidth="133.0" text="Membership Valid Until :" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+            <Label fx:id="memvaliddatelabel" prefHeight="17.0" prefWidth="154.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label fx:id="memstatuslabel" prefHeight="17.0" prefWidth="155.0" text="Current Membership Status :" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+            <Label fx:id="statuslabel" prefHeight="17.0" prefWidth="156.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
             <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="pointsearnlabel" prefHeight="17.0" prefWidth="83.0" text="Points Earned :" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-            <Label fx:id="pointslabel" prefHeight="17.0" prefWidth="152.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label fx:id="pointsearnlabel" prefHeight="17.0" prefWidth="80.0" text="Points Earned :" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+            <Label fx:id="pointslabel" prefHeight="17.0" prefWidth="152.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Button fx:id="cancelmemButton" mnemonicParsing="false" onAction="#handleCancelMemberButton" text="Cancel Membership" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
          </children>
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="177.0" minWidth="10.0" prefWidth="177.0" />
