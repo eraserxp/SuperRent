@@ -29,9 +29,9 @@
             <Button fx:id="showButton" layoutX="166.0" layoutY="243.0" mnemonicParsing="false" onAction="#handleShowButtonAction" prefHeight="2.0" prefWidth="45.0" text="Show" />
             <CheckBox fx:id="statuscb" layoutX="25.0" layoutY="65.0" mnemonicParsing="false" text="By Status" />
             <CheckBox fx:id="confnocb" layoutX="22.0" layoutY="149.0" mnemonicParsing="false" text="By Confirmation Number" />
-            <Button fx:id="cancelButton" disable="true" layoutX="678.0" layoutY="450.0" mnemonicParsing="false" text="Cancel Reservation" />
+            <Button fx:id="cancelButton" disable="true" layoutX="678.0" layoutY="450.0" mnemonicParsing="false" onAction="#handleCancelReserveButtonAction" text="Cancel Reservation" />
             <Label fx:id="showValidator" layoutX="14.0" layoutY="283.0" prefHeight="17.0" prefWidth="241.0" wrapText="true" />
-            <Label fx:id="cancelLabel" layoutX="515.0" layoutY="454.0" prefHeight="17.0" prefWidth="154.0" />
+            <Label fx:id="cancelLabel" layoutX="455.0" layoutY="454.0" prefHeight="17.0" prefWidth="214.0" wrapText="true" />
          </children>
       </AnchorPane>
    </children>

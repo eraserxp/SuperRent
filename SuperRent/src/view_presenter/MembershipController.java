@@ -284,6 +284,7 @@ public class MembershipController extends AbstractController implements Initiali
         {
             
         show(applyButton);
+        applyButton.setDisable(false);
         hide(lastpaydatelabel,paydatelabel,memvaliduptolabel,memvaliddatelabel,memstatuslabel,statuslabel,pointsearnlabel,pointslabel,cancelmemButton);
        
         }

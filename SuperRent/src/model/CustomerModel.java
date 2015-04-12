@@ -258,12 +258,12 @@ public class CustomerModel extends UserModel {
 
     }
     
-    public boolean cancelreservation(String username,int confno, String status, String category) throws SQLException {
+    public boolean cancelreservation(String username,int confno, String status) throws SQLException {
 
         String deleteAddon = "delete from reserve_addon where confirmNo = " + confno;
         System.out.println(" \n" + deleteAddon);
 
-        String changereserve = "update reservation set status ='expired'"
+        String changereserve = "update reservation set status ='cancelled'"
                 + " where confirmation_number = " + confno;
         
         return updateDatabaseBatch(deleteAddon, changereserve);

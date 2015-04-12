@@ -84,6 +84,7 @@ public class CancelReserveController extends AbstractController implements Initi
 
     String username,status,cancelreserve;
     int conformationno;
+    String cnf_reserve,status_reserve;
     
     ArrayList statusarraylist = new ArrayList();
     
@@ -239,9 +240,9 @@ public class CancelReserveController extends AbstractController implements Initi
                 if (event.isPrimaryButtonDown() && event.getClickCount() == 1) {
                     cancelreserve = tableContent.getSelectionModel().getSelectedItem().toString();
                     
-                     String cnf_reserve = cancelreserve.split(",")[0].substring(1);
+                      cnf_reserve = cancelreserve.split(",")[0].substring(1);
 
-                     String status_reserve = cancelreserve.split(",")[7].split("]")[0].trim();
+                      status_reserve = cancelreserve.split(",")[7].split("]")[0].trim();
                      
                      if(status_reserve.equals("pending"))
                      {
@@ -338,9 +339,9 @@ public class CancelReserveController extends AbstractController implements Initi
                     //soldLabel.setVisible(false);
                     cancelreserve = tableContent.getSelectionModel().getSelectedItem().toString();
                     
-                    String cnf_reserve = cancelreserve.split(",")[0].substring(1);
+                     cnf_reserve = cancelreserve.split(",")[0].substring(1);
 
-                     String status_reserve = cancelreserve.split(",")[7].split("]")[0].trim();
+                      status_reserve = cancelreserve.split(",")[7].split("]")[0].trim();
                      
                      if(status_reserve.equals("pending"))
                      {
@@ -375,9 +376,9 @@ public class CancelReserveController extends AbstractController implements Initi
             public void handle(MouseEvent event) {
                 if (event.isPrimaryButtonDown() && event.getClickCount() == 1) {
                     cancelreserve = tableContent.getSelectionModel().getSelectedItem().toString();
-                    String cnf_reserve = cancelreserve.split(",")[0].substring(1);
+                     cnf_reserve = cancelreserve.split(",")[0].substring(1);
 
-                     String status_reserve = cancelreserve.split(",")[7].split("]")[0].trim();
+                     status_reserve = cancelreserve.split(",")[7].split("]")[0].trim();
                      
                      if(status_reserve.equals("pending"))
                      {
@@ -409,9 +410,9 @@ public class CancelReserveController extends AbstractController implements Initi
             public void handle(MouseEvent event) {
                 if (event.isPrimaryButtonDown() && event.getClickCount() == 1) {
                    cancelreserve = tableContent.getSelectionModel().getSelectedItem().toString();
-                 String cnf_reserve = cancelreserve.split(",")[0].substring(1);
+                  cnf_reserve = cancelreserve.split(",")[0].substring(1);
 
-                 String status_reserve = cancelreserve.split(",")[7].split("]")[0].trim();
+                  status_reserve = cancelreserve.split(",")[7].split("]")[0].trim();
                  
                  if(status_reserve.equals("pending"))
                      {
@@ -423,14 +424,32 @@ public class CancelReserveController extends AbstractController implements Initi
         }
         }
         
-        
-        
+            
         
 
        
 
     }
 
-   
+    @FXML
+    private void handleCancelReserveButtonAction() throws IOException, SQLException {
+        
+        
+        if(cusModel.cancelreservation(username,Integer.parseInt(cnf_reserve),status_reserve))
+        {
+            showSuccessMessage(cancelLabel, "Reservation has been cancelled!");
+            handleShowAllButtonAction();
+            
+        }
+        else {
 
+            showWarning(cancelLabel, "Reservation was not cancelled!");
+         }
+        
+        
+        
+    }
+
+    
+    
 }
