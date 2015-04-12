@@ -199,6 +199,36 @@ public class PaymentModel extends UserModel{
         return false;
         
     }
+public boolean updateCustomerMembership(String username)  {
+        boolean result = false,result1=false;
+             
+        
+        
+        try {
+        
+        //System.out.println("Actual Date"+current_date);
+         
+        String updateCustomer = "update customer set isClubMember=0,point=0,payment_date=NULL where username='"+username+"'"; //+ addQuotation(username);
+        
+               
+        
+        result=updateDatabase(updateCustomer);
+         
+        return result;
+        }
+        
+        catch (Exception e) {
+
+            e.printStackTrace();
+
+            System.out.println("Error on Building Data");
+
+        }
+
+        
+        return false;
+        
+    }
 
    public Date GetCurrentDate() 
    {

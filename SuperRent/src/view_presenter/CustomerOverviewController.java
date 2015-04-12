@@ -48,6 +48,9 @@ public class CustomerOverviewController  extends AbstractController implements I
     
      @FXML
     private Tab membershiptab;
+     
+      @FXML
+    private Tab cancelreservetab;
     
     
     @FXML
@@ -58,6 +61,9 @@ public class CustomerOverviewController  extends AbstractController implements I
     
      @FXML
     private BorderPane updateProfilePane;
+     
+      @FXML
+    private BorderPane cancelreservePane;
     
     @FXML
     private Label usernameLabel;
@@ -108,6 +114,12 @@ public class CustomerOverviewController  extends AbstractController implements I
                                          AppContext.getInstance().setUserType(user_type);
                                         root = FXMLLoader.load(getClass().getResource("UpdateProfileView.fxml"));
                                         updateProfilePane.setCenter(root);
+                                    }
+                                    else if (newTab == cancelreservetab) {
+                                        AppContext.getInstance().setUsername(user_name);
+                                         AppContext.getInstance().setUserType(user_type);
+                                        root = FXMLLoader.load(getClass().getResource("CancelReserveView.fxml"));
+                                        cancelreservePane.setCenter(root);
                                     }
                                 } catch (IOException ex) {
                                     Logger.getLogger(CustomerOverviewController.class.getName()).log(Level.SEVERE, null, ex);

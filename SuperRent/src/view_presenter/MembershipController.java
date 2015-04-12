@@ -60,12 +60,15 @@ public class MembershipController extends AbstractController implements Initiali
             
     @FXML
     private Button cancelButton;
+    
+    @FXML
+    private Button cancelmemButton;
 
     @FXML
     private Label namelabel;
     
     @FXML
-    private Label   addresslabel;
+    private Label addresslabel;
     
     @FXML
     private Label annualfeelabel;
@@ -169,7 +172,7 @@ public class MembershipController extends AbstractController implements Initiali
         {
            hide(lastpaydatelabel,paydatelabel,memvaliduptolabel,memvaliddatelabel,memstatuslabel,statuslabel,
            namelabel,NameField,NameValidator,addresslabel,AddressField,addressValidator,
-                  annualfeelabel,annuallabel,pointsearnlabel,pointslabel,makepaymentButton); 
+                  annualfeelabel,annuallabel,pointsearnlabel,pointslabel,makepaymentButton,cancelButton,cancelmemButton); 
         }
             
             
@@ -259,13 +262,32 @@ public class MembershipController extends AbstractController implements Initiali
     public void handleApplyButton(ActionEvent event)throws IOException {
         
         show(namelabel,NameField,NameValidator,addresslabel,AddressField,addressValidator,
-                  annualfeelabel,annuallabel,makepaymentButton);
+                  annualfeelabel,annuallabel,makepaymentButton,cancelButton);
         
         NameField.requestFocus();
         //AddressField.requestFocus();
         
         applyButton.setDisable(true);
         cancelButton.setDisable(false);
+        
+       
+    }
+    
+    @FXML
+    public void handleCancelMemberButton(ActionEvent event)throws IOException {
+        
+        boolean readytoChange;
+        
+        readytoChange=payModel.updateCustomerMembership(username);
+        
+        if(readytoChange==true)
+        {
+            
+        show(applyButton);
+        applyButton.setDisable(false);
+        hide(lastpaydatelabel,paydatelabel,memvaliduptolabel,memvaliddatelabel,memstatuslabel,statuslabel,pointsearnlabel,pointslabel,cancelmemButton);
+       
+        }
         
        
     }
