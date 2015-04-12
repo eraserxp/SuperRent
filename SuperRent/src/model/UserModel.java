@@ -689,7 +689,7 @@ public class UserModel extends AbstractController {
             LocalDate toDate, int toHour, boolean isRoadStar, int redeemedPoints,
             int odometer, String vlicense, boolean isForReturn, Integer num1, Integer num2) {
         GridPane gridPane = new GridPane();
-        int totalCost = 0;
+        Integer totalCost = 0;
 
         int all_days = (int) ChronoUnit.DAYS.between(fromDate, toDate);
         int total_day = all_days;
@@ -936,9 +936,9 @@ public class UserModel extends AbstractController {
                         4, rowIndex);
                 rowIndex++;
                 rowIndex++;
-            }else{
-                    popUpError("The odometer should be larger than the previous record!");
-                    return null;
+            } else {
+                popUpError("The odometer should be larger than the previous record!");
+                return null;
             }
         }
         rowIndex++;
@@ -1013,6 +1013,10 @@ public class UserModel extends AbstractController {
                     gridPane.add(new Label(lostquantity2.toString() + " lost"), 2, rowIndex);
                     gridPane.add(new Label((lostequipmentfees2) / 100 + ".00"),
                             4, rowIndex);
+                } else if (num1 != null && num1 == rentnum1) {
+                    System.out.println("Rented equip1 = returned equip1");
+                } else if (num2 != null && num2 == rentnum1) {
+                    System.out.println("Rented equip2 = returned equip2");
                 } else {
                     popUpError("The number of returned equipments should be smaller than the number of rented equipments!");
                     return null;
@@ -1022,7 +1026,9 @@ public class UserModel extends AbstractController {
 
             }
         }
-
+        
+        AppContext.getInstance().emptyTempData();
+        AppContext.getInstance().setTempData("TotalCost", totalCost.toString());
         //add the total sum
         rowIndex++;
         for (int colIndex = 0; colIndex < cols; colIndex++) {

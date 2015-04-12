@@ -195,11 +195,32 @@ public class ClerkModel extends UserModel {
         return null;
     }
 
-    public Integer createVreturn(Integer Rentid, LocalDate Returndate, Integer Returntime, String city, String location, Integer Tank, Integer odometer, String totalcost, String Payment_Method) {
+    public Boolean createVreturn(Integer Rentid, LocalDate Returndate, Integer Returntime, String city, String location, Integer Tank, Integer odometer, String totalcost, String Payment_Method) {
         Integer returnid = -1;
 
         String sql;
-        if (!totalcost.isEmpty() && !Payment_Method.isEmpty()) {
+        Integer total;
+        String TotalCost = null;
+        //This will result in errors if you click return button twice in a row
+        //because the appcontext.settempdata is set in calculate cost once
+        //so the second return button has no Total cost temp data
+        //hence parseInt get null and cause errors
+        if (AppContext.getInstance().getTempData("TotalCost") != null) {
+            total = Integer.parseInt(AppContext.getInstance().getTempData("TotalCost"));
+            total = total / 100;
+            TotalCost = total.toString();
+        }
+
+        AppContext.getInstance().emptyTempData();
+        if (TotalCost != null) {
+            AppContext.getInstance().setTempData("amount", TotalCost);
+        }
+
+        Boolean checkValue = checkredundantRent(Rentid.toString());
+
+        //check wheter the rentid has been returned
+//        if (!TotalCost.isEmpty() && !Payment_Method.isEmpty() &&checkValue == false) {
+        if (checkValue == false) {
             sql = "insert into vreturn "
                     + " (rent_id, return_date, return_time, branch_city,"
                     + " branch_location, tank_full, odometer, total_cost,payment_method)"
@@ -211,34 +232,37 @@ public class ClerkModel extends UserModel {
                     + addQuotation(location) + ", "
                     + addQuotation(Tank.toString()) + ", "
                     + addQuotation(odometer.toString()) + ", "
-                    + addQuotation(totalcost) + ", "
+                    + addQuotation(TotalCost) + ", "
                     + addQuotation(Payment_Method) + " )";
-        } else if (!totalcost.isEmpty() && Payment_Method.isEmpty()) {
-            sql = "insert into vreturn "
-                    + " (rent_id, return_date, return_time, branch_city,"
-                    + " branch_location, tank_full, odometer, total_cost,payment_method)"
-                    + " values ( "
-                    + addQuotation(Rentid.toString()) + ", "
-                    + addQuotation(Returndate.toString()) + ", "
-                    + addQuotation(Returntime.toString()) + ", "
-                    + addQuotation(city) + ", "
-                    + addQuotation(location) + ", "
-                    + addQuotation(Tank.toString()) + ", "
-                    + addQuotation(odometer.toString())
-                    + addQuotation(totalcost) + ", "
-                    + ", null)";
+
+//        } else if (!TotalCost.isEmpty() && Payment_Method.isEmpty()&&checkValue == false) {
+//            sql = "insert into vreturn "
+//                    + " (rent_id, return_date, return_time, branch_city,"
+//                    + " branch_location, tank_full, odometer, total_cost,payment_method)"
+//                    + " values ( "
+//                    + addQuotation(Rentid.toString()) + ", "
+//                    + addQuotation(Returndate.toString()) + ", "
+//                    + addQuotation(Returntime.toString()) + ", "
+//                    + addQuotation(city) + ", "
+//                    + addQuotation(location) + ", "
+//                    + addQuotation(Tank.toString()) + ", "
+//                    + addQuotation(odometer.toString())
+//                    + addQuotation(TotalCost) + ", "
+//                    + ", null)";
         } else {
-            sql = "insert into vreturn "
-                    + " (rent_id, return_date, return_time, branch_city,"
-                    + " branch_location, tank_full, odometer, total_cost,payment_method)"
-                    + " values ( "
-                    + addQuotation(Rentid.toString()) + ", "
-                    + addQuotation(Returndate.toString()) + ", "
-                    + addQuotation(Returntime.toString()) + ", "
-                    + addQuotation(city) + ", "
-                    + addQuotation(location) + ", "
-                    + addQuotation(Tank.toString()) + ", "
-                    + addQuotation(odometer.toString()) + ", null, null)";
+//            sql = "insert into vreturn "
+//                    + " (rent_id, return_date, return_time, branch_city,"
+//                    + " branch_location, tank_full, odometer, total_cost,payment_method)"
+//                    + " values ( "
+//                    + addQuotation(Rentid.toString()) + ", "
+//                    + addQuotation(Returndate.toString()) + ", "
+//                    + addQuotation(Returntime.toString()) + ", "
+//                    + addQuotation(city) + ", "
+//                    + addQuotation(location) + ", "
+//                    + addQuotation(Tank.toString()) + ", "
+//                    + addQuotation(odometer.toString()) + ", null, null)";
+
+            return false;
 
         }
 
@@ -287,6 +311,7 @@ public class ClerkModel extends UserModel {
         if (!rentcity.equals(city) && !rentlocation.equals(location)) {
             //update the vehicleinbranch
             updatevehicleinbranch(vlicense, city, location);
+            System.out.println("The vehicle is returned to a different  branch!");
 
         } else {
             //do nothing
@@ -294,7 +319,7 @@ public class ClerkModel extends UserModel {
 
         }
 
-        return returnid;
+        return true;
     }
 
 //    public ArrayList<String> getVehicleBranch(String Vehicle_No){
@@ -560,12 +585,27 @@ public class ClerkModel extends UserModel {
         return getTableViewForSQL(SQL);
     }
 
-//    public void updateEquipNum(String EquipName, String City, String Location,Integer ReturnNum) {
-//        //keep_equipment
-//        String updateKeppE = "update keep_equipment set quantity = quantity+"+addQuotation(ReturnNum.toString())
-//                + " where equipName = " + addQuotation(EquipName) + "AND city = " + addQuotation(City) + "AND location =" + addQuotation(Location);
-//        updateDatabase(updateKeppE);
-//
-//    }
+    public void updateEquipNum(String EquipName, String City, String Location, Integer ReturnNum) {
+        //keep_equipment
+        String updateKeppE = "update keep_equipment set quantity = quantity+" + addQuotation(ReturnNum.toString())
+                + " where equipName = " + addQuotation(EquipName) + "AND city = " + addQuotation(City) + "AND location =" + addQuotation(Location);
+        updateDatabase(updateKeppE);
+
+    }
+
+    public Boolean checkredundantRent(String Rentid) {
+        String SQL = "select returnid from vreturn where rent_id = "
+                + addQuotation(Rentid);
+        ResultSet rs = queryDatabase(SQL);
+        try {
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClerkModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
 
 }

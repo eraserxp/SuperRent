@@ -121,7 +121,7 @@ public class PaymentCCViewController extends AbstractController implements Initi
 
     
 
-    private String radiobutton, cardtype, user_type, user_name,amount;
+    private String radiobutton, cardtype, user_type, user_name,amount,Totalcost;
 
     boolean cardnumberOK, expirydateOK, amountOK;
 
@@ -132,7 +132,8 @@ public class PaymentCCViewController extends AbstractController implements Initi
         hide(cardnumbervalidator, expirydatevalidator, amountvalidator);
         user_type = AppContext.getInstance().getUserType();
         user_name = AppContext.getInstance().getUsername();
-        amount=AppContext.getInstance().getTempData("amount");
+        amount=AppContext.getInstance().getTempData("amount")+".00";
+//        Totalcost = AppContext.getInstance().getTempData("TotalCost");
         //System.out.println("Amount"+amount);
         amountvaluelabel.setText(amount);
 
@@ -266,6 +267,7 @@ public class PaymentCCViewController extends AbstractController implements Initi
     private void setUpAmountField() {
         AmountTF.focusedProperty().addListener((observable, oldValue, newValue) -> {
             // when user enter some text and leave the password field, check the password
+
             if (!newValue) {
                 if (isInputEmpty(AmountTF)) {
                     showWarning(amountvalidator, "Can't be empty!");

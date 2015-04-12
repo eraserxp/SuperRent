@@ -131,6 +131,7 @@ public class ReturnViewController extends AbstractController implements Initiali
     String Payment_Method = "Cash";
     String totalcost = "";
     Integer TankFullint = 0;
+    Integer rentEquip1Num = null, rentEquip2Num = null, returnEquip1Num = null, returnEquip2Num = null;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -166,10 +167,13 @@ public class ReturnViewController extends AbstractController implements Initiali
 
         if (!Equip1Combox.getSelectionModel().isEmpty()) {
             Numequipment1 = Integer.parseInt(Equip1Combox.getSelectionModel().getSelectedItem().toString());
+            returnEquip1Num = Numequipment1;
         }
         if (!Equip2Combox.getSelectionModel().isEmpty()) {
             Numequipment2 = Integer.parseInt(Equip2Combox.getSelectionModel().getSelectedItem().toString());
+            returnEquip2Num = Numequipment2;
         }
+
 //        LocalDate returnDate =ReturnDatePicker.getValue();
         returnDate = ReturnDatePicker.getValue();
 
@@ -287,8 +291,12 @@ public class ReturnViewController extends AbstractController implements Initiali
 //        Integer temp = Integer.parseInt(totalcost);
 //        temp = temp/100;
 //        totalcost = temp.toString();
-        summaryVBox.getChildren().add(summaryGP);
-        System.out.println(equipmentslist);
+        if (summaryGP != null) {
+            summaryVBox.getChildren().add(summaryGP);
+            System.out.println("Sucessful query of cost summary");
+        } else {
+            System.out.println("Unsucessful query of cost summary");
+        }
         //[child_safety_seat, 1, ski_rack, 1]
     }
 
@@ -369,9 +377,23 @@ public class ReturnViewController extends AbstractController implements Initiali
 
                 try {
 
-                    clerkModel.createVreturn(rentidint, returnDate, returnTimeInt, city, location, TankFullint, odometer, totalcost, Payment_Method);
+                    Boolean checkV = clerkModel.createVreturn(rentidint, returnDate, returnTimeInt, city, location, TankFullint, odometer, totalcost, Payment_Method);
+                    //update the quantity
+                    //updateEquipNum(String EquipName, String City, String Location,Integer ReturnNum)
 
-                    showPaymentDialog();
+//                    if (returnEquip1Num != null && returnEquip1Num <= rentEquip1Num) {
+//                        //do sth
+//                        updateEquipNum();
+//                    } else if (returnEquip2Num != null && returnEquip2Num <= rentEquip2Num) {
+//                        //do sth
+//                    } else {
+//                        //returned too many equipments
+//                    }
+                    if (checkV == true) {
+                        showPaymentDialog();
+                    } else {
+                        popUpError("The vehicle is not rented yet");
+                    }
 
                 } catch (IOException ex) {
                     Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
