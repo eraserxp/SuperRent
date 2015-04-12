@@ -40,12 +40,13 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import javafx.util.Callback;
+import view_presenter.AbstractController;
 
 /**
  *
  * @author eraserxp
  */
-public class UserModel {
+public class UserModel extends AbstractController{
 
     private ArrayList<String> lowRankList = new ArrayList<>(
             Arrays.asList("economy", "compact", "midsize", "standard", "full-size", "premium")
@@ -694,6 +695,10 @@ public class UserModel {
         int all_days = (int) ChronoUnit.DAYS.between(fromDate, toDate);
         int total_day = all_days;
         int hours = toHour - fromHour;
+        if(all_days<0){
+            popUpError("The return date should be later than the rent date!");
+            return null;
+        }
         if (hours < 0) {
             hours += 24;
             all_days -= 1;
@@ -783,14 +788,14 @@ public class UserModel {
             totalCost += h_cost;
             gridPane.add(new Label((h_rent + h_cost) / 100 + ".00"),
                     4, rowIndex);
-            rowIndex++;
+            //rowIndex++;
         }
 
         //add an empty line       
         for (int colIndex = 0; colIndex < cols; colIndex++) {
             gridPane.add(new Label("  "), colIndex, rowIndex);
         }
-        rowIndex++;
+        //rowIndex++;
 
         //consider the roadstar deduction
         if (isRoadStar) {
@@ -931,6 +936,7 @@ public class UserModel {
                 gridPane.add(new Label(pk_rent + ".00"),
                         4, rowIndex);
                 rowIndex++;
+                rowIndex++;
             }
         }
         rowIndex++;
@@ -968,11 +974,19 @@ public class UserModel {
                 gridPane.add(new Label((over_rent) / 100 + ".00"),
                         4, rowIndex);
                 rowIndex++;
-                Integer rentnum1 = null;
-                Integer rentnum2 = null;
+                Integer rentnum1 = 0;
+                Integer rentnum2 = 0;
                 if (equipList != null && !equipList.isEmpty()) {
+                    if(equipList.size()==1){
+                    rentnum1 = equipQuantityList.get(0);
+                    }else if(equipList.size()==2){
                     rentnum1 = equipQuantityList.get(0);
                     rentnum2 = equipQuantityList.get(1);
+                    }
+                }else{
+                    //No rent equipment
+                    rentnum1 = 0;
+                    rentnum2 = 0;
                 }
                 //lost equipment
                 //the price should be added to the database

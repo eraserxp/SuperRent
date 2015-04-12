@@ -37,15 +37,10 @@
                               <Insets top="5.0" />
                            </VBox.margin>
                         </Label>
-                        <TextField fx:id="PlateNoTextField" prefHeight="26.0" prefWidth="199.0">
+                        <TextField fx:id="PlateNoTextField" prefHeight="26.0" prefWidth="205.0">
                            <VBox.margin>
-                              <Insets right="20.0" top="5.0" />
+                              <Insets right="50.0" top="5.0" />
                            </VBox.margin></TextField>
-                        <Button fx:id="CheckButton" mnemonicParsing="false" text="Check">
-                           <VBox.margin>
-                              <Insets left="223.0" top="5.0" />
-                           </VBox.margin>
-                        </Button>
                         <Separator prefWidth="200.0">
                            <VBox.margin>
                               <Insets top="20.0" />
@@ -80,12 +75,12 @@
                         </Label>
                         <TextField fx:id="OdometerTextField">
                            <VBox.margin>
-                              <Insets right="20.0" top="5.0" />
+                              <Insets right="50.0" top="5.0" />
                            </VBox.margin></TextField>
                         <HBox prefHeight="26.0" prefWidth="245.0">
                            <children>
                               <Label prefHeight="26.0" prefWidth="58.0" text="Tank Full" />
-                              <ComboBox fx:id="TankFullCombox" prefHeight="26.0" prefWidth="133.0">
+                              <ComboBox fx:id="TankFullCombox" prefHeight="26.0" prefWidth="70.0">
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
@@ -145,7 +140,7 @@
             </AnchorPane>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="749.0">
                <children>
-                  <VBox fx:id="summaryVBox" layoutX="77.0" layoutY="238.0" prefHeight="444.0" prefWidth="660.0" AnchorPane.bottomAnchor="234.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                  <VBox fx:id="summaryVBox" layoutY="40.0" prefHeight="580.0" prefWidth="660.0" AnchorPane.bottomAnchor="78.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="40.0">
                      <children>
                         <Separator prefWidth="200.0">
                            <VBox.margin>
@@ -324,7 +319,7 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Button fx:id="ReturnButton" layoutX="533.0" layoutY="476.0" mnemonicParsing="false" text="Return" />
+                  <Button fx:id="ReturnButton" layoutX="590.0" layoutY="9.0" mnemonicParsing="false" text="Return" />
                </children>
             </AnchorPane>
          </items>

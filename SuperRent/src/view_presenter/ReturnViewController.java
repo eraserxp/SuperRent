@@ -97,8 +97,8 @@ public class ReturnViewController extends AbstractController implements Initiali
     private Label Number2;
     @FXML
     private Button ReturnButton;
-    @FXML
-    private Button CheckButton;
+//    @FXML
+//    private Button CheckButton;
 
     @FXML
     private CheckBox RoadStar;
@@ -146,7 +146,7 @@ public class ReturnViewController extends AbstractController implements Initiali
         setUpTankFullCombox();
         setUpEquipmentCombox();
 
-        handleEquipmentAction();
+        setupVehicleNumField();
         handleConfirmButton();
         handleCheckOutButton();
 
@@ -232,7 +232,7 @@ public class ReturnViewController extends AbstractController implements Initiali
         if (equipmentslist.size() == 2) {
             Equipment1.setText(equipmentslist.get(0));
             //ReturnedEquipment1Label.setText(equipmentslist.get(0));
-            Number1.setText(equipmentslist.get(1));
+            Number1.setText("-" + equipmentslist.get(1));
             equipments.add(equipmentslist.get(0));
             quantities.add(Integer.parseInt(equipmentslist.get(1).trim()));
             show(Equipment1, Number1);
@@ -536,11 +536,9 @@ public class ReturnViewController extends AbstractController implements Initiali
         });
     }
 
-    public void handleEquipmentAction() {
-
-        CheckButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
+    private void setupVehicleNumField() {
+        PlateNoTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
 
                 String PlateNumString = PlateNoTextField.getText();
 
@@ -595,17 +593,87 @@ public class ReturnViewController extends AbstractController implements Initiali
 
                 } else {
                     popUpError("Please input a valid vehicle plate number!");
+                    clearText(PlateNoTextField);
                     Equip1Combox.setVisible(false);
                     Equip2Combox.setVisible(false);
                     hide(ReturnedEquipment1Label, ReturnedEquipment2Label);
                 }
 
             }
-
         });
-
     }
 
+//    public void handleEquipmentAction() {
+//        
+//
+//        CheckButton.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent e) {
+//
+//                String PlateNumString = PlateNoTextField.getText();
+//
+//                ArrayList<String> rentList = new ArrayList<>();
+//                try {
+//                    rentList = clerkModel.getRentDetails(PlateNumString.trim());
+//                } catch (SQLException ex) {
+//                    Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//
+//                if (rentList != null) {
+//                    String rentid = rentList.get(5);
+//                    fromDate = LocalDate.parse(rentList.get(8).trim());
+//
+//                    equipmentslist = new ArrayList<>();
+//                    try {
+//                        equipmentslist = clerkModel.getEquipmentDetails(rentid);
+//                    } catch (SQLException ex) {
+//                        Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//
+//                    equipments = new ArrayList<>();
+//                    quantities = new ArrayList<>();
+//
+//                    if (equipmentslist.size() == 2) {
+//                        ReturnedEquipment1Label.setText(equipmentslist.get(0));
+//                        equipments.add(equipmentslist.get(0));
+//                        quantities.add(Integer.parseInt(equipmentslist.get(1).trim()));
+//                        Equip1Combox.setVisible(true);
+//                        show(ReturnedEquipment1Label);
+//                        hide(ReturnedEquipment2Label);
+//                        Equip2Combox.setVisible(false);
+//                    } else if (equipmentslist.size() == 4) {
+//                        ReturnedEquipment1Label.setText(equipmentslist.get(0));
+//                        ReturnedEquipment2Label.setText(equipmentslist.get(2));
+//                        Equip1Combox.setVisible(true);
+//                        Equip2Combox.setVisible(true);
+//                        equipments.add(equipmentslist.get(0));
+//                        equipments.add(equipmentslist.get(2));
+//                        quantities.add(Integer.parseInt(equipmentslist.get(1).trim()));
+//                        quantities.add(Integer.parseInt(equipmentslist.get(3).trim()));
+//                        show(ReturnedEquipment1Label, ReturnedEquipment2Label);
+//                    } else {
+//                        System.out.println("No equipments");
+//                        ReturnedEquipment1Label.setText("No equipment!");
+//                        show(ReturnedEquipment1Label);
+//                        Equip1Combox.setVisible(false);
+//                        Equip2Combox.setVisible(false);
+//                        equipments = null;
+//                        quantities = null;
+//                    }
+//
+//                } else {
+//                    popUpError("Please input a valid vehicle plate number!");
+//                    Equip1Combox.setVisible(false);
+//                    Equip2Combox.setVisible(false);
+//                    hide(ReturnedEquipment1Label, ReturnedEquipment2Label);
+//                }
+//
+//            }
+//
+//        });
+//
+//    }
+//
 //    private void passDataToNext() {
 //        String equipment1 = null, equipment2 = null;
 //        if (Equip1Combox.getValue() != null) {
