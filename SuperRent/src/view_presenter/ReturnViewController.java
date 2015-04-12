@@ -131,7 +131,7 @@ public class ReturnViewController extends AbstractController implements Initiali
     String Payment_Method = "Cash";
     String totalcost = "";
     Integer TankFullint = 0;
-    Integer rentEquip1Num = null, rentEquip2Num = null, returnEquip1Num = null, returnEquip2Num = null;
+    Integer rentEquip1Num = -1, rentEquip2Num = -1, returnEquip1Num = -1, returnEquip2Num = -1;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -234,6 +234,7 @@ public class ReturnViewController extends AbstractController implements Initiali
         show(UsernameLabel, PlatenoLabel, PickupLocationLabel, PickupTimeLabel, ReturnLocationLabel, ReturnTimeLabel);
 
         if (equipmentslist.size() == 2) {
+            rentEquip1Num = Integer.parseInt(equipmentslist.get(1));
             Equipment1.setText(equipmentslist.get(0));
             //ReturnedEquipment1Label.setText(equipmentslist.get(0));
             Number1.setText("-" + equipmentslist.get(1));
@@ -241,6 +242,8 @@ public class ReturnViewController extends AbstractController implements Initiali
             quantities.add(Integer.parseInt(equipmentslist.get(1).trim()));
             show(Equipment1, Number1);
         } else if (equipmentslist.size() == 4) {
+            rentEquip1Num = Integer.parseInt(equipmentslist.get(1));
+            rentEquip2Num = Integer.parseInt(equipmentslist.get(3));
             Equipment1.setText(equipmentslist.get(0));
             Number1.setText("-" + equipmentslist.get(1));
             //ReturnedEquipment1Label.setText(equipmentslist.get(0));
@@ -291,6 +294,8 @@ public class ReturnViewController extends AbstractController implements Initiali
 //        Integer temp = Integer.parseInt(totalcost);
 //        temp = temp/100;
 //        totalcost = temp.toString();
+        totalcost = AppContext.getInstance().getTempData("amount");
+        System.out.println(totalcost);
         if (summaryGP != null) {
             summaryVBox.getChildren().add(summaryGP);
             System.out.println("Sucessful query of cost summary");
@@ -374,25 +379,34 @@ public class ReturnViewController extends AbstractController implements Initiali
         ReturnButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-
+                Boolean checkV = false;
                 try {
 
-                    Boolean checkV = clerkModel.createVreturn(rentidint, returnDate, returnTimeInt, city, location, TankFullint, odometer, totalcost, Payment_Method);
-                    //update the quantity
-                    //updateEquipNum(String EquipName, String City, String Location,Integer ReturnNum)
+                    showPaymentDialog();
 
-//                    if (returnEquip1Num != null && returnEquip1Num <= rentEquip1Num) {
-//                        //do sth
-//                        updateEquipNum();
-//                    } else if (returnEquip2Num != null && returnEquip2Num <= rentEquip2Num) {
-//                        //do sth
-//                    } else {
-//                        //returned too many equipments
-//                    }
+                    String status = AppContext.getInstance().getTempData("status");
+                    if (status.equals("success")) {
+
+                        checkV = clerkModel.createVreturn(rentidint, returnDate, returnTimeInt, city, location, TankFullint, odometer, totalcost, Payment_Method);
+                    }else{
+                        popUpMessage("Payment is not sucessful!");
+                    }
+
+//update the quantity
+                    //updateEquipNum(String EquipName, String City, String Location,Integer ReturnNum)
+                    if (returnEquip1Num != -1 && rentEquip1Num != -1 && returnEquip1Num <= rentEquip1Num) {
+                        //do sth
+                        clerkModel.updateEquipNum(equipmentslist.get(0), city, location, returnEquip1Num);
+                    } else if (returnEquip2Num != -1 && rentEquip2Num != -1 && returnEquip2Num <= rentEquip2Num) {
+                        //do sth
+                        clerkModel.updateEquipNum(equipmentslist.get(0), city, location, returnEquip1Num);
+                        clerkModel.updateEquipNum(equipmentslist.get(2), city, location, returnEquip2Num);
+                    }
+
                     if (checkV == true) {
-                        showPaymentDialog();
+                        popUpMessage("The vehicle has been sucessfully returned!");
                     } else {
-                        popUpError("The vehicle is not rented yet");
+                        popUpError("The vehicle has not been rented yet");
                     }
 
                 } catch (IOException ex) {
@@ -407,7 +421,7 @@ public class ReturnViewController extends AbstractController implements Initiali
     public void showPaymentDialog() throws IOException {
         //tell the payment page, the request is from "return page"
         AppContext.getInstance().setTempData("requestFrom", "returnPage");
-        
+
         AnchorPane loader = (AnchorPane) FXMLLoader.load(ReturnDialogViewController.class.getResource("PaymentCCView.fxml"));
 
         Stage dialogStage = new Stage();

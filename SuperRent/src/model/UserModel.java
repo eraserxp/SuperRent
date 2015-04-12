@@ -1026,9 +1026,11 @@ public class UserModel extends AbstractController {
 
             }
         }
+
+        Integer amount = totalCost/100;
         
-        AppContext.getInstance().emptyTempData();
-        AppContext.getInstance().setTempData("TotalCost", totalCost.toString());
+        AppContext.getInstance().setTempData("amount", amount.toString());
+        System.out.println(totalCost.toString());
         //add the total sum
         rowIndex++;
         for (int colIndex = 0; colIndex < cols; colIndex++) {

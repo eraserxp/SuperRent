@@ -199,22 +199,21 @@ public class ClerkModel extends UserModel {
         Integer returnid = -1;
 
         String sql;
-        Integer total;
-        String TotalCost = null;
+
         //This will result in errors if you click return button twice in a row
         //because the appcontext.settempdata is set in calculate cost once
         //so the second return button has no Total cost temp data
         //hence parseInt get null and cause errors
-        if (AppContext.getInstance().getTempData("TotalCost") != null) {
-            total = Integer.parseInt(AppContext.getInstance().getTempData("TotalCost"));
-            total = total / 100;
-            TotalCost = total.toString();
-        }
-
-        AppContext.getInstance().emptyTempData();
-        if (TotalCost != null) {
-            AppContext.getInstance().setTempData("amount", TotalCost);
-        }
+//        if (AppContext.getInstance().getTempData("amount") != null) {
+//            total = Integer.parseInt(AppContext.getInstance().getTempData("TotalCost"));
+//            total = total / 100;
+//            TotalCost = total.toString();
+//        }
+//
+//        //AppContext.getInstance().emptyTempData();
+//        if (TotalCost != null) {
+//            AppContext.getInstance().setTempData("amount", TotalCost);
+//        }
 
         Boolean checkValue = checkredundantRent(Rentid.toString());
 
@@ -232,7 +231,7 @@ public class ClerkModel extends UserModel {
                     + addQuotation(location) + ", "
                     + addQuotation(Tank.toString()) + ", "
                     + addQuotation(odometer.toString()) + ", "
-                    + addQuotation(TotalCost) + ", "
+                    + addQuotation(totalcost) + ", "
                     + addQuotation(Payment_Method) + " )";
 
 //        } else if (!TotalCost.isEmpty() && Payment_Method.isEmpty()&&checkValue == false) {
