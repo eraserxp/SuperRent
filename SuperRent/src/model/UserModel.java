@@ -46,7 +46,7 @@ import view_presenter.AbstractController;
  *
  * @author eraserxp
  */
-public class UserModel extends AbstractController{
+public class UserModel extends AbstractController {
 
     private ArrayList<String> lowRankList = new ArrayList<>(
             Arrays.asList("economy", "compact", "midsize", "standard", "full-size", "premium")
@@ -413,7 +413,6 @@ public class UserModel extends AbstractController{
         return branchList;
     }
 
-
     public ArrayList<String> getVehicleTypeAtBranch(String city, String location, String carOrTruck) {
         String SQL = "select distinct typeName from vehicletype VT, vehicleforrent VF, vehicleinbranch VB"
                 + " where VF.vlicense=VB.vlicense and VF.vehicletype=VT.typeName "
@@ -695,7 +694,7 @@ public class UserModel extends AbstractController{
         int all_days = (int) ChronoUnit.DAYS.between(fromDate, toDate);
         int total_day = all_days;
         int hours = toHour - fromHour;
-        if(all_days<0){
+        if (all_days < 0) {
             popUpError("The return date should be later than the rent date!");
             return null;
         }
@@ -977,13 +976,13 @@ public class UserModel extends AbstractController{
                 Integer rentnum1 = 0;
                 Integer rentnum2 = 0;
                 if (equipList != null && !equipList.isEmpty()) {
-                    if(equipList.size()==1){
-                    rentnum1 = equipQuantityList.get(0);
-                    }else if(equipList.size()==2){
-                    rentnum1 = equipQuantityList.get(0);
-                    rentnum2 = equipQuantityList.get(1);
+                    if (equipList.size() == 1) {
+                        rentnum1 = equipQuantityList.get(0);
+                    } else if (equipList.size() == 2) {
+                        rentnum1 = equipQuantityList.get(0);
+                        rentnum2 = equipQuantityList.get(1);
                     }
-                }else{
+                } else {
                     //No rent equipment
                     rentnum1 = 0;
                     rentnum2 = 0;
@@ -1003,14 +1002,16 @@ public class UserModel extends AbstractController{
                     gridPane.add(new Label((lostequipmentfees) / 100 + ".00"),
                             4, rowIndex);
                     rowIndex++;
-                }
-                if (num2 != null && num2 < rentnum1) {
+                } else if (num2 != null && num2 < rentnum1) {
                     Integer lostquantity2 = rentnum2 - num2;
                     lostequipmentfees2 += (lostquantity2) * eprice2;
                     gridPane.add(new Label(equipList.get(1)), 1, rowIndex);
                     gridPane.add(new Label(lostquantity2.toString() + " lost"), 2, rowIndex);
                     gridPane.add(new Label((lostequipmentfees2) / 100 + ".00"),
                             4, rowIndex);
+                } else {
+                    popUpError("The number of returned equipments should be smaller than the number of rented equipments!");
+                    return null;
                 }
 
                 totalCost += lostequipmentfees + lostequipmentfees2;
@@ -1232,12 +1233,12 @@ public class UserModel extends AbstractController{
                     + " where confirmation_number = " + reservationConfirmNo;
             updateDatabase(updateReservation);
         }
-        
+
         //update vehicle status
         String updateVehicleStatus = "update vehicleforrent set isAvailable=0 "
                 + " where vlicense = " + addQuotation(vlicense);
         updateDatabase(updateVehicleStatus);
-        
+
         return confirmNo;
     }
 
