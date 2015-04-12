@@ -383,7 +383,9 @@ public class ReturnViewController extends AbstractController implements Initiali
     }
 
     public void showPaymentDialog() throws IOException {
-
+        //tell the payment page, the request is from "return page"
+        AppContext.getInstance().setTempData("requestFrom", "returnPage");
+        
         AnchorPane loader = (AnchorPane) FXMLLoader.load(ReturnDialogViewController.class.getResource("PaymentCCView.fxml"));
 
         Stage dialogStage = new Stage();

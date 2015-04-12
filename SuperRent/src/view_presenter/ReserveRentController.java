@@ -840,6 +840,8 @@ public class ReserveRentController extends AbstractController implements Initial
 
     public void handleRent() {
         prepareData();
+        //tell the payment view, the request is from the rent page
+        AppContext.getInstance().setTempData("requestFrom", "rentPage");
         setupNextPage(this, "PaymentCCView.fxml", "Payment");
         //get data from the popup page
         String driver_license = licenseLabel.getText();
@@ -847,6 +849,7 @@ public class ReserveRentController extends AbstractController implements Initial
         String card_type = AppContext.getInstance().getTempData("card_type");
         String card_no = AppContext.getInstance().getTempData("card_no");
         String expiry_date = AppContext.getInstance().getTempData("expiry_date");
+        
 
         String username = usernameLabel.getText().trim();
         int is_reserve = 0;
