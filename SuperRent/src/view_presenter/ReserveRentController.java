@@ -212,6 +212,7 @@ public class ReserveRentController extends AbstractController implements Initial
     private UserModel userModel;
 
     private VehicleSelection selectedVehicle = new VehicleSelection();
+    private String amount;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -619,7 +620,7 @@ public class ReserveRentController extends AbstractController implements Initial
             if (AppContext.getInstance().getTempData("driver-license") != null) {
                 licenseLabel.setText(AppContext.getInstance().getTempData("driver-license"));
             }
-            AppContext.getInstance().emptyTempData();
+            //AppContext.getInstance().emptyTempData();
             //enable rent button
             rentButton.setDisable(false);
         } else {
@@ -778,6 +779,8 @@ public class ReserveRentController extends AbstractController implements Initial
                 fromDate, fromHour, toDate, toHour, isRoadStar,
                 redeemedPoints, odometer, null, false,null,null);
         summaryVBox.getChildren().add(summaryGP);
+        amount = AppContext.getInstance().getTempData("amount");
+        System.out.println("show summary: amount " + amount);
 
     }
 
@@ -840,6 +843,7 @@ public class ReserveRentController extends AbstractController implements Initial
 
     public void handleRent() {
         prepareData();
+        System.out.println("handleRent: amount = " + amount);
         //tell the payment view, the request is from the rent page
         AppContext.getInstance().setTempData("requestFrom", "rentPage");
         setupNextPage(this, "PaymentCCView.fxml", "Payment");
@@ -873,6 +877,7 @@ public class ReserveRentController extends AbstractController implements Initial
             clearLabels(foundByCNoResult, usernameLabel, phoneLabel, vehicleTypeLabel, plateNoLabel,
                     fromTimeLabel, toTimeLabel, branchLabel, licenseLabel);
             clearSummary();
+            enableNodes(reserveButton);
 
         }
     }

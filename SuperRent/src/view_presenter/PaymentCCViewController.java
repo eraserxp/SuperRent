@@ -131,9 +131,10 @@ public class PaymentCCViewController extends AbstractController implements Initi
         user_type = AppContext.getInstance().getUserType();
         user_name = AppContext.getInstance().getUsername();
         amount = AppContext.getInstance().getTempData("amount") + ".00";
+        
         payment_met = AppContext.getInstance().getTempData("requestFrom");
 //        Totalcost = AppContext.getInstance().getTempData("TotalCost");
-        //System.out.println("Amount"+amount);
+        System.out.println("payment amount"+amount);
         amountvaluelabel.setText(amount);
 
         switch (user_type) {
