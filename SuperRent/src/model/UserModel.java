@@ -9,6 +9,7 @@ import database.MysqlConnection;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import static java.lang.Math.round;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -928,18 +929,27 @@ public class UserModel extends AbstractController {
                 //
                 gridPane.add(new Label("Exceed mile limt"), 0, rowIndex);
                 gridPane.add(new Label("by " + outstandingOdometer / 1000 + " km"), 0, rowIndex + 1);
-                gridPane.add(new Label(outstandingOdometer + " x " + vehicleRates.get("pk_rate") / 100 + ".00"),
+                gridPane.add(new Label(outstandingOdometer / 1000 + " x " + vehicleRates.get("pk_rate") / 100 + ".00"),
                         2, rowIndex);
-                int pk_rent = vehicleRates.get("pk_rate") * outstandingOdometer;
+                int pk_rent = vehicleRates.get("pk_rate") * round(outstandingOdometer / 1000);
                 totalCost += pk_rent;
+                pk_rent = pk_rent / 100;
+                System.out.println("ahahahahha!" + pk_rent);
+
                 gridPane.add(new Label(pk_rent + ".00"),
                         4, rowIndex);
                 rowIndex++;
                 rowIndex++;
+//                rowIndex++;
+
             } else {
                 popUpError("The odometer should be larger than the previous record!");
                 return null;
             }
+            //this can cause bug
+//            for (int colIndex = 0; colIndex < cols; colIndex++) {
+//                gridPane.add(new Label("--------------"), colIndex, rowIndex);
+//            }
         }
         rowIndex++;
 
@@ -962,10 +972,14 @@ public class UserModel extends AbstractController {
                 //but no overdue fees applied
             }
 
-            for (int colIndex = 0; colIndex < cols; colIndex++) {
-                gridPane.add(new Label("--------------"), colIndex, rowIndex - 1);
-            }
+//            for (int colIndex = 0; colIndex < cols; colIndex++) {
+//                gridPane.add(new Label("--------------"), colIndex, rowIndex - 1);
+//            }
             if (over_days > 0) {
+                for (int colIndex = 0; colIndex < cols; colIndex++) {
+                    gridPane.add(new Label("--------------"), colIndex, rowIndex);
+                }
+                rowIndex++;
                 gridPane.add(new Label("Penalty"), 0, rowIndex);
                 gridPane.add(new Label(over_days + " overdue day(s)"), 1, rowIndex);
                 gridPane.add(new Label(over_days + " x " + vehicleRates.get("d_rate") / 100 + ".00" + " x 10%"),
@@ -1034,7 +1048,7 @@ public class UserModel extends AbstractController {
         AppContext.getInstance().setTempData("amount", amount.toString());
         System.out.println("amount" + totalCost.toString());
         //add the total sum
-        rowIndex++;
+        //rowIndex++;
         for (int colIndex = 0; colIndex < cols; colIndex++) {
             gridPane.add(new Label("--------------"), colIndex, rowIndex);
         }
