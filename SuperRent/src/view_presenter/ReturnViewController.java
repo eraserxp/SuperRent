@@ -257,8 +257,9 @@ public class ReturnViewController extends AbstractController implements Initiali
             quantities.add(Integer.parseInt(equipmentslist.get(3).trim()));
             show(Equipment1, Number1, Equipment2, Number2);
         } else {
-            System.out.println("No equipments");
+            //System.out.println("No equipments");
             Equipment1.setText("No equipments rented");
+            hide(Number1);
             show(Equipment1);
             equipments = null;
             quantities = null;
