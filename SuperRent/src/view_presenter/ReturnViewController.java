@@ -132,6 +132,7 @@ public class ReturnViewController extends AbstractController implements Initiali
     String totalcost = "";
     Integer TankFullint = 0;
     Integer rentEquip1Num = -1, rentEquip2Num = -1, returnEquip1Num = -1, returnEquip2Num = -1;
+    Integer counter = 0;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -310,11 +311,9 @@ public class ReturnViewController extends AbstractController implements Initiali
             @Override
             public void handle(ActionEvent e) {
                 try {
-                    //String checkString = PlateNoTextField.getText();
-                    //LocalDate returnDate = ReturnDatePicker.getValue();
-                    //Integer returnTime = ReturnTimeCombox.getSelectionModel().getSelectedIndex();
 
                     if (PlateNoTextField.getText().isEmpty()) {
+                        
                         popUpError("PlateNo is empty!");
                         return;
                     }
@@ -381,14 +380,15 @@ public class ReturnViewController extends AbstractController implements Initiali
             public void handle(ActionEvent e) {
                 Boolean checkV = false;
                 try {
-
+                    //summaryGP.getChildren().clear();
                     showPaymentDialog();
 
                     String status = AppContext.getInstance().getTempData("status");
+                    Payment_Method = AppContext.getInstance().getTempData("Paymentmethod");
                     if (status.equals("success")) {
 
                         checkV = clerkModel.createVreturn(rentidint, returnDate, returnTimeInt, city, location, TankFullint, odometer, totalcost, Payment_Method);
-                    }else{
+                    } else {
                         popUpMessage("Payment is not sucessful!");
                     }
 

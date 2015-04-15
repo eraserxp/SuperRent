@@ -992,14 +992,15 @@ public class UserModel extends AbstractController {
                 }
                 //lost equipment
                 //the price should be added to the database
-                Integer eprice1 = 500000;
-                Integer eprice2 = 500000;
+                Integer eprice1 = 0;
+                Integer eprice2 = 0;
                 Integer lostequipmentfees = 0;
                 Integer lostequipmentfees2 = 0;
 
                 if (num1 != null && num1 < rentnum1) {
                     Integer lostquantity = rentnum1 - num1;
 //                    updateEquipNum(equipList.get(0),getClerkDetails(),,num1);
+                    eprice1 = getEprice(equipList.get(0));
                     lostequipmentfees += (lostquantity) * eprice1;
                     gridPane.add(new Label(equipList.get(0)), 1, rowIndex);
                     gridPane.add(new Label(lostquantity.toString() + " lost"), 2, rowIndex);
@@ -1008,6 +1009,7 @@ public class UserModel extends AbstractController {
                     rowIndex++;
                 } else if (num2 != null && num2 < rentnum1) {
                     Integer lostquantity2 = rentnum2 - num2;
+                    eprice2 = getEprice(equipList.get(1));
                     lostequipmentfees2 += (lostquantity2) * eprice2;
                     gridPane.add(new Label(equipList.get(1)), 1, rowIndex);
                     gridPane.add(new Label(lostquantity2.toString() + " lost"), 2, rowIndex);
@@ -1027,8 +1029,8 @@ public class UserModel extends AbstractController {
             }
         }
 
-        Integer amount = totalCost/100;
-        
+        Integer amount = totalCost / 100;
+
         AppContext.getInstance().setTempData("amount", amount.toString());
         System.out.println("amount" + totalCost.toString());
         //add the total sum
@@ -1396,6 +1398,29 @@ public class UserModel extends AbstractController {
             return false;
         }
 
+    }
+
+    public Integer getEprice(String typename) {
+        Integer price = 0;
+        String SQL = "select price"
+                + " from equipment"
+                + " where equipName = " + addQuotation(typename);
+
+        ResultSet rs = queryDatabase(SQL);
+
+        try {
+            if (rs.next()) {
+
+                String eprice = rs.getString("price");
+                price = Integer.parseInt(eprice);
+                rs.close();
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return price;
     }
 
 }
