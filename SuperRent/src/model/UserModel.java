@@ -1111,10 +1111,22 @@ public class UserModel extends AbstractController {
                     System.out.println("Rented equip1 = returned equip1");
                 } else if (num2 != null && num2 == rentnum1) {
                     System.out.println("Rented equip2 = returned equip2");
-                } else {
+                } else if (num1 != null && num1 > rentnum1) {
                     popUpError("The number of returned equipments should be smaller than the number of rented equipments!");
                     return null;
-                }
+                } else if (num2 != null && num2 > rentnum2) {
+                    popUpError("The number of returned equipments should be smaller than the number of rented equipments!");
+                    return null;
+                } 
+                //What this else means?
+//                else{
+//                    popUpError("God knows what happened!");
+//                    return null;
+//                }
+//                else {
+//                    popUpError("The number of returned equipments should be smaller than the number of rented equipments!");
+//                    return null;
+//                }
 
                 totalCost += lostequipmentfees + lostequipmentfees2;
 
@@ -1406,7 +1418,7 @@ public class UserModel extends AbstractController {
     }
 
     public int getEquipQuantity(String city, String location, String equipName) {
-        String sql = " select quantity from keep_equipment " 
+        String sql = " select quantity from keep_equipment "
                 + " where city = " + addQuotation(city)
                 + " and location = " + addQuotation(location)
                 + " and equipName = " + addQuotation(equipName);

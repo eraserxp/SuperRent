@@ -169,11 +169,15 @@ public class ReturnViewController extends AbstractController implements Initiali
         if (!Equip1Combox.getSelectionModel().isEmpty()) {
             Numequipment1 = Integer.parseInt(Equip1Combox.getSelectionModel().getSelectedItem().toString());
             returnEquip1Num = Numequipment1;
-        }
-        if (!Equip2Combox.getSelectionModel().isEmpty()) {
+//            returnEquip2Num = null;
+        } else if (!Equip2Combox.getSelectionModel().isEmpty()) {
             Numequipment2 = Integer.parseInt(Equip2Combox.getSelectionModel().getSelectedItem().toString());
             returnEquip2Num = Numequipment2;
         }
+//        else {
+//            returnEquip1Num = null;
+//            returnEquip2Num = null;
+//        }
 
 //        LocalDate returnDate =ReturnDatePicker.getValue();
         returnDate = ReturnDatePicker.getValue();
@@ -304,7 +308,13 @@ public class ReturnViewController extends AbstractController implements Initiali
         } else {
             System.out.println("Unsucessful query of cost summary");
         }
-        //[child_safety_seat, 1, ski_rack, 1]
+//        returnEquip1Num = null;
+//        returnEquip2Num = null;
+//        equipments.clear();
+//        quantities.clear();
+//        Numequipment1 = -1;
+//        Numequipment1 = -1;
+
     }
 
     public void handleConfirmButton() {
@@ -314,7 +324,7 @@ public class ReturnViewController extends AbstractController implements Initiali
                 try {
 
                     if (PlateNoTextField.getText().isEmpty()) {
-                        
+
                         popUpError("PlateNo is empty!");
                         return;
                     }
@@ -578,6 +588,8 @@ public class ReturnViewController extends AbstractController implements Initiali
     private void setupVehicleNumField() {
         PlateNoTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
+                Equip1Combox.getSelectionModel().clearSelection();
+                Equip2Combox.getSelectionModel().clearSelection();
 
                 String PlateNumString = PlateNoTextField.getText();
 
@@ -609,7 +621,9 @@ public class ReturnViewController extends AbstractController implements Initiali
                         Equip1Combox.setVisible(true);
                         show(ReturnedEquipment1Label);
                         hide(ReturnedEquipment2Label);
+//                        Equip2Combox.getSelectionModel().clearSelection();
                         Equip2Combox.setVisible(false);
+
                     } else if (equipmentslist.size() == 4) {
                         ReturnedEquipment1Label.setText(equipmentslist.get(0));
                         ReturnedEquipment2Label.setText(equipmentslist.get(2));
@@ -619,6 +633,7 @@ public class ReturnViewController extends AbstractController implements Initiali
                         equipments.add(equipmentslist.get(2));
                         quantities.add(Integer.parseInt(equipmentslist.get(1).trim()));
                         quantities.add(Integer.parseInt(equipmentslist.get(3).trim()));
+                        rentEquip2Num = -1;
                         show(ReturnedEquipment1Label, ReturnedEquipment2Label);
                     } else {
                         System.out.println("No equipments");
@@ -626,8 +641,12 @@ public class ReturnViewController extends AbstractController implements Initiali
                         show(ReturnedEquipment1Label);
                         Equip1Combox.setVisible(false);
                         Equip2Combox.setVisible(false);
+                        Equip1Combox.getSelectionModel().clearSelection();
+                        Equip2Combox.getSelectionModel().clearSelection();
                         equipments = null;
                         quantities = null;
+                        rentEquip1Num = -1;
+                        rentEquip2Num = -1;
                     }
 
                 } else {
