@@ -136,6 +136,10 @@ public class PaymentCCViewController extends AbstractController implements Initi
 //        Totalcost = AppContext.getInstance().getTempData("TotalCost");
         System.out.println("payment amount"+amount);
         amountvaluelabel.setText(amount);
+        
+        //set the payment status as failure so that if the window is closed
+        //the previous page will know the status of the payment
+        AppContext.getInstance().setTempData("status", "failure");
 
         switch (user_type) {
             case "CUSTOMER":
@@ -298,6 +302,7 @@ public class PaymentCCViewController extends AbstractController implements Initi
             }
         });
     }
+    
 
     @FXML
     private void handleProceedButtonAction(ActionEvent event) throws IOException {
@@ -328,6 +333,8 @@ public class PaymentCCViewController extends AbstractController implements Initi
             }
 
         }
+        
+        
 
         if (check == true) {
             //System.out.println(cardtype);

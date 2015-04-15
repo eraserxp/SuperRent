@@ -861,12 +861,16 @@ public class ReserveRentController extends AbstractController implements Initial
             is_reserve = 1;
             reservationConfirmNo = Integer.parseInt(CNoField.getText().trim());
         }
+        if (AppContext.getInstance().getTempData("status").equals("failure")) {
+            popUpError("The payment is failed!");
+            return;            
+        }
         int rent_id = userModel.createRent(is_reserve, driver_license,
                 vlicense, city, location,
                 username, card_type, card_no,
                 expiry_date, fromDate, fromHour,
                 toDate, toHour, reservationConfirmNo);
-        if (rent_id == -1) {
+        if (rent_id == -1 ) {
             popUpError("Failed to make the rent!");
         } else {
             userModel.createEquipRent(rent_id, equipments, EquipmentQuantities);
