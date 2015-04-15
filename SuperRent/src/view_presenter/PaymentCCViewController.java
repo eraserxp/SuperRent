@@ -131,12 +131,12 @@ public class PaymentCCViewController extends AbstractController implements Initi
         user_type = AppContext.getInstance().getUserType();
         user_name = AppContext.getInstance().getUsername();
         amount = AppContext.getInstance().getTempData("amount") + ".00";
-        
+
         payment_met = AppContext.getInstance().getTempData("requestFrom");
 //        Totalcost = AppContext.getInstance().getTempData("TotalCost");
-        System.out.println("payment amount"+amount);
+        System.out.println("payment amount" + amount);
         amountvaluelabel.setText(amount);
-        
+
         //set the payment status as failure so that if the window is closed
         //the previous page will know the status of the payment
         AppContext.getInstance().setTempData("status", "failure");
@@ -180,7 +180,7 @@ public class PaymentCCViewController extends AbstractController implements Initi
         configureComboBox(cardtypeCMB, cardtypes);
         // cardtypeCMB.getSelectionModel().selectFirst();
         cardtypeCMB.setOnAction((ActionEvent event) -> {
-           // cardtype = cardtypeCMB.getSelectionModel().getSelectedItem().toString();
+            // cardtype = cardtypeCMB.getSelectionModel().getSelectedItem().toString();
 
             if (cardtypeCMB.getSelectionModel().isEmpty()) {
                 showWarning(cardtypevalidator, "Cardtype can't be empty!");
@@ -217,11 +217,13 @@ public class PaymentCCViewController extends AbstractController implements Initi
                         hide(amountvalidator);
                         enableNodes(cardtypelabel, cardnumberlabel, cardnumberTF, cardnumbervalidator, cardtypeCMB, cardtypevalidator,
                                 expirydateTF, expirydatelabel, expirydatevalidator);
+//                        AppContext.getInstance().setTempData("Paymentmethod", "Visa");
                     } else if (radiobutton.equals("By Cash")) {
                         disableNodes(cardtypelabel, cardnumberlabel, cardnumberTF, cardnumbervalidator, cardtypeCMB, cardtypevalidator,
                                 expirydateTF, expirydatelabel, expirydatevalidator);
                         hide(cardnumbervalidator, expirydatevalidator, cardtypevalidator);
                         enableNodes(amountlabel, AmountTF, amountvalidator);
+//                        AppContext.getInstance().setTempData("Paymentmethod", "Cash");
                     }
 
                 }
@@ -302,7 +304,6 @@ public class PaymentCCViewController extends AbstractController implements Initi
             }
         });
     }
-    
 
     @FXML
     private void handleProceedButtonAction(ActionEvent event) throws IOException {
@@ -322,10 +323,12 @@ public class PaymentCCViewController extends AbstractController implements Initi
             if (radiobutton.equals("By Credit Card")) {
                 check = cardnumberOK && expirydateOK;
                 // showSuccessMessage(sucesslabel,"creditcardclerk");
+                AppContext.getInstance().setTempData("Paymentmethod", "Visa");
                 cardnumberTF.requestFocus();
                 expirydateTF.requestFocus();
                 Proceed_button.requestFocus();
             } else if (radiobutton.equals("By Cash")) {
+                AppContext.getInstance().setTempData("Paymentmethod", "Cash");
                 check = amountOK;
                 //showSuccessMessage(sucesslabel,"cashclerk");
                 AmountTF.requestFocus();
@@ -333,8 +336,6 @@ public class PaymentCCViewController extends AbstractController implements Initi
             }
 
         }
-        
-        
 
         if (check == true) {
             //System.out.println(cardtype);
