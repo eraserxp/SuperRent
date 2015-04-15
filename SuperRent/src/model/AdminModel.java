@@ -80,7 +80,7 @@ public class AdminModel extends UserModel {
                 + isRoadStar + ", " + isClubMember + ", " + point.toString() + "," 
                 + " null "
                 + ")";
-        System.out.print(addCustomer);
+        System.out.println(addCustomer);
         return updateDatabaseBatch(addUser, addCustomer);
     }
 

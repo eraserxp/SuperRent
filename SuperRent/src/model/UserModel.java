@@ -9,6 +9,7 @@ import database.MysqlConnection;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import static java.lang.Math.abs;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -233,6 +234,21 @@ public class UserModel extends AbstractController {
         return result;
     }
 
+    public boolean isUserExisted(String username) {
+        String SQL = "select * from user where username = '" + username + "'";
+        boolean result = false;
+        try {
+            if (queryDatabase(SQL).next()) {
+                result = true;
+            } else {
+                result = false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
     public boolean isCustomerExisted(String username) {
         String SQL = "select * from customer where username = '" + username + "'";
         boolean result = false;
@@ -246,6 +262,50 @@ public class UserModel extends AbstractController {
             Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
+    }
+
+    public boolean isClerkExisted(String username) {
+        String SQL = "select * from clerk where username = '" + username + "'";
+        boolean result = false;
+        try {
+            if (queryDatabase(SQL).next()) {
+                result = true;
+            } else {
+                result = false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
+    public boolean isVehicleAvailable(String vlicense) {
+        String SQL = "select isAvailable from vehicleforrent where vlicense = '"
+                + vlicense + "'";
+        boolean result = false;
+        try {
+            ResultSet rs = queryDatabase(SQL);
+            if (rs.next()) {
+                int isAvailable = rs.getInt(1);
+                if (isAvailable == 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                result = false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
+    public boolean setVehicleAvailability(String vlicense, String isAvailable) {
+        String SQL = "update vehicleforrent set isAvailable="
+                + isAvailable
+                + " where vlicense = '" + vlicense + "'";
+        return updateDatabase(SQL);
     }
 
     protected ResultSet queryDatabase(String SQL) {
@@ -440,6 +500,24 @@ public class UserModel extends AbstractController {
         String changePasswd = "update user set password = " + addQuotation(passwd)
                 + " where username = " + addQuotation(username);
         return updateDatabase(changePasswd);
+    }
+
+    public HashMap<String, String> getRecordAsHashMap(String SQL) {
+        ResultSet rs = queryDatabase(SQL);
+        System.out.println(SQL);
+        HashMap<String, String> record = new HashMap<String, String>();
+        try {
+            if (rs.next()) {
+                for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
+                    String columnName = rs.getMetaData().getColumnName(i + 1);
+                    //System.out.println(columnName);
+                    record.put(columnName, rs.getString(columnName));
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return record;
     }
 
     private HashMap<String, Integer> getVehicleRate(String vehicleType) {
@@ -1027,8 +1105,8 @@ public class UserModel extends AbstractController {
             }
         }
 
-        Integer amount = totalCost/100;
-        
+        Integer amount = totalCost / 100;
+
         AppContext.getInstance().setTempData("amount", amount.toString());
         System.out.println("amount" + totalCost.toString());
         //add the total sum
@@ -1050,6 +1128,11 @@ public class UserModel extends AbstractController {
             return false;
         }
 
+    }
+
+    public boolean removeUser(String username) {
+        String removeuser = "delete from user where username = " + addQuotation(username);
+        return updateDatabase(removeuser);
     }
 
     public HashMap<String, String> getReservationDetails(String ConNumber) {
@@ -1153,6 +1236,16 @@ public class UserModel extends AbstractController {
         }
 
         return confirmNo;
+    }
+
+    public boolean removeReservation(int confirmNo) {
+        String removeReserve = "delete from reservation where confirmation_number = " + confirmNo;
+        return updateDatabase(removeReserve);
+    }
+
+    public boolean removeRent(int rentid) {
+        String removeRent = "delete from rent where rentid = " + rentid;
+        return updateDatabase(removeRent);
     }
 
     public void createEquipReservation(int confirmNo, ArrayList<String> equipments,
@@ -1265,6 +1358,44 @@ public class UserModel extends AbstractController {
                     + addQuotation(equipName) + ") ";
             updateDatabase(sql);
         }
+        //update the inventory of the corresponding branch
+        // get city and location from the rentid
+        String sql = "select branch_city, branch_location from rent where "
+                + " rentid = " + rent_id;
+        HashMap<String, String> record = new HashMap<>();
+        record = getRecordAsHashMap(sql);
+        String branch_city = record.get("branch_city");
+        String branch_location = record.get("branch_location");
+
+        for (int i = 0; i < equipments.size(); ++i) {
+            String equipName = equipments.get(i);
+            int quantity = equipmentQuantities.get(i);
+            boolean ok = updateEquipInventory(branch_city, branch_location, equipName, quantity);
+            if (!ok) {
+                System.out.println("Failed to update the equipment inventory!");
+            }
+        }
+    }
+
+    public boolean updateEquipInventory(String city, String location, String equipName,
+            int increment) {
+        String sign = (increment >= 0) ? "+" : "-";
+        String sql = " update keep_equipment set quantity = quantity " + sign
+                + abs(increment)
+                + " where city = " + addQuotation(city)
+                + " and location = " + addQuotation(location)
+                + " and equipName = " + addQuotation(equipName);
+        System.out.println(sql);
+        return updateDatabase(sql);
+    }
+
+    public int getEquipQuantity(String city, String location, String equipName) {
+        String sql = " select quantity from keep_equipment " 
+                + " where city = " + addQuotation(city)
+                + " and location = " + addQuotation(location)
+                + " and equipName = " + addQuotation(equipName);
+        HashMap<String, String> record = getRecordAsHashMap(sql);
+        return Integer.parseInt(record.get("quantity"));
     }
 
     public ArrayList<String> getExpDates(String VehicleNumber) {
