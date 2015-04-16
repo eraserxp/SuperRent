@@ -593,15 +593,33 @@ public class ClerkModel extends UserModel {
     }
 
     public void updatePoint(Integer totalcost, String customer) {
-        Integer points = round(totalcost/5);
+        Integer points = round(totalcost / 5);
 
-        String updateKeppE = "update customer set point = point+" 
+        String updateKeppE = "update customer set point = point+"
                 + addQuotation(points.toString())
                 + " where username = " + addQuotation(customer)
                 + "and isClubMember = 1";
         updateDatabase(updateKeppE);
 
     }
+
+    public void updateOdometer(String Odoreading, String vehicleNum) {
+
+        String updateKeppE = "update vehicleforrent set odometer = "
+                + addQuotation(Odoreading)
+                + " where vlicense = " + addQuotation(vehicleNum);
+        updateDatabase(updateKeppE);
+
+    }
+
+//    public void updateTankStatus(String tankfull, String vehicleNum) {
+//
+//        String updateKeppE = "update vehicleforrent set tank_full = "
+//                + addQuotation(tankfull)
+//                + " where vlicense = " + addQuotation(vehicleNum);
+//        updateDatabase(updateKeppE);
+//
+//    }
 
     public Boolean checkredundantRent(String Rentid) {
         String SQL = "select returnid from vreturn where rent_id = "

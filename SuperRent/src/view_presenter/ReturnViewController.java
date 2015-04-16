@@ -126,7 +126,7 @@ public class ReturnViewController extends AbstractController implements Initiali
     LocalDate returnDate;
     Integer rentidint, returnTimeInt, odometer;
 
-    String rentid, city, location, customerusername, TankFull;
+    String rentid, city, location, customerusername, TankFull, PlateNumString;
     //payment method and total cost may not be available here
     String Payment_Method = "Cash";
     String totalcost = "";
@@ -162,7 +162,7 @@ public class ReturnViewController extends AbstractController implements Initiali
     //then, show the rent and return details and all kinds of costs with the valid input
     private void showSummary() throws SQLException {
 
-        String PlateNumString = PlateNoTextField.getText();
+        PlateNumString = PlateNoTextField.getText();
         Integer Numequipment1 = null, Numequipment2 = null;
 
         if (!Equip1Combox.getSelectionModel().isEmpty()) {
@@ -408,11 +408,15 @@ public class ReturnViewController extends AbstractController implements Initiali
                             clerkModel.updateEquipNum(equipmentslist.get(2), city, location, returnEquip2Num);
                         }
                         //update the odometer
+                        //System.out.println(odometer.toString());
+                        //System.out.println(PlateNumString);
+                        clerkModel.updateOdometer(odometer.toString(), PlateNumString);
 
                         //update the points
                         clerkModel.updatePoint(Integer.parseInt(totalcost), customerusername);
 
                         //update the tankfull
+                        //we dont have a table with the tankfull status
                     } else {
                         popUpMessage("Payment is not sucessful!");
                     }
@@ -521,7 +525,7 @@ public class ReturnViewController extends AbstractController implements Initiali
                     return;
                 }
 
-                String PlateNumString = PlateNoTextField.getText();
+                PlateNumString = PlateNoTextField.getText();
                 String vehicleType;
                 try {
                     vehicleType = clerkModel.getVehicleType(PlateNumString);
@@ -573,7 +577,7 @@ public class ReturnViewController extends AbstractController implements Initiali
                     return;
                 }
 
-                String PlateNumString = PlateNoTextField.getText();
+                PlateNumString  = PlateNoTextField.getText();
                 String vehicleType;
                 try {
                     vehicleType = clerkModel.getVehicleType(PlateNumString);
@@ -609,7 +613,7 @@ public class ReturnViewController extends AbstractController implements Initiali
                 Equip1Combox.getSelectionModel().clearSelection();
                 Equip2Combox.getSelectionModel().clearSelection();
 
-                String PlateNumString = PlateNoTextField.getText();
+                PlateNumString = PlateNoTextField.getText();
 
                 ArrayList<String> rentList = new ArrayList<>();
                 try {
