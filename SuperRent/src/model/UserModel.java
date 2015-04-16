@@ -41,6 +41,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import view_presenter.AbstractController;
 
@@ -1466,8 +1467,14 @@ public class UserModel extends AbstractController {
 /////////////////////////////Exporting();
         try {
 
-            DirectoryChooser dc = new DirectoryChooser();
-            File file = dc.showDialog(null);
+//            DirectoryChooser dc = new DirectoryChooser();
+//            File file = dc.showDialog(null);
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setInitialFileName("report.csv");
+
+            //Show save file dialog
+            File file = fileChooser.showSaveDialog(null);
+            /*
             if (file != null) {
                 String fileName = "";
 
@@ -1499,11 +1506,11 @@ public class UserModel extends AbstractController {
 
                 file = new File(file.getAbsolutePath() + "/" + fileName);
             }
-
+*/
             FileWriter fstream = new FileWriter(file);
             BufferedWriter out = new BufferedWriter(fstream);
 
-            String text = "License,Location,City,Category,Date" + "\n";
+            String text = "License,Location,City,Type,Date" + "\n";
             out.write(text);
             for (int i = 0; i < data.size(); i++) {
 
@@ -1513,35 +1520,92 @@ public class UserModel extends AbstractController {
 
                 out.write(text);
             }
+            text = "";
+            int vancouverAmount = 0;
+            int vancouverNum = 0;
+            int torontaAmount = 0;
+            int torontaNum = 0;
+            int totalAmount = 0;
+            int totalNumber = 0;
 
+            for (int i = 0; i < count.length; i++) {
+                if (i < 14) {
+                    vancouverNum += count[i];
+
+                } else if (i < 28) {
+                    torontaNum += count[i];
+
+                } else if (i < 42) {
+                    vancouverAmount += count[i];
+
+                } else if (i < 56) {
+                    torontaAmount += count[i];
+
+                }
+
+            }
+
+            totalAmount = vancouverAmount + torontaAmount;
+            totalNumber = vancouverNum + torontaNum;
             if (dailyRental) {
+
+                text += "\n\nType,Number";
+                text += "\nboxtrucks," + (count[0] + count[14]);
+                text += "\ncargovans," + (count[1] + count[15]);
+                text += "\nfoot12," + (count[2] + count[16]);
+                text += "\nfoot15," + (count[3] + count[17]);
+                text += "\nfoot24," + (count[4] + count[18]);
+
+                text += "\nstandard," + (count[5] + count[19]);
+                text += "\nvan," + (count[6] + count[20]);
+                text += "\nNcompact," + (count[7] + count[21]);
+                text += "\neconomy," + (count[8] + count[22]);
+                text += "\nfull-size," + (count[9] + count[23]);
+
+                text += "\nluxury," + (count[10] + count[24]);
+                text += "\nmidsize," + (count[11] + count[25]);
+                text += "\npremium," + (count[12] + count[26]);
+                text += "\nsuv," + (count[13] + count[27]);
                 if (location.equals("")) {
-                    text = "\nNumber of Trucks," + (count[0] + count[2]);
-                    text += "\nNumber of Cars," + (count[1] + count[3]);
-                    text += "\nSubtotal for Westbrook Branch," + (count[0] + count[1]);
-                    text += "\nSubtotal for 300 Regina Street Branch," + (count[2] + count[3]);
-                    text += "\nTotal Numbers," + (count[0] + count[1] + count[2] + count[3]);
+
+                    text += "\n\nSubtotal for Westbrook Branch," + (vancouverNum);
+                    text += "\nSubtotal for 300 Regina Street Branch," + (torontaNum);
+                    text += "\n\nTotal Numbers," + (totalNumber);
 
                 } else {
 
-                    text = "\nNumber of Trucks," + (count[0] + count[2]);
-                    text += "\nNumber of Cars," + (count[1] + count[3]);
-                    text += "\nTotal Numbers," + (count[0] + count[1] + count[2] + count[3]);
+                    text += "\n\nTotal Numbers," + (totalNumber);
 
                 }
 
             } else if (dailyReturn) {
+
+                text += "\n\nType,Number,Cost";
+                text += "\nboxtrucks," + (count[0] + count[14]) + ",$" + ((count[28] + count[42]));
+                text += "\ncargovans," + (count[1] + count[15]) + ",$" + ((count[29] + count[43]));
+                text += "\nfoot12," + (count[2] + count[16]) + ",$" + ((count[30] + count[44]));
+                text += "\nfoot15," + (count[3] + count[17]) + ",$" + ((count[31] + count[45]));
+                text += "\nfoot24," + (count[4] + count[18]) + ",$" + ((count[32] + count[46]));
+
+                text += "\nstandard," + (count[5] + count[19]) + ",$" + ((count[33] + count[47]));
+                text += "\nvan," + (count[6] + count[20]) + ",$" + ((count[34] + count[48]));
+                text += "\ncompact," + (count[7] + count[21]) + ",$" + ((count[35] + count[49]));
+                text += "\neconomy," + (count[8] + count[22]) + ",$" + ((count[36] + count[50]));
+                text += "\nfull-size," + (count[9] + count[23] + ",$" + ((count[37] + count[51])));
+
+                text += "\nluxury," + (count[10] + count[24]) + ",$" + ((count[38] + count[52]));
+                text += "\nmidsize," + (count[11] + count[25]) + ",$" + ((count[39] + count[53]));
+                text += "\npremium," + (count[12] + count[26]) + ",$" + ((count[40] + count[54]));
+                text += "\nsuv," + (count[13] + count[27]) + ",$" + ((count[41] + count[55]));
                 if (location.equals("")) {
-                    text = "\nNumber of Trucks," + (count[0] + count[2]) + ", Amount Paid," + ((count[4] + count[5]) / 100);
-                    text += "\nNumber of Cars," + (count[1] + count[3]) + ", Amount Paid," + ((count[6] + count[7]) / 100);
-                    text += "\nSubtotal for Westbrook Branch," + (count[0] + count[1]) + ", Amount Paid," + ((count[4] + count[6]) / 100);
-                    text += "\nSubtotal for 300 Regina Street Branch," + (count[2] + count[3]) + ", Amount Paid," + ((count[4] + count[6]) / 100);
-                    text += "\nTotal Numbers," + (count[0] + count[1] + count[2] + count[3]) + ", Amount Paid," + ((count[4] + count[5] + count[6] + count[7]) / 100);
+
+                    text += "\n\nSubtotal for Westbrook Branch," + (vancouverNum) + ",$" + ((vancouverAmount));
+                    text += "\nSubtotal for 300 Regina Street Branch," + (torontaNum) + ",$" + ((torontaAmount));
+                    text += "\nTotal Numbers," + (totalNumber) + ",$" + ((totalAmount));
 
                 } else {
-                    text = "\nNumber of Trucks," + (count[0] + count[2]) + ", Amount Paid," + ((count[4] + count[5]) / 100);
-                    text += "\nNumber of Cars," + (count[1] + count[3]) + ", Amount Paid," + ((count[6] + count[7]) / 100);
-                    text += "\nTotal Numbers," + (count[0] + count[1] + count[2] + count[3]) + ", Amount Paid," + ((count[4] + count[5] + count[6] + count[7]) / 100);
+
+                    text += "\n\nTotal Numbers," + (totalNumber) + ",$" + ((totalAmount));
 
                 }
 
