@@ -5,6 +5,7 @@
  */
 package model;
 
+import static java.lang.Math.round;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -214,7 +215,6 @@ public class ClerkModel extends UserModel {
 //        if (TotalCost != null) {
 //            AppContext.getInstance().setTempData("amount", TotalCost);
 //        }
-
         Boolean checkValue = checkredundantRent(Rentid.toString());
 
         //check wheter the rentid has been returned
@@ -588,6 +588,16 @@ public class ClerkModel extends UserModel {
         //keep_equipment
         String updateKeppE = "update keep_equipment set quantity = quantity+" + addQuotation(ReturnNum.toString())
                 + " where equipName = " + addQuotation(EquipName) + "AND city = " + addQuotation(City) + "AND location =" + addQuotation(Location);
+        updateDatabase(updateKeppE);
+
+    }
+
+    public void updatePoint(Integer totalcost, String customer) {
+        Integer points = round(totalcost / 5);
+
+        String updateKeppE = "update customer set point = point+" + addQuotation(points.toString())
+                + " where username = " + addQuotation(customer)
+                + "and ";
         updateDatabase(updateKeppE);
 
     }

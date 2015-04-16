@@ -1117,7 +1117,7 @@ public class UserModel extends AbstractController {
                 } else if (num2 != null && num2 > rentnum2) {
                     popUpError("The number of returned equipments should be smaller than the number of rented equipments!");
                     return null;
-                } 
+                }
                 //What this else means?
 //                else{
 //                    popUpError("God knows what happened!");
@@ -1579,5 +1579,7 @@ public class UserModel extends AbstractController {
 
         return price;
     }
+
+
 
 }

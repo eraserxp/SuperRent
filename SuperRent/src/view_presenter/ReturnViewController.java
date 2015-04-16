@@ -399,25 +399,39 @@ public class ReturnViewController extends AbstractController implements Initiali
                     if (status.equals("success")) {
 
                         checkV = clerkModel.createVreturn(rentidint, returnDate, returnTimeInt, city, location, TankFullint, odometer, totalcost, Payment_Method);
+                        if (checkV == true) {
+                            popUpMessage("The vehicle has been sucessfully returned!");
+                        } else {
+                            popUpError("The vehicle has not been rented yet");
+                        }
+                    //do te updates
+                        //update the quantity of the equipment
+                        if (returnEquip1Num != -1 && rentEquip1Num != -1 && returnEquip1Num <= rentEquip1Num) {
+                            //do sth
+                            clerkModel.updateEquipNum(equipmentslist.get(0), city, location, returnEquip1Num);
+                        } else if (returnEquip2Num != -1 && rentEquip2Num != -1 && returnEquip2Num <= rentEquip2Num) {
+                            //do sth
+                            clerkModel.updateEquipNum(equipmentslist.get(0), city, location, returnEquip1Num);
+                            clerkModel.updateEquipNum(equipmentslist.get(2), city, location, returnEquip2Num);
+                        }
+                        //update the odometer
+                        
+                        
+                        
+                        
+                        //update the points
+                        
+                        
+                        
+                        //update the tankfull
+                        
+                        
+                        
+                        
+                        
+
                     } else {
                         popUpMessage("Payment is not sucessful!");
-                    }
-
-//update the quantity
-                    //updateEquipNum(String EquipName, String City, String Location,Integer ReturnNum)
-                    if (returnEquip1Num != -1 && rentEquip1Num != -1 && returnEquip1Num <= rentEquip1Num) {
-                        //do sth
-                        clerkModel.updateEquipNum(equipmentslist.get(0), city, location, returnEquip1Num);
-                    } else if (returnEquip2Num != -1 && rentEquip2Num != -1 && returnEquip2Num <= rentEquip2Num) {
-                        //do sth
-                        clerkModel.updateEquipNum(equipmentslist.get(0), city, location, returnEquip1Num);
-                        clerkModel.updateEquipNum(equipmentslist.get(2), city, location, returnEquip2Num);
-                    }
-
-                    if (checkV == true) {
-                        popUpMessage("The vehicle has been sucessfully returned!");
-                    } else {
-                        popUpError("The vehicle has not been rented yet");
                     }
 
                 } catch (IOException ex) {
