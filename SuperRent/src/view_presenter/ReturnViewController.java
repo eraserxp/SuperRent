@@ -397,7 +397,7 @@ public class ReturnViewController extends AbstractController implements Initiali
                         } else {
                             popUpError("The vehicle has not been rented yet");
                         }
-                    //do te updates
+                        //do te updates
                         //update the quantity of the equipment
                         if (returnEquip1Num != -1 && rentEquip1Num != -1 && returnEquip1Num <= rentEquip1Num) {
                             //do sth
@@ -408,25 +408,11 @@ public class ReturnViewController extends AbstractController implements Initiali
                             clerkModel.updateEquipNum(equipmentslist.get(2), city, location, returnEquip2Num);
                         }
                         //update the odometer
-                        
-                        
-                        
-                        
+
                         //update the points
                         clerkModel.updatePoint(Integer.parseInt(totalcost), customerusername);
-                        
-                        
-                        
-                        
-                        
-                        
-                        //update the tankfull
-                        
-                        
-                        
-                        
-                        
 
+                        //update the tankfull
                     } else {
                         popUpMessage("Payment is not sucessful!");
                     }
@@ -502,6 +488,13 @@ public class ReturnViewController extends AbstractController implements Initiali
                     }
                 }
 
+            } else {
+                try {
+
+                    showSummary();
+                } catch (SQLException ex) {
+                    Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         });
@@ -546,6 +539,13 @@ public class ReturnViewController extends AbstractController implements Initiali
                     Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
+            } else {
+                try {
+
+                    showSummary();
+                } catch (SQLException ex) {
+                    Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         });
@@ -591,6 +591,13 @@ public class ReturnViewController extends AbstractController implements Initiali
                     Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
+            } else {
+                try {
+
+                    showSummary();
+                } catch (SQLException ex) {
+                    Logger.getLogger(ReturnViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         });
