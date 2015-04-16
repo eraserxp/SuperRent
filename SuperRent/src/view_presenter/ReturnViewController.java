@@ -132,7 +132,6 @@ public class ReturnViewController extends AbstractController implements Initiali
     String totalcost = "";
     Integer TankFullint = 0;
     Integer rentEquip1Num = -1, rentEquip2Num = -1, returnEquip1Num = -1, returnEquip2Num = -1;
-    Integer counter = 0;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -301,19 +300,13 @@ public class ReturnViewController extends AbstractController implements Initiali
 //        temp = temp/100;
 //        totalcost = temp.toString();
         totalcost = AppContext.getInstance().getTempData("amount");
-        System.out.println(totalcost);
+        //System.out.println(totalcost);
         if (summaryGP != null) {
             summaryVBox.getChildren().add(summaryGP);
             System.out.println("Sucessful query of cost summary");
         } else {
             System.out.println("Unsucessful query of cost summary");
         }
-//        returnEquip1Num = null;
-//        returnEquip2Num = null;
-//        equipments.clear();
-//        quantities.clear();
-//        Numequipment1 = -1;
-//        Numequipment1 = -1;
 
     }
 
@@ -420,6 +413,10 @@ public class ReturnViewController extends AbstractController implements Initiali
                         
                         
                         //update the points
+                        clerkModel.updatePoint(Integer.parseInt(totalcost), customerusername);
+                        
+                        
+                        
                         
                         
                         

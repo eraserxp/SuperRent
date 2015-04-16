@@ -593,11 +593,12 @@ public class ClerkModel extends UserModel {
     }
 
     public void updatePoint(Integer totalcost, String customer) {
-        Integer points = round(totalcost / 5);
+        Integer points = round(totalcost/5);
 
-        String updateKeppE = "update customer set point = point+" + addQuotation(points.toString())
+        String updateKeppE = "update customer set point = point+" 
+                + addQuotation(points.toString())
                 + " where username = " + addQuotation(customer)
-                + "and ";
+                + "and isClubMember = 1";
         updateDatabase(updateKeppE);
 
     }
