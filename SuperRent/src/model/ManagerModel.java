@@ -282,7 +282,7 @@ public class ManagerModel extends UserModel {
         }
         if (!mileLimit.equals("")) {
 
-            updateStatement = updateStatement + "vehicletype.milelimit =" + addQuotation(mileLimit) + "*100,";
+            updateStatement = updateStatement + "vehicletype.milelimit =" + addQuotation(mileLimit) + ",";
 
         }
 
