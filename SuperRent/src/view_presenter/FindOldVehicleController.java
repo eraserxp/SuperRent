@@ -127,13 +127,14 @@ public class FindOldVehicleController extends AbstractController implements Init
 
         sortByCategoryCB.selectedProperty().addListener(new ChangeListener<Boolean>() {
             public void changed(ObservableValue<? extends Boolean> ov,
+                    
                     Boolean old_val, Boolean new_val) {
               
                 
                 if (sortByCategoryCB.isSelected()) {
                     categoryCBSelected = true;
                 } else {
-                    categoryCBSelected = false;
+                   categoryCBSelected = false;
                 }
 
             }
@@ -227,7 +228,7 @@ public class FindOldVehicleController extends AbstractController implements Init
 
                     vehicleCategory = vehicleCategory.toLowerCase();
                     categorySelected = true;
-                    sortByCategoryCB.setDisable(true);
+                   // sortByCategoryCB.setDisable(true);
 
                 }
             }

@@ -317,7 +317,7 @@ public class ManagerModel extends UserModel {
             String category, String year, boolean locationCBSlected, boolean categoryCBSelected) throws IOException {
         TableView tableview;
 
-        String SQL = "select vehicleinbranch.vlicense,vehicleinbranch.location,vehicleforrent.category,vehicleforrent.starting_date from"
+        String SQL = "select vehicleinbranch.vlicense,vehicleinbranch.location,vehicleforrent.vehicleType,vehicleforrent.starting_date from"
                 + " vehicleinbranch, vehicleforrent where  vehicleinbranch.vlicense=vehicleforrent.vlicense";
 
         if (!location.equals("")) {
@@ -335,12 +335,12 @@ public class ManagerModel extends UserModel {
         }
 
         if (locationCBSlected && categoryCBSelected) {
-            SQL = SQL + " order by vehicleinbranch.location,vehicleforrent.category ;";
+            SQL = SQL + " order by vehicleinbranch.location,vehicleforrent.vehicleType ;";
         } else if (locationCBSlected && !categoryCBSelected) {
             SQL = SQL + " order by vehicleinbranch.location ;";
 
         } else if (!locationCBSlected && categoryCBSelected) {
-            SQL = SQL + " order by vehicleforrent.category ;";
+            SQL = SQL + " order by vehicleforrent.vehicleType;";
 
         } else if (!locationCBSlected && !categoryCBSelected) {
             SQL = SQL + " order by vehicleforrent.starting_date ;";
