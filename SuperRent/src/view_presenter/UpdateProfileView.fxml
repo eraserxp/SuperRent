@@ -8,18 +8,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="554.0" prefWidth="911.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.UpdateProfileController">
+<AnchorPane id="AnchorPane" prefHeight="554.0" prefWidth="911.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.UpdateProfileController">
    <children>
-      <GridPane alignment="CENTER_LEFT" prefHeight="554.0" prefWidth="911.0" vgap="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <GridPane alignment="CENTER_LEFT" layoutX="29.0" prefHeight="554.0" prefWidth="882.0" vgap="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label prefHeight="20.0" prefWidth="120.0" text="Change Password" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+            <Label prefHeight="20.0" prefWidth="129.0" text="Change Password" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Label>
-            <Label prefHeight="17.0" prefWidth="81.0" text="Old Password:" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+            <Label prefHeight="17.0" prefWidth="97.0" text="Old Password:" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
             <Label text="New password:  " GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-            <Label text="Re-type new password:  " GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+            <Label prefHeight="16.0" prefWidth="148.0" text="Re-type new password:  " GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
             <Button fx:id="changepassButton" mnemonicParsing="false" onAction="#handleChangePassButton" text="Change Password" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
             <Separator prefHeight="0.0" prefWidth="918.0" GridPane.columnSpan="2147483647" />
             <PasswordField fx:id="passwdField" GridPane.columnIndex="2" GridPane.rowIndex="3" />
@@ -46,17 +46,17 @@
                </font>
             </Label>
             <Separator prefHeight="13.0" prefWidth="204.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" />
-            <Label prefHeight="20.0" prefWidth="99.0" text="Change Phone" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
+            <Label prefHeight="19.0" prefWidth="112.0" text="Change Phone" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Label>
-            <Label prefHeight="17.0" prefWidth="90.0" text="Phone Number:" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
+            <Label prefHeight="17.0" prefWidth="100.0" text="Phone Number:" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
             <PasswordField fx:id="oldpassField" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <TextField fx:id="phoneField" GridPane.columnIndex="2" GridPane.rowIndex="8" />
             <Button fx:id="changephoneButton" mnemonicParsing="false" onAction="#handleChangePhoneButton" text="Change Phone" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="9" />
             <Separator prefHeight="13.0" prefWidth="204.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="10" />
-            <Label prefHeight="20.0" prefWidth="107.0" text="Change Address" GridPane.halignment="RIGHT" GridPane.rowIndex="11">
+            <Label prefHeight="20.0" prefWidth="121.0" text="Change Address" GridPane.halignment="RIGHT" GridPane.rowIndex="11">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>
@@ -81,11 +81,10 @@
                </padding></Label>
          </children>
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0" prefWidth="144.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="139.0" minWidth="10.0" prefWidth="139.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="207.0" minWidth="10.0" prefWidth="188.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="158.0" minWidth="10.0" prefWidth="158.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="235.0" minWidth="10.0" prefWidth="235.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="244.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="141.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />

@@ -163,7 +163,7 @@ public class MembershipController extends AbstractController implements Initiali
             }
             else 
             {
-            statuslabel.setText("Membership Period is Valid");
+            statuslabel.setText("Valid");
             hide(makepaymentButton);
             }
         }
