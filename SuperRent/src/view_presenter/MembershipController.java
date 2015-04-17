@@ -250,7 +250,7 @@ public class MembershipController extends AbstractController implements Initiali
             updateOK=payModel.updateCustomer(username, name, address);
             hide(namelabel,NameField,NameValidator,addresslabel,AddressField,addressValidator,
                   annualfeelabel,annuallabel,applyButton,cancelButton,makepaymentButton);
-            show(lastpaydatelabel,paydatelabel,memvaliduptolabel,memvaliddatelabel,memstatuslabel,statuslabel,pointsearnlabel,pointslabel);
+            show(lastpaydatelabel,paydatelabel,memvaliduptolabel,memvaliddatelabel,memstatuslabel,statuslabel,pointsearnlabel,pointslabel,cancelmemButton);
             setUpMember();
             
         }
