@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="553.0" prefWidth="832.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.CancelReserveController">
+<AnchorPane id="AnchorPane" prefHeight="553.0" prefWidth="832.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_presenter.CancelReserveController">
    <children>
       <AnchorPane layoutX="-3.0" minHeight="0.0" minWidth="0.0" prefHeight="545.0" prefWidth="1003.0">
          <children>
@@ -26,7 +26,7 @@
             <VBox fx:id="ReserveVbox" layoutX="233.0" layoutY="52.0" prefHeight="420.0" prefWidth="759.0" />
             <TextField fx:id="ConfNoTextField" disable="true" layoutX="25.0" layoutY="176.0" prefHeight="25.0" prefWidth="163.0" />
             <ComboBox fx:id="StatusCombobox" disable="true" layoutX="25.0" layoutY="91.0" prefHeight="26.0" prefWidth="163.0" />
-            <Button fx:id="showButton" layoutX="166.0" layoutY="243.0" mnemonicParsing="false" onAction="#handleShowButtonAction" prefHeight="2.0" prefWidth="45.0" text="Show" />
+            <Button fx:id="showButton" layoutX="150.0" layoutY="243.0" mnemonicParsing="false" onAction="#handleShowButtonAction" prefHeight="26.0" prefWidth="61.0" text="Show" />
             <CheckBox fx:id="statuscb" layoutX="25.0" layoutY="65.0" mnemonicParsing="false" text="By Status" />
             <CheckBox fx:id="confnocb" layoutX="22.0" layoutY="149.0" mnemonicParsing="false" text="By Confirmation Number" />
             <Button fx:id="cancelButton" disable="true" layoutX="684.0" layoutY="483.0" mnemonicParsing="false" onAction="#handleCancelReserveButtonAction" text="Cancel Reservation" />
