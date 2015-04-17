@@ -419,10 +419,10 @@ public class ManagerModel extends UserModel {
                 + " and  vreturn.rent_id=rent.rentid  ";
         if (date == null) {
 
-            SQL = SQL + " and rent.from_date= CURDATE() ";
+            SQL = SQL + " and vreturn.return_date= CURDATE() ";
 
         } else {
-            SQL = SQL + " and rent.from_date=" + addQuotation(date.toString());
+            SQL = SQL + " and vreturn.return_date=" + addQuotation(date.toString());
 
         }
 
@@ -743,10 +743,10 @@ public class ManagerModel extends UserModel {
                 + " and  vreturn.rent_id=rent.rentid  ";
         if (date == null) {
 
-            SQL = SQL + " and rent.from_date= CURDATE() ";
+            SQL = SQL + " and vreturn.return_date= CURDATE() ";
 
         } else {
-            SQL = SQL + " and rent.from_date=" + addQuotation(date.toString());
+            SQL = SQL + " and vreturn.return_date=" + addQuotation(date.toString());
 
         }
 
