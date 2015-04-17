@@ -867,7 +867,7 @@ public class UserModel extends AbstractController {
             totalCost += h_cost;
             gridPane.add(new Label((h_rent + h_cost) / 100 + ".00"),
                     4, rowIndex);
-            //rowIndex++;
+            rowIndex++;
         }
 
         //add an empty line       
