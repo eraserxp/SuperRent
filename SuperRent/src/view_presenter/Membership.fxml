@@ -35,7 +35,7 @@
                </GridPane.margin>
             </Label>
             <Label fx:id="annuallabel" prefHeight="17.0" prefWidth="148.0" text="100.00" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Button fx:id="applyButton" mnemonicParsing="false" onAction="#handleApplyButton" prefHeight="25.0" prefWidth="118.0" text="Apply Membership" GridPane.rowIndex="1">
+            <Button fx:id="applyButton" mnemonicParsing="false" onAction="#handleApplyButton" prefHeight="26.0" prefWidth="141.0" text="Apply Membership" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="50.0" />
                </GridPane.margin>
